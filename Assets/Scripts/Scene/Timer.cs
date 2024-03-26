@@ -22,7 +22,7 @@ public class Timer : MonoBehaviour
         startTime = Time.time;
 
         GameClearObject.SetActive(false);
-        Invoke("GameClear", 180.0f);
+        Invoke("GameClear", 900.0f);
     }
 
     void Update()
