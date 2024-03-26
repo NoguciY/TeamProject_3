@@ -21,11 +21,11 @@ public class Timer : MonoBehaviour
         oldSeconds = 0;
         startTime = Time.time;
 
-        GameClearObject.SetActive(false);
+        GameClearObject.SetActive(false);   
         Invoke("GameClear", 900.0f);
     }
 
-    void Update()
+    private void FixedUpdate()
     {
 
         //@Time.time‚Å‚ÌŠÔŒv‘ª

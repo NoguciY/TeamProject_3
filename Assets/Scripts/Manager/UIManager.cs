@@ -32,24 +32,19 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
-        //Time.timeScale = 0;
+        Time.timeScale = 0;
         gameOverPanel.SetActive(true);
-        Invoke("ChangeScene", 5.0f);
     }
 
     //ゲームクリアパネルを表示する
     private void GameClear()
     {
-        //Time.timeScale = 0;
+        Time.timeScale = 0;
         gameClearPanel.SetActive(true);
-        Invoke("ChangeScene", 5.0f);
     }
 
     //時間が来たらシーン遷移(仮)
-    private void ChangeScene()
-    {
-        SceneManager.LoadScene("StartScene");
-    }
+
 
     //テキストに経過時間を反映する
     private void CountTimer(GameManager gameManager)
