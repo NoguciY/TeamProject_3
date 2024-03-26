@@ -1,0 +1,448 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+//using Unity.VisualScripting;
+//using UnityEditor.Rendering;
+using UnityEngine;
+using UnityEngine.Events;
+//using UnityEngine.Rendering;
+//using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+
+
+//群を検知して、進行方向を決めて移動する
+//群を検知する距離、接近を許す距離、敵の速さ、は、
+//敵ごとに変えたい
+
+public class EnemyFlocking : MonoBehaviour
+{
+    public EnemyFlockManager flockManager;
+
+  
+    [SerializeField]
+    private GameObject itemPrefab;
+
+    [SerializeField, Header("近隣の個体を検知する距離")]
+    private float ditectingNeiborDistance;
+
+    //視野角
+    [SerializeField]
+    private float fieldOfView;
+
+    [SerializeField]
+    private float rotationSpeed;
+
+    [SerializeField, Header("分離する力の係数")]
+    private float separationCoefficient;
+
+    [SerializeField, Header("整列する力の係数")]
+    private float alignmentCoefficient;
+
+    [SerializeField, Header("結合する力の係数")]
+    private float combiningCoefficient;
+
+    [SerializeField, Header("壁から遠ざける力の係数")]
+    private float restitutionCoefficient;
+
+    [SerializeField, Header("壁からの力が掛かり始める距離")]
+    private float restitutionDistance;
+
+    [SerializeField, Header("プレイヤーに結合する力の係数")]
+    private float combiningPlayerCoefficient;
+
+    //最小速度
+    [SerializeField]
+    private float minSpeed;
+
+    //最大速度
+    [SerializeField]
+    private float maxSpeed;
+
+
+    //処理の最初に１度インスタンスを取得して、
+    //取得したインスタンスにアクセスする
+    private Transform myTransform;
+
+    //プレイヤーの位置
+    [SerializeField]
+    private Transform playerTransform;
+
+    //近隣の個体を格納する
+    [SerializeField]
+    private List<GameObject> neighbors = new List<GameObject>();
+
+    //移動処理に使う速度
+    private Vector3 velocity;
+
+    //加速度
+    private Vector3 acceleration;
+
+    //速さ
+    private float speed;
+
+    //ステージの大きさ
+    private float stageScale = Utilities.stageSize * 0.5f;
+
+    //内積の閾値
+    private float innerProductThred;
+
+    private void Start()
+    {
+        myTransform = transform;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+        speed = UnityEngine.Random.Range(minSpeed, maxSpeed);
+
+        velocity = speed * Vector3.forward;
+
+        //視野角を内積の閾値に使う
+        innerProductThred = Mathf.Cos(fieldOfView * Mathf.Deg2Rad);
+    }
+
+    private void Update()
+    {
+        //近隣の個体を取得する
+        AddNeighbors();
+
+        //移動する
+        UpdateMove();
+
+        //Debug.Log($"velocity:{velocity}");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var hit = other.gameObject.GetComponent<IApplicableDamage>();
+
+        if(hit != null)
+        {
+            hit.RecieveDamage(10f);
+        }
+    }
+
+    public void Dead()
+    {
+        //群から自身を削除
+        flockManager.boids.Remove(this.gameObject);
+        //自身を破棄
+        Destroy(this.gameObject);
+        //アイテムを生成
+        Instantiate(itemPrefab, this.transform.position, itemPrefab.transform.rotation);
+    }
+
+    /// <summary>
+    /// 近隣の仲間を探してリストに追加
+    /// </summary>
+    private void AddNeighbors()
+    {
+        //リストをクリア
+        neighbors.Clear();
+
+        foreach(var boid in flockManager.boids)
+        {
+            if(boid != this.gameObject)
+            {
+                Vector3 toOtherVec = boid.transform.position - this.transform.position;
+                float sqrDistance = toOtherVec.sqrMagnitude;
+
+                if(sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
+                {
+                    Vector3 direction = toOtherVec.normalized;
+                    Vector3 forward = velocity.normalized;
+
+                    float innerProduct = Vector3.Dot(forward, direction);
+                    if(innerProduct >= innerProductThred) 
+                    {
+                        neighbors.Add(boid);
+                    }
+                }
+            }
+        }
+    }
+
+    //力をまとめて移動する
+    private void UpdateMove()
+    {
+        //フレームごとに速度に加算する値(加速度)を求める
+        //acceleration = SeparateNeighbors(separationCoefficient)
+        //             + StayWithinRange(restitutionDistance)
+        //             //+ AlignNeighbors(alignmentCoefficient)
+        //             + CombineNeighbors(combiningCoefficient)
+        //             + CombinePlayer(combiningPlayerCoefficient);
+
+        acceleration = SeparateNeighbors() * separationCoefficient
+                     + AlignNeighbors() * alignmentCoefficient
+                     + CombineNeighbors() * combiningCoefficient
+                     + CombinePlayer() * combiningPlayerCoefficient
+                     //+ CombineNearbyPlayer() * combiningPlayerCoefficient
+                     + StayWithinRange();
+
+
+        velocity += acceleration * Time.deltaTime;
+
+        float speed = velocity.magnitude;
+        Vector3 direction = velocity.normalized;
+
+        //速度を制限する
+        velocity = Mathf.Clamp(speed, minSpeed, maxSpeed) * direction;
+
+        if (direction != Vector3.zero)
+        {
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
+                                 Quaternion.LookRotation(direction),        //向かせたい方向
+                                 rotationSpeed * Time.deltaTime);
+        }
+        if (!float.IsNaN(velocity.x) && !float.IsNaN(velocity.y) && !float.IsNaN(velocity.z))
+        {
+            myTransform.position += velocity * Time.deltaTime;
+        }
+        acceleration = Vector3.zero;
+    }
+
+    //---------------------------------------------------------------------------------------------
+    /// <summary>
+    /// 近隣の個体から離れる(分離する)力を返す
+    /// </summary>
+    /// <param name="coefficient">分離する力にかける係数</param>
+    /// <returns>近隣の群れから離れる力</returns>
+    private Vector3 SeparateNeighbors(float coefficient)
+    {
+        Vector3 avoidanceForce = Vector3.zero;
+
+        if (neighbors.Count == 0)
+        {
+            return avoidanceForce;
+        }
+
+        //近隣の群から離れるベクトルを返す
+        foreach (GameObject neighbor in neighbors)
+        {
+            avoidanceForce += (myTransform.position - neighbor.transform.position).normalized;
+        }
+
+        return coefficient * avoidanceForce;
+    }
+    
+    //群から分離する方向の力を返す
+    private Vector3 SeparateNeighbors()
+    {
+        Vector3 avoidanceForce = Vector3.zero;
+
+        if (neighbors.Count == 0)
+        {
+            return avoidanceForce;
+        }
+
+        //近くの群から離れるベクトルを求める
+        foreach (GameObject neighbor in neighbors)
+        {
+            avoidanceForce += (myTransform.position - neighbor.transform.position);
+        }
+
+        return avoidanceForce.normalized;
+    }
+    //---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// 近隣の群に合わせて整列させる方向の力を返す
+    /// </summary>
+    /// <param name="coefficient">整列する力にかける係数</param>
+    /// <returns>群と整列させようとする力</returns>
+    private Vector3 AlignNeighbors(float coefficient)
+    {
+        Vector3 averageVelocity = Vector3.zero;
+
+        if (neighbors.Count == 0)
+        {
+            return averageVelocity;
+        }
+
+        //近隣の群の平均ベクトルを返す
+        foreach (GameObject neighbor in neighbors)
+        {
+            //float flockDistance = Vector3.Distance(myTransform.position, neighbor.transform.position);
+
+            EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
+            averageVelocity += anotherFlock.velocity;
+        }
+
+        averageVelocity /= neighbors.Count;
+      
+        return coefficient * (averageVelocity - velocity);
+    }
+    
+    //群と整列する方向の力を返す
+    private Vector3 AlignNeighbors()
+    {
+        Vector3 averageVelocity = Vector3.zero;
+
+        if (neighbors.Count == 0)
+        {
+            return averageVelocity;
+        }
+
+        //近くの群の平均速度を求める
+        foreach (GameObject neighbor in neighbors)
+        {
+            EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
+            averageVelocity += anotherFlock.velocity;
+        }
+        averageVelocity /= neighbors.Count;
+
+        return averageVelocity.normalized;
+    }
+    //---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// 近隣の群の中心に近づく(結合する)力を返す
+    /// </summary>
+    /// <param name="coefficient">結合する力にかける係数</param>
+    /// <returns>群と結合する力</returns>
+    private Vector3 CombineNeighbors(float coefficient)
+    {
+        Vector3 centerPos = Vector3.zero;
+
+        if (neighbors.Count == 0)
+        {
+            return centerPos;
+        }
+
+        //群の中心の位置の計算
+        foreach (GameObject neighbor in neighbors)
+        {
+            centerPos += neighbor.transform.position;
+        }
+        centerPos /= neighbors.Count;
+
+        //中心方向へ向かう力を返す
+        return coefficient * (centerPos - myTransform.position);
+    }
+    
+    //群に結合する方向の力を返す
+    private Vector3 CombineNeighbors()
+    {
+        Vector3 centerPos = Vector3.zero;
+
+        if (neighbors.Count == 0)
+        {
+            return centerPos;
+        }
+
+        //近くの群の中心に近づくベクトルを求める
+        foreach (GameObject neighbor in neighbors)
+        {
+            centerPos += neighbor.transform.position;
+        }
+        centerPos /= neighbors.Count;
+
+        //中心方向へ向かう力を返す
+        return (centerPos - myTransform.position).normalized;
+    }
+    //---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// 全ての壁での止めようとする力をまとめて返す
+    /// </summary>
+    /// <returns>範囲内から出ないようにする力</returns>
+    private Vector3 StayWithinRange()
+    {
+        //範囲から出ないようにする力
+        Vector3 stayRangeForce = Vector3.zero;
+
+        //４つの壁からの止めようとする力をまとめる
+        stayRangeForce = RebelAgainstWall(stageScale - myTransform.position.x, Vector3.left)
+                       + RebelAgainstWall(stageScale - myTransform.position.z, Vector3.back)
+                       + RebelAgainstWall(-stageScale - myTransform.position.x, Vector3.right)
+                       + RebelAgainstWall(-stageScale - myTransform.position.z, Vector3.forward);
+
+        return stayRangeForce;
+    }
+
+    /// <summary>
+    /// 壁の内側に止めようとする力を返す
+    /// </summary>
+    /// <param name="toWallDistance">壁との距離</param>
+    /// <param name="fromWallDirection">壁の内側方向</param>
+    /// <returns>壁の内側に止めようとする力</returns>
+    private Vector3 RebelAgainstWall(float toWallDistance, Vector3 fromWallDirection)
+    {
+        //壁と反対方向の力
+        Vector3 restitutionForce = Vector3.zero;
+
+        //壁との距離がある値より小さくなった場合
+        if (Mathf.Abs(toWallDistance) < restitutionDistance)
+        {
+            //壁の内側方向の力を加える
+            //壁との距離が近いほど力は大きくなる
+            restitutionForce = fromWallDirection * 
+                (restitutionCoefficient / (Mathf.Abs(toWallDistance / restitutionDistance)));
+        }
+
+        return restitutionForce;
+    }
+
+
+    //---------------------------------------------------------------------------
+    //プレイヤーの方向へ向かう力を返す
+    //位置、プレイヤーの位置、係数
+    private Vector3 CombinePlayer(float coefficient)
+    {
+        //プレイヤーの位置を取得する
+        Vector3 playerPos = playerTransform.position;
+
+        //プレイヤーまでのベクトル
+        Vector3 toPlayerVec = playerPos - myTransform.position;
+
+        //プレイヤーに向かおうとする力
+        Vector3 combineForce = coefficient * (toPlayerVec - velocity).normalized;
+
+        return combineForce;
+    }
+
+    //プレイヤーの方向へ向かう力を返す
+    //位置、プレイヤーの位置、係数
+    private Vector3 CombinePlayer()
+    {
+        Vector3 combineForce = Vector3.zero;
+
+        //プレイヤーの位置を取得する
+        Vector3 playerPos = playerTransform.position;
+
+        //プレイヤーまでのベクトル
+        Vector3 toPlayerVec = playerPos - myTransform.position;
+
+        //プレイヤーに向かう力
+        combineForce = toPlayerVec.normalized;
+
+        return combineForce;
+    }
+
+    //視角内のプレイヤーの方向へ向かう力を返す
+    private Vector3 CombineNearbyPlayer()
+    {
+        //プレイヤーに向かおうとする力
+        Vector3 combineForce = Vector3.zero;
+
+        //プレイヤーの位置を取得する
+        Vector3 playerPos = playerTransform.position;
+
+        //プレイヤーまでのベクトル
+        Vector3 toPlayerVec = playerPos - myTransform.position;
+
+        //プレイヤーとの距離が設定した値以下の場合
+        float sqrDistance = playerPos.sqrMagnitude;
+        if (sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
+        {
+
+            Vector3 direction = playerPos.normalized;
+            Vector3 forward = velocity.normalized;
+
+            float innerProduct = Vector3.Dot(forward, direction);
+            if (innerProduct >= innerProductThred)
+            {
+                //プレイヤーの方向を返す
+                combineForce = toPlayerVec.normalized;
+            }
+        }
+        return combineForce;
+    }
+}
