@@ -13,12 +13,42 @@ using UnityEngine.Events;
 
 public class TestBomb : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public float fuseTime;          //爆発するまでの時間
+    public float explosionRadius;   //範囲
+
+    private void Start()
     {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            other.gameObject.GetComponent<EnemyFlocking>().Dead();
-            Destroy(this.gameObject);
-        }
+        Invoke("Detonate", fuseTime);
     }
+
+
+    //範囲内にいるオブジェクトにダメージ
+    void Detonate()
+    {
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, explosionRadius, Vector3.forward);
+        
+        foreach (var hit in hits)
+        {
+            Player playe = hit.collider.gameObject.GetComponent<Player>();
+            //敵にダメージ
+            //if (playe != null)
+            //{
+                if (hit.collider.gameObject.CompareTag("Enemy"))
+                {
+                    hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
+                }
+            //}
+        }
+
+        Destroy(this.gameObject);
+    }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Enemy"))
+    //    {
+    //        other.gameObject.GetComponent<EnemyFlocking>().Dead();
+    //        Destroy(this.gameObject);
+    //    }
+    //}
 }

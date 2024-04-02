@@ -21,7 +21,8 @@ public class GamePresenter : MonoBehaviour
 
     private void Awake()
     {
-        //プレイヤーのイベントにUIマネージャーのゲームオーバー関数を登録する
+        //プレイヤーのイベントにUIマネージャーの関数を登録する
         player.gameOverEvent.AddListener(() => uiManager.GameOver());
+        player.experienceEvent.AddListener((currentExp, needExp) => uiManager.UpdateExperienceGauge(currentExp, needExp));
     }
 }

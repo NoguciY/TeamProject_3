@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -27,6 +28,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI timerText;
+
+    [SerializeField]
+    private Slider experienceGauge;
 
     private float oldSeconds;
 
@@ -61,6 +65,21 @@ public class UIManager : MonoBehaviour
             timerText.text = minute.ToString("00") + ":" + ((int)(seconds % 60)).ToString("00");
         }
         oldSeconds = seconds;
+    }
+
+    /// <summary>
+    /// 経験値ゲージを更新する
+    /// </summary>
+    /// <param name="currentExp">現在の経験値</param>
+    /// <param name="needExp">レベルアップに必要な経験値</param>
+    public void UpdateExperienceGauge(int currentExp, int needExp)
+    {
+        float value = 0;
+        if (currentExp != 0)
+            //int型同士の除算では、結果が整数になるため、flaot型にキャストする
+            value = (float)currentExp / (float)needExp;
+        
+        experienceGauge.value = value;
     }
 
     private void Start()

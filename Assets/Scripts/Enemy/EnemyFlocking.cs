@@ -1,12 +1,8 @@
-using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
-//using Unity.VisualScripting;
-//using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
-//using UnityEngine.Rendering;
-//using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 
 //群を検知して、進行方向を決めて移動する
