@@ -1,7 +1,7 @@
-using System.CodeDom.Compiler;
+//using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 using UnityEngine;
 
 //”ÍˆÍA”‚ğŒˆ‚ß‚Ä“G‚ğ¶¬‚·‚é

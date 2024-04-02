@@ -8,10 +8,17 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
+    //経験値
+    private int exp = 1;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            //プレイヤーが経験値を得る
+            var player = other.gameObject.GetComponent<Player>();
+            player.GetExp(exp);
+
             Destroy(this.gameObject);
         }
     }

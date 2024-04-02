@@ -5,6 +5,4 @@ using UnityEngine;
 public interface IApplicableDamage
 {
     void RecieveDamage(float damage);
-
-    //void CauseDamage(float damage);
 }

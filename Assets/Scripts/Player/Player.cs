@@ -1,13 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour, IApplicableDamage
 {
     [NonSerialized]
     public UnityEvent gameOverEvent = new UnityEvent();
+
+
+    public class ExperienceEvent : UnityEvent<int, int> { }
+
+    public ExperienceEvent experienceEvent = new ExperienceEvent();
 
     [SerializeField, Header("移動速度")]
     private float speed = 3.0f;
@@ -25,11 +33,43 @@ public class Player : MonoBehaviour, IApplicableDamage
     //爆弾の縦幅の半分
     private float bombHelfHeight;
 
+    //現在のレベル
+    private int currentLevel = 1;
+
+    //現在の経験値
+    private int currentExp = 0;
+
+    //前回の経験値
+    private int beforeExp;
+
+    //必要経験値
+    private int needExp;
+
+    //最大レベル
+    private int maxLevel = 300;
+
+    //レベルアップに必要な経験値の基準値
+    private int offsetNeedExp = 1;
+
+    private Experience experience;
+
+    //ゲッター
+    //public int CurrentExp { get { return currentExp; } }
+    //public int NeedExp { get { return needExp; } }
+
     private void Start()
     {
         health = maxHealth;
 
         bombHelfHeight = bombPrefab.transform.localScale.y / 2;
+        
+        experience = new Experience(maxLevel, offsetNeedExp);
+        //レベルアップに必要な経験値を計算する
+        experience.CalNeedExperience();
+        //次のレベルに必要な経験値を取得
+        needExp = experience.GetNeedExp(currentLevel + 1) ;
+
+        beforeExp = 0;
     }
 
     void Update()
@@ -67,6 +107,16 @@ public class Player : MonoBehaviour, IApplicableDamage
         {
             gameOverEvent.Invoke();
         }
+
+        //レベルアップ
+        LevelUp();
+
+        //経験値が変化した場合、経験値ゲージを更新
+        if (currentExp != beforeExp)
+        {
+            experienceEvent.Invoke(currentExp, needExp);
+            beforeExp = currentExp;
+        }
     }
 
     public void RecieveDamage(float damage)
@@ -75,4 +125,25 @@ public class Player : MonoBehaviour, IApplicableDamage
         Debug.Log($"プレイヤーは{damage}ダメージ食らった\n" +
             $"残りの体力：{health}");
     }
+
+    //経験値を得る
+    public void GetExp(int exp)
+    {
+        currentExp += exp;
+    }
+
+    //レベルアップ
+    void LevelUp()
+    {
+        //経験値がレベルアップに必要な経験値以上になった場合
+        if (currentExp >= needExp)
+        {
+            //レベルアップ
+            currentLevel++;
+            currentExp = 0;
+            needExp = experience.GetNeedExp(currentLevel + 1);
+            Debug.Log($"レベルアップ！\n 現在のレベル：{currentLevel}");
+        }
+    }
+
 }
