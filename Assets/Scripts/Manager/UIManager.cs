@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
+        timerText.transform.position = new Vector3(1000.0f, 600.0f, 0.0f);
         Time.timeScale = 0;
         gameOverPanel.SetActive(true);
     }
@@ -43,6 +44,7 @@ public class UIManager : MonoBehaviour
     //ゲームクリアパネルを表示する
     private void GameClear()
     {
+        timerText.transform.position = new Vector3(1000.0f,600.0f, 0.0f);
         Time.timeScale = 0;
         gameClearPanel.SetActive(true);
     }
