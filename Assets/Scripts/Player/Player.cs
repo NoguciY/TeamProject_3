@@ -1,22 +1,14 @@
-using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+//using System.Data;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
+//using UnityEngine.Events;
+//using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
-public class Player : MonoBehaviour, IApplicableDamage
+public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 {
-    [NonSerialized]
-    public UnityEvent gameOverEvent = new UnityEvent();
-
-
-    public class ExperienceEvent : UnityEvent<int, int> { }
-
-    public ExperienceEvent experienceEvent = new ExperienceEvent();
-
     [SerializeField, Header("移動速度")]
     private float speed = 3.0f;
 
@@ -24,52 +16,36 @@ public class Player : MonoBehaviour, IApplicableDamage
     [SerializeField]
     private GameObject bombPrefab;
 
-    //最大HP
-    private float maxHealth = 100f;
+    //体力コンポーネント
+    [SerializeField]
+    private LifeController lifeController;
 
-    //HP
-    private float health;
+    //レベルアップコンポーネント
+    [SerializeField]
+    private PlayerLevelUp playerLevelUp;
+
+    //最大HP
+    private int maxLife = 100;
 
     //爆弾の縦幅の半分
     private float bombHelfHeight;
 
-    //現在のレベル
-    private int currentLevel = 1;
-
-    //現在の経験値
-    private int currentExp = 0;
-
-    //前回の経験値
-    private int beforeExp;
-
-    //必要経験値
-    private int needExp;
-
-    //最大レベル
-    private int maxLevel = 300;
-
-    //レベルアップに必要な経験値の基準値
-    private int offsetNeedExp = 1;
-
-    private Experience experience;
-
-    //ゲッター
-    //public int CurrentExp { get { return currentExp; } }
-    //public int NeedExp { get { return needExp; } }
+    //プレイヤーのイベントコンポーネント
+    public PlayerEvent playerEvent;
 
     private void Start()
     {
-        health = maxHealth;
-
-        bombHelfHeight = bombPrefab.transform.localScale.y / 2;
+        //体力の初期化
+        lifeController.InitializeLife(maxLife);
         
-        experience = new Experience(maxLevel, offsetNeedExp);
-        //レベルアップに必要な経験値を計算する
-        experience.CalNeedExperience();
-        //次のレベルに必要な経験値を取得
-        needExp = experience.GetNeedExp(currentLevel + 1) ;
+        //体力ゲージを体力の最大値にする
+        playerEvent.getMaxLifeEvent.Invoke(maxLife);
 
-        beforeExp = 0;
+        //爆弾の高さの半分
+        bombHelfHeight = bombPrefab.transform.localScale.y / 2;
+
+        //レベルの初期化
+        playerLevelUp.InitLevel();
     }
 
     void Update()
@@ -103,47 +79,32 @@ public class Player : MonoBehaviour, IApplicableDamage
         }
 
         //体力が0になった場合、ゲームオーバー
-        if (health <= 0)
+        if (lifeController.IsDead())
         {
-            gameOverEvent.Invoke();
+            playerEvent.gameOverEvent.Invoke();
         }
 
         //レベルアップ
-        LevelUp();
-
-        //経験値が変化した場合、経験値ゲージを更新
-        if (currentExp != beforeExp)
-        {
-            experienceEvent.Invoke(currentExp, needExp);
-            beforeExp = currentExp;
-        }
+        playerLevelUp.LevelUp(playerEvent.levelUpEvent);
     }
 
-    public void RecieveDamage(float damage)
+    //ダメージを受ける関数(インターフェースで実装)
+    public void RecieveDamage(int damage)
     {
-        health -= damage;
+        lifeController.AddValueToLife(-damage);
+        playerEvent.damageEvent.Invoke(damage);
         Debug.Log($"プレイヤーは{damage}ダメージ食らった\n" +
-            $"残りの体力：{health}");
+            $"残りの体力：{lifeController.GetLife}");
     }
 
-    //経験値を得る
+
+    //経験値を取得する関数(インターフェースで実装)
     public void GetExp(int exp)
     {
-        currentExp += exp;
-    }
+        //経験値を加える
+        playerLevelUp.AddExp(exp);
 
-    //レベルアップ
-    void LevelUp()
-    {
-        //経験値がレベルアップに必要な経験値以上になった場合
-        if (currentExp >= needExp)
-        {
-            //レベルアップ
-            currentLevel++;
-            currentExp = 0;
-            needExp = experience.GetNeedExp(currentLevel + 1);
-            Debug.Log($"レベルアップ！\n 現在のレベル：{currentLevel}");
-        }
+        //経験値ゲージを更新するイベントを実行
+        playerEvent.expEvent.Invoke(playerLevelUp.GetExp, playerLevelUp.GetNeedExp);
     }
-
 }
