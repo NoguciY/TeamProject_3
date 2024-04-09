@@ -2,27 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Experience //: MonoBehaviour
+public class ExperienceValue : MonoBehaviour
 {
-    //最大レベル
-    private int maxLevel = 100;
     //レベルアップに必要な経験値の基準値
     private int offsetNeedExp = 1;
+    
     //レベルと必要経験値を持つディクショナリ
     private Dictionary<int, int> needExpDictionary;
 
 
-    //コンストラクタ
-    public Experience(int maxLevel, int offsetNeedExp)
+    // レベルに必要な経験値を計算してディクショナリに格納する
+    public void CalNeedExperience(int maxLevel)
     {
-        this.maxLevel = maxLevel;
-        this.offsetNeedExp = offsetNeedExp;
-    }
-
-
-    /// レベルに必要な経験値を計算してディクショナリに格納する
-    public void CalNeedExperience()
-    {
+        //レベルと必要経験値を格納する
         needExpDictionary = new Dictionary<int, int>();
 
         //レベル1の時は、必要経験値は0

@@ -6,18 +6,20 @@ using UnityEngine;
 //・プレイヤーが持つ値が上昇
 //・アイテムが破棄される
 
-public class Item : MonoBehaviour
+public class ItemExp : MonoBehaviour
 {
     //経験値
     private int exp = 1;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        //アイテムを取得できるオブジェクトを取得
+        var gettableItemObject = other.gameObject.GetComponent<IGettableItem>();
+
+        if(gettableItemObject != null)
         {
-            //プレイヤーが経験値を得る
-            var player = other.gameObject.GetComponent<Player>();
-            player.GetExp(exp);
+            //経験値を取得させる
+            gettableItemObject.GetExp(exp);
 
             Destroy(this.gameObject);
         }

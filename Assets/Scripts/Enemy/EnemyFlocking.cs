@@ -107,11 +107,13 @@ public class EnemyFlocking : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var hit = other.gameObject.GetComponent<IApplicableDamage>();
+        //ダメージを受けることができるオブジェクトを取得
+        var applicableDamageObject = other.gameObject.GetComponent<IApplicableDamage>();
 
-        if(hit != null)
+        if(applicableDamageObject != null)
         {
-            hit.RecieveDamage(10f);
+            //ダメージを受けさせる
+            applicableDamageObject.RecieveDamage(10);
         }
     }
 

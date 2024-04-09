@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -23,72 +21,70 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverPanel;
 
-    [SerializeField, Header("ゲーム終了時間")]
-    private float endingTime;
-
+    //レベルアップパネル
     [SerializeField]
-    private TextMeshProUGUI timerText;
+    private GameObject levelUpPanel;
 
+    //経過時間テキストコンポーネント
     [SerializeField]
-    private Slider experienceGauge;
+    private Timer timer;
 
-    private float oldSeconds;
+    //体力ゲージコンポーネント
+    [SerializeField]
+    private LifeGauge lifeGauge;
 
-    public void GameOver()
-    {
-        timerText.transform.position = new Vector3(1000.0f, 600.0f, 0.0f);
-        Time.timeScale = 0;
-        gameOverPanel.SetActive(true);
-    }
+    //経験値ゲージコンポーネント
+    [SerializeField]
+    private ExpGauge experienceValueGauge;
+
+    //ボタン管理コンポーネント
+    [SerializeField]
+    private ButtonManager buttonManager;
+
+    //最大体力強化イベント
+
+
+    //速さ強化イベント
+
+
+    //爆弾強化イベント
+
+
+
+    //ゲッター
+    public GameObject GetGameOverPanel { get { return gameOverPanel; } }
+    public GameObject GetLevelUpPanel { get { return levelUpPanel; } }
+    public LifeGauge GetLifeGauge { get { return lifeGauge; } }
+    public ExpGauge GetExperienceValueGauge { get {  return experienceValueGauge; } }
+
 
     //ゲームクリアパネルを表示する
-    private void GameClear()
+    //private void GameClear()
+    //{
+    //    timerText.transform.position = new Vector3(1000.0f,600.0f, 0.0f);
+    //    Time.timeScale = 0;
+    //    gameClearPanel.SetActive(true);
+    //}
+
+
+    //パネルを表示させるか
+    public void ShoulShowPanel(GameObject panel, bool shoudShow)
     {
-        timerText.transform.position = new Vector3(1000.0f,600.0f, 0.0f);
-        Time.timeScale = 0;
-        gameClearPanel.SetActive(true);
+        panel.SetActive(shoudShow);
     }
 
-    //時間が来たらシーン遷移(仮)
-
-
-    //テキストに経過時間を反映する
-    private void CountTimer(GameManager gameManager)
-    {
-        //　Time.timeでの時間計測
-        float seconds = gameManager.GetDeltaTimeInMain;
-
-        int minute = (int)seconds / 60;
-
-        if ((int)seconds != (int)oldSeconds)
-        {
-            timerText.text = minute.ToString("00") + ":" + ((int)(seconds % 60)).ToString("00");
-        }
-        oldSeconds = seconds;
-    }
-
-    /// <summary>
-    /// 経験値ゲージを更新する
-    /// </summary>
-    /// <param name="currentExp">現在の経験値</param>
-    /// <param name="needExp">レベルアップに必要な経験値</param>
-    public void UpdateExperienceGauge(int currentExp, int needExp)
-    {
-        float value = 0;
-        if (currentExp != 0)
-            //int型同士の除算では、結果が整数になるため、flaot型にキャストする
-            value = (float)currentExp / (float)needExp;
-        
-        experienceGauge.value = value;
-    }
 
     private void Start()
     {
-        Invoke("GameClear", endingTime);
+        //Invoke("GameClear", endingTime);
+        //ボタンの初期化
+        buttonManager.InitButton(this);
     }
+
 
     private void Update()
     {
-        CountTimer(gameManager);
+        //経過時間テキストの更新
+        timer.CountTimer(gameManager.GetDeltaTimeInMain);
     }
 }

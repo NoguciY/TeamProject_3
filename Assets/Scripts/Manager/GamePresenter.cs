@@ -22,7 +22,34 @@ public class GamePresenter : MonoBehaviour
     private void Awake()
     {
         //プレイヤーのイベントにUIマネージャーの関数を登録する
-        player.gameOverEvent.AddListener(() => uiManager.GameOver());
-        player.experienceEvent.AddListener((currentExp, needExp) => uiManager.UpdateExperienceGauge(currentExp, needExp));
+        //イベントにゲームオーバーパネルを表示する関数を登録
+        player.playerEvent.gameOverEvent.AddListener(
+            () => uiManager.ShoulShowPanel(uiManager.GetGameOverPanel, true));
+        //ゲームをポーズする関数を登録
+        player.playerEvent.gameOverEvent.AddListener(
+            () => Time.timeScale = 0);
+
+        //イベントに経験値ゲージを更新する関数を登録
+        player.playerEvent.expEvent.AddListener(
+            (currentExp, needExp) => uiManager.GetExperienceValueGauge.UpdateExpGauge(currentExp, needExp));
+        
+        //イベントに体力ゲージの更新を行う関数を登録
+        player.playerEvent.damageEvent.AddListener(
+            (damage) => uiManager.GetLifeGauge.UpdateGauge(-damage));
+
+        //イベントに体力ゲージの初期化を行う関数を登録
+        player.playerEvent.getMaxLifeEvent.AddListener(
+            (maxLife) => uiManager.GetLifeGauge.InitializeGauge(maxLife));
+
+        //イベントにレベルアップパネルを表示する関数を登録
+        player.playerEvent.levelUpEvent.AddListener(
+            () => uiManager.ShoulShowPanel(uiManager.GetLevelUpPanel, true));
+        //ゲームをポーズする関数を登録
+        player.playerEvent.levelUpEvent.AddListener(
+            () => Time.timeScale = 0);
+
+
+        //UIマネジャーのイベントにプレイヤーの強化関数を登録する
+        
     }
 }
