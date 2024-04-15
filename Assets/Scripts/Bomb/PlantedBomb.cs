@@ -5,16 +5,21 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-//仮の爆弾
+//爆弾
 //敵に当たった場合、
 //・敵を破壊する
 //・アイテムを生成する
 //・自身を破壊する
 
-public class TestBomb : MonoBehaviour
+public class PlantedBomb : MonoBehaviour
 {
     public float fuseTime;          //爆発するまでの時間
     public float explosionRadius;   //範囲
+
+    //コライダーコンポーネント
+    [SerializeField]
+    private SphereCollider sphereCollider;
+
 
     private void Start()
     {
@@ -30,25 +35,22 @@ public class TestBomb : MonoBehaviour
         foreach (var hit in hits)
         {
             Player playe = hit.collider.gameObject.GetComponent<Player>();
-            //敵にダメージ
-            //if (playe != null)
-            //{
-                if (hit.collider.gameObject.CompareTag("Enemy"))
-                {
-                    hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
-                }
-            //}
+            if (hit.collider.gameObject.CompareTag("Enemy"))
+            {
+                //敵に当たった場合、ダメージを与える
+                hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
+            }
         }
 
         Destroy(this.gameObject);
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Enemy"))
-    //    {
-    //        other.gameObject.GetComponent<EnemyFlocking>().Dead();
-    //        Destroy(this.gameObject);
-    //    }
-    //}
+
+    //爆弾の半分の高さを取得する
+    public float GetHalfHeight()
+    {
+        float halfHeight;
+        return halfHeight = 
+            transform.localScale.y * sphereCollider.radius;
+    }
 }

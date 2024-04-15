@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -56,6 +55,7 @@ public class UIManager : MonoBehaviour
     public GameObject GetLevelUpPanel { get { return levelUpPanel; } }
     public LifeGauge GetLifeGauge { get { return lifeGauge; } }
     public ExpGauge GetExperienceValueGauge { get {  return experienceValueGauge; } }
+    public ButtonManager GetButtonManager { get {  return buttonManager; } }
 
 
     //ゲームクリアパネルを表示する
