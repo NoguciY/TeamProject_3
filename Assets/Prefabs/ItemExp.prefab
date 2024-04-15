@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 333678946549891768}
   - component: {fileID: 8523644831044501121}
   - component: {fileID: 6310612290029238505}
-  m_Layer: 0
-  m_Name: Item
+  m_Layer: 6
+  m_Name: ItemExp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 3777276650352961262}
   - component: {fileID: 8065738829466057105}
   - component: {fileID: 6759236160251306296}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -6,16 +6,16 @@ public class LifeController : MonoBehaviour
 {
     //体力
     [SerializeField]
-    private int life;
+    private float life;
 
     //最大体力
-    private int maxLife;
+    private float maxLife;
 
     //ゲッター
-    public int GetLife { get { return life; } }
+    public float GetLife { get { return life; } }
 
     //体力の初期化(体力を最大にする)
-    public void InitializeLife(int maxLife)
+    public void InitializeLife(float maxLife)
     {
         SetMaxLife(maxLife);
         life = maxLife;
@@ -23,7 +23,7 @@ public class LifeController : MonoBehaviour
 
 
     //体力に値を加える(ダメージ、回復)
-    public void AddValueToLife(int value)
+    public void AddValueToLife(float value)
     {
         life += value;
         
@@ -34,7 +34,7 @@ public class LifeController : MonoBehaviour
 
 
     //体力の最大値を設定する
-    public void SetMaxLife(int maxLife)
+    public void SetMaxLife(float maxLife)
     {
         this.maxLife = maxLife;
     }
