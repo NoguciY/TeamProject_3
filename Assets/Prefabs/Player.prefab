@@ -269,6 +269,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  bombPrefab: {fileID: 0}
+  lifeController: {fileID: 0}
+  playerLevelUp: {fileID: 0}
+  playerEvent: {fileID: 0}
 --- !u!136 &5569499146929724953
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -289,9 +293,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.009056
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.99547195, z: 0}
 --- !u!1 &9208770001640528175
 GameObject:
   m_ObjectHideFlags: 0
