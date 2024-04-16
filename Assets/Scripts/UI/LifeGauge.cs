@@ -13,14 +13,14 @@ public class LifeGauge : MonoBehaviour
     private Slider lifeGauge;
 
     //ゲージの初期化(体力を最大値にする)
-    public void InitializeGauge(int maxLife)
+    public void InitializeGauge(float maxLife)
     {
         lifeGauge.maxValue = maxLife;
         lifeGauge.value = maxLife;
     }
 
     //ゲージを更新する
-    public void UpdateGauge(int value)
+    public void UpdateGauge(float value)
     {
         lifeGauge.value += value;
     }
