@@ -13,7 +13,7 @@ public abstract class PowerUpItem : MonoBehaviour
     private Image powerUpItemImage;
 
     //‹­‰»ŠÖ”
-    public virtual void PowerUpFunc()
+    public virtual void PowerUpFunc(Player player)
     {
     }
 }
@@ -24,7 +24,7 @@ public class MaxLife : PowerUpItem
     //‰æ‘œ
 
     //Å‘å‘Ì—Í‚ğ‹­‰»‚·‚é
-    public override void PowerUpFunc()
+    public override void PowerUpFunc(Player player)
     {
         //ˆø”‚ÉŒ»İ‚ÌÅ‘å‘Ì—Í‚ª‚¢‚é
     }
