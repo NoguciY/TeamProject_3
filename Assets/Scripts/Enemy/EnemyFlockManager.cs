@@ -79,7 +79,7 @@ public class EnemyFlockManager : MonoBehaviour
             //ƒ‰ƒ“ƒ_ƒ€‚ÈˆÊ’u
             float randomPosX = Random.Range(generatedMinRange, generatedMaxRange);
             float randomPosZ = Random.Range(generatedMinRange, generatedMaxRange);
-            Vector3 generationPos = new Vector3(randomPosX, 0, randomPosZ);
+            Vector3 generationPos = new Vector3(randomPosX, 50, randomPosZ);
 
             //“G‚Ì¶¬
             GameObject boid = Instantiate(enemy, generationPos, Quaternion.identity, parent);
