@@ -24,4 +24,11 @@ public class LifeGauge : MonoBehaviour
     {
         lifeGauge.value += value;
     }
+
+    //ゲームオーバー時にゲージが0になっていない場合ゲージを0にする
+    public void GameOverLifeGauge()
+    {
+        if(lifeGauge.value >= 0)
+            lifeGauge.value = 0;
+    }
 }

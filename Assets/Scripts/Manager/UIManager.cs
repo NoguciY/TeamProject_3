@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -40,15 +41,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ButtonManager buttonManager;
 
-    //最大体力強化イベント
-
-
-    //速さ強化イベント
-
-
-    //爆弾強化イベント
-
-
 
     //ゲッター
     public GameObject GetGameOverPanel { get { return gameOverPanel; } }
@@ -73,6 +65,7 @@ public class UIManager : MonoBehaviour
         panel.SetActive(shoudShow);
     }
 
+    //ボタンを選択する
 
     private void Start()
     {

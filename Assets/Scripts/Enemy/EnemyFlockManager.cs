@@ -12,6 +12,10 @@ public class EnemyFlockManager : MonoBehaviour
     [SerializeField]
     private GameManager gameManager;
 
+    //プレイヤーコンポーネント
+    [SerializeField]
+    private Player player;
+
     //生成する敵
     [SerializeField]
     private GameObject enemy;
@@ -31,39 +35,50 @@ public class EnemyFlockManager : MonoBehaviour
     [SerializeField, Header("生成間隔(秒)")]
     private float generatedInterval;
 
+    // 円の中心点
+    [SerializeField, Header("円状に生成する際の中心座標")]
+    private Vector3 centerPos;
+
+    // 円の半径
+    [SerializeField, Header("円状に生成する際の半径")]
+    private float radius;
+
     //インスタンス化した群の個体を格納する
     public List<GameObject> boids = new List<GameObject>();
 
-
-    // 円の半径
-    [SerializeField]
-    private float radius;
-
-    // 円の中心点
-    [SerializeField]
-    private Vector3 centerPos;
-
-    
+    //前回の間隔
     private float beforeInterval;
+
+
+    float oneCycle = 2.0f * Mathf.PI; // sin の周期は 2π
+
 
     private void Awake()
     {
         //敵をランダムな位置に生成する
         //AddBoid();
-        GenerateEnemiesInCircle(enemy, radius, generatedNum);
+        //GenerateEnemiesInCircle(enemy, radius, generatedNum);
     }
 
     private void Update()
     {
+        //間隔 = 経過時間 / 生成間隔 の余り
         float interval = gameManager.GetDeltaTimeInMain % generatedInterval;
 
         //設定した秒数毎に繰り返す
         if (interval < beforeInterval)
         {
-            GenerateEnemiesInCircle(enemy, radius, generatedNum);
+            //GenerateEnemiesInCircle(enemy, radius, generatedNum);
+            
+            //生成間隔ごとに生成数を10増やす
+            generatedNum += 10;
         }
-
         beforeInterval = interval;
+
+        //AddBoid();
+
+        //常に設定した数をプレイヤーを中心に円状に生成する
+        AddBoidInCircle();
     }
 
     /// <summary>
@@ -79,7 +94,15 @@ public class EnemyFlockManager : MonoBehaviour
             //ランダムな位置
             float randomPosX = Random.Range(generatedMinRange, generatedMaxRange);
             float randomPosZ = Random.Range(generatedMinRange, generatedMaxRange);
-            Vector3 generationPos = new Vector3(randomPosX, 50, randomPosZ);
+//<<<<<<< Updated upstream
+//            Vector3 generationPos = new Vector3(randomPosX, 50, randomPosZ);
+//=======
+
+            Vector3 playerPos = player.transform.position;
+
+            //生成位置
+            Vector3 generationPos = new Vector3(randomPosX, 0, randomPosZ) + playerPos;
+//>>>>>>> Stashed changes
 
             //敵の生成
             GameObject boid = Instantiate(enemy, generationPos, Quaternion.identity, parent);
@@ -129,19 +152,46 @@ public class EnemyFlockManager : MonoBehaviour
     /// <param name="generatedNum">生成する数</param>
     private void GenerateEnemiesInCircle(GameObject generatedPrefab, float radius, int generatedNum)
     {
-        float oneCycle = 2.0f * Mathf.PI; // sin の周期は 2π
-
         for (int i = 0; i < generatedNum; ++i)
         {
             // 周期の位置 (1.0 = 100% の時 2π となる)
             float point = ((float)i / generatedNum) * oneCycle; 
 
-            float x = Mathf.Cos(point) * radius;
-            float z = Mathf.Sin(point) * radius;
+            float x = Mathf.Cos(point) * radius + centerPos.x;
+            float z = Mathf.Sin(point) * radius + centerPos.z;
 
-            var spawnPos = new Vector3(x, 0, z);
+            var spawnPos = new Vector3(x, centerPos.y, z);
 
             GameObject boid = Instantiate(generatedPrefab,spawnPos,Quaternion.identity,transform);
+            boid.GetComponent<EnemyFlocking>().flockManager = this;
+
+            //リストに追加
+            boids.Add(boid);
+        }
+    }
+
+    //円状に敵を生成する
+    //常に設定した数がフィールドにいるようにする
+    private void AddBoidInCircle()
+    {
+        //生成数が設定した生成数より小さい場合
+        if (boids.Count < generatedNum)
+        {
+            Vector3 playerPos = player.transform.position;
+
+            //ランダムな数
+            int randomPoint = Random.Range(0, generatedNum);
+
+            //周期の位置 (1.0 = 100% の時 2π となる)
+            float point = ((float)randomPoint / generatedNum) * oneCycle;
+
+            float x = Mathf.Cos(point) * radius + playerPos.x;
+            float z = Mathf.Sin(point) * radius + playerPos.z;
+
+            //生成位置
+            var spawnPos = new Vector3(x, centerPos.y, z);
+
+            GameObject boid = Instantiate(enemy, spawnPos, Quaternion.identity, transform);
             boid.GetComponent<EnemyFlocking>().flockManager = this;
 
             //リストに追加

@@ -86,7 +86,7 @@ public class EnemyFlocking : MonoBehaviour
         myTransform = transform;
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
-        speed = UnityEngine.Random.Range(minSpeed, maxSpeed);
+        speed = Random.Range(minSpeed, maxSpeed);
 
         velocity = speed * Vector3.forward;
 
@@ -137,16 +137,22 @@ public class EnemyFlocking : MonoBehaviour
 
         foreach(var boid in flockManager.boids)
         {
+            //自身以外のfloackMangerを持ったオブジェクト
             if(boid != this.gameObject)
             {
+                //自身から仲間の方向、距離
                 Vector3 toOtherVec = boid.transform.position - this.transform.position;
+                //magnitudeより処理が速いためsqrMagnitudeを使う
                 float sqrDistance = toOtherVec.sqrMagnitude;
 
-                if(sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
+                //自身と仲間の距離がditectingNeiborDistance以下の場合
+                if (sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
                 {
+                    //自身から仲間の方向と自身の進行方向
                     Vector3 direction = toOtherVec.normalized;
                     Vector3 forward = velocity.normalized;
 
+                    //内積を使い視野角内にいる仲間のみをリストに追加する
                     float innerProduct = Vector3.Dot(forward, direction);
                     if(innerProduct >= innerProductThred) 
                     {
