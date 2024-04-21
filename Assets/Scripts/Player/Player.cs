@@ -24,6 +24,9 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //爆弾プレハブ
     public GameObject bombPrefab;
 
+    //プレイヤーのイベントコンポーネント
+    public PlayerEvent playerEvent;
+
     //体力コンポーネント
     [SerializeField]
     private LifeController lifeController;
@@ -31,9 +34,6 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //レベルアップコンポーネント
     [SerializeField]
     private PlayerLevelUp playerLevelUp;
-
-    //プレイヤーのイベントコンポーネント
-    public PlayerEvent playerEvent;
 
     //プレイヤーステータスコンポーネント
     [SerializeField]
@@ -43,8 +43,11 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private PowerUpItems powerUpItems;
 
+    //ゲームマネージャー
+    [SerializeField]
+    private GameManager gameManager;
+
     //アイテム用のコライダーコンポーネント
-    //[SerializeField]
     public CapsuleCollider capsuleColliderForItem;
 
     //爆弾の縦幅の半分
@@ -53,9 +56,12 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //設置型爆弾の回転値
     private Quaternion bombRotation;
 
+    //回復力のクールタイム
+    float resilienceCoolTime;
+
     //ゲッター
     public PowerUpItems GetPowerUpItems { get { return powerUpItems; } }
-    //public float GetMaxLife { get { return maxLife; } }
+
 
     private void Start()
     {
@@ -78,6 +84,9 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
         //レベルの初期化
         playerLevelUp.InitLevel();
+
+        //回復力のクールタイム初期化
+        resilienceCoolTime = 1f;
     }
 
     void Update()
@@ -108,14 +117,16 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //自動回復する
         AutomaticRecovery();
 
+        //レベルアップ
+        playerLevelUp.LevelUp(playerEvent.levelUpEvent);
+
         //体力が0になった場合、ゲームオーバー
         if (lifeController.IsDead())
         {
+            //体力ゲージが０出ない場合、体力ゲージを0にする
+
             playerEvent.gameOverEvent.Invoke();
         }
-
-        //レベルアップ
-        playerLevelUp.LevelUp(playerEvent.levelUpEvent);
     }
 
     //ダメージを受ける関数(インターフェースで実装)
@@ -123,7 +134,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     {
         float totalDamage = -damage + difence;
         lifeController.AddValueToLife(totalDamage);
-        playerEvent.damageEvent.Invoke(totalDamage);
+        playerEvent.addLifeEvent.Invoke(totalDamage);
         Debug.Log($"プレイヤーは{totalDamage}ダメージ食らった\n" +
             $"残りの体力：{lifeController.GetLife}");
     }
@@ -154,10 +165,23 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //体力を自動回復する
     private void AutomaticRecovery()
     {
-        //回復力が０より大きい場合
-        if (resilience > 0)
+        //回復力が０より大きい場合かつ
+        //ゲームオーバーでない場合
+        if (resilience > 0　&& !lifeController.IsDead())
         {
-            lifeController.AddValueToLife(resilience);
+            //経過時間
+            float deltaTime = gameManager.GetDeltaTimeInMain;
+            
+            //回復にはクールタイムを設ける
+            if (deltaTime >= resilienceCoolTime)
+            {
+                //体力を回復力分増加
+                lifeController.AddValueToLife(resilience);
+                //体力ゲージを回復力分増加
+                playerEvent.addLifeEvent.Invoke(resilience);
+
+                resilienceCoolTime++;
+            }
         }
     }
 }

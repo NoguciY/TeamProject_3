@@ -58,7 +58,7 @@ public class PowerUpItems : MonoBehaviour
     public void PowerUpDifence(Player player)
     {
         //–hŒä—Í‚ğ‘‰Á—¦•ª‘‚â‚·
-        player.difence += player.difence * difenceIncreaseRate;
+        player.difence += difenceIncreaseRate;
         Debug.Log($"Œ»İ‚Ì–hŒä—ÍF{player.difence}");
     }
 
@@ -66,7 +66,7 @@ public class PowerUpItems : MonoBehaviour
     public void PowerUpResilience(Player player)
     {
         //‰ñ•œ—Í‚ğ‘‰Á—¦•ª‘‚â‚·
-        player.resilience += player.resilience * resilienceIncreaseRate;
+        player.resilience += resilienceIncreaseRate;
         Debug.Log($"Œ»İ‚Ì‰ñ•œ—ÍF{player.resilience}");
     }
 
@@ -78,7 +78,7 @@ public class PowerUpItems : MonoBehaviour
         radius += radius * bombRangeIncreaseRate;
         //2‰ñGetComponent‚µ‚Ä‚¢‚é‚©‚çÅ¬ŒÀ‚É—}‚¦‚ç‚ê‚È‚¢‚©H
         player.bombPrefab.GetComponent<PlantedBomb>().explosionRadius = radius;
-        Debug.Log($"”š’e‚ÌUŒ‚”ÍˆÍ‚ğ‹­‰»");
+        Debug.Log($"Œ»İ‚ÌUŒ‚”ÍˆÍ{radius}");
     }
 
     //”š’e‚Ìg—p‘¬“x‚ğ‹­‰»‚·‚é

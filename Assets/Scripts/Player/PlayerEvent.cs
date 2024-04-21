@@ -15,8 +15,8 @@ public class PlayerEvent : MonoBehaviour
     public ExpEvent expEvent = new ExpEvent();
 
     //ダメージを受けた場合に実行するイベント
-    public class DamageEvent : UnityEvent<float> { }
-    public DamageEvent damageEvent = new DamageEvent();
+    public class AddLifeEvent : UnityEvent<float> { }
+    public AddLifeEvent addLifeEvent = new AddLifeEvent();
 
     //体力の最大値を渡す場合に実行するイベント
     public class GetMaxLifeEvent : UnityEvent<float> { }

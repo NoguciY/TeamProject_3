@@ -22,65 +22,66 @@ public class GamePresenter : MonoBehaviour
     private void Awake()
     {
         //プレイヤーのイベントにUIマネージャーの関数を登録する
-        //イベントにゲームオーバーパネルを表示する関数を登録
+
+        //ゲームオーバー時に体力ゲージを0にする関数を登録
+        player.playerEvent.gameOverEvent.AddListener(
+            () => uiManager.GetLifeGauge.GameOverLifeGauge());
+        //ゲームオーバー時にゲームオーバーパネルを表示する関数を登録
         player.playerEvent.gameOverEvent.AddListener(
             () => uiManager.ShoulShowPanel(uiManager.GetGameOverPanel, true));
-        //ゲームをポーズする関数を登録
+        //ゲームオーバー時にゲームをポーズする関数を登録
         player.playerEvent.gameOverEvent.AddListener(
             () => Time.timeScale = 0);
+        //ゲームオーバー時にコンティニューボタンを選択する関数を登録
+        player.playerEvent.gameOverEvent.AddListener(
+            () => uiManager.GetButtonManager.GetGameOverContinueButton.Select());
 
-        //イベントに経験値ゲージを更新する関数を登録
+        //経験値取得時に経験値ゲージを更新する関数を登録
         player.playerEvent.expEvent.AddListener(
             (currentExp, needExp) => uiManager.GetExperienceValueGauge.UpdateExpGauge(currentExp, needExp));
         
-        //イベントに体力ゲージの更新を行う関数を登録
-        player.playerEvent.damageEvent.AddListener(
+        //ダメージを受けた際に体力ゲージの更新を行う関数を登録
+        player.playerEvent.addLifeEvent.AddListener(
             (damage) => uiManager.GetLifeGauge.UpdateGauge(damage));
 
-        //イベントに体力ゲージの初期化を行う関数を登録
+        //レベルアップ時に体力ゲージの初期化を行う関数を登録
         player.playerEvent.getMaxLifeEvent.AddListener(
             (maxLife) => uiManager.GetLifeGauge.InitializeGauge(maxLife));
-
-        //イベントにレベルアップパネルを表示する関数を登録
+        //レベルアップ時にレベルアップパネルを表示する関数を登録
         player.playerEvent.levelUpEvent.AddListener(
             () => uiManager.ShoulShowPanel(uiManager.GetLevelUpPanel, true));
-        //ゲームをポーズする関数を登録
+        //レベルアップ時にゲームをポーズする関数を登録
         player.playerEvent.levelUpEvent.AddListener(
             () => Time.timeScale = 0);
-        //登録した強化項目の関数を削除と
-        //強化項目の関数を登録
-        //player.playerEvent.levelUpEvent.AddListener(
-        //    () => uiManager.GetButtonManager.RegisterPowerUpFunc()); 
+        //レベルアップ時に強化ボタンに強化イベントを登録する関数を登録
         player.playerEvent.levelUpEvent.AddListener(
-            () => uiManager.GetButtonManager.RegisterPowerUpItemEvents());
+            () => uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents());
 
 
         //UIマネージャーのイベントにプレイヤーの強化関数を登録
-        //uiManager.buttonEvent.AddListener(
-        //    (num) => player.PowerUpItems.PowerUpFunc(num));
 
-        //ボタンマネージャーのイベントにプレイヤーの最大体力強化関数を登録
-        uiManager.GetButtonManager.powerUpMaxLifeEvent.AddListener(
+        //強化イベントにプレイヤーの最大体力強化関数を登録
+        uiManager.GetButtonManager.powerUpButton.powerUpMaxLifeEvent.AddListener(
             () => player.GetPowerUpItems.PowerUpMaxLife(player));
 
-        //ボタンマネージャーのイベントにプレイヤーの移動速度強化関数を登録
-        uiManager.GetButtonManager.powerUpSpeedEvent.AddListener(
+        //強化イベントにプレイヤーの移動速度強化関数を登録
+        uiManager.GetButtonManager.powerUpButton.powerUpSpeedEvent.AddListener(
             () => player.GetPowerUpItems.PowerUpSpeed(player));
 
-        //ボタンマネージャーのイベントにプレイヤーの回収範囲強化関数を登録
-        uiManager.GetButtonManager.powerUpCollectionRangeRateEvent.AddListener(
+        //強化イベントにプレイヤーの回収範囲強化関数を登録
+        uiManager.GetButtonManager.powerUpButton.powerUpCollectionRangeRateEvent.AddListener(
             () => player.GetPowerUpItems.PowerUpCollectionRangeRate(player));
 
-        //ボタンマネージャーのイベントにプレイヤーの防御力強化関数を登録
-        uiManager.GetButtonManager.powerUpDifenceEvent.AddListener(
+        //強化イベントにプレイヤーの防御力強化関数を登録
+        uiManager.GetButtonManager.powerUpButton.powerUpDifenceEvent.AddListener(
             () => player.GetPowerUpItems.PowerUpDifence(player));
 
-        //ボタンマネージャーのイベントにプレイヤーの回復力強化関数を登録
-        uiManager.GetButtonManager.powerUpResilienceEvent.AddListener(
+        //強化イベントにプレイヤーの回復力強化関数を登録
+        uiManager.GetButtonManager.powerUpButton.powerUpResilienceEvent.AddListener(
             () => player.GetPowerUpItems.PowerUpResilience(player));
 
-        //ボタンマネージャーのイベントにプレイヤーの爆弾の爆発範囲強化関数を登録
-        uiManager.GetButtonManager.powerUpBombRangeEvent.AddListener(
+        //強化イベントにプレイヤーの爆弾の爆発範囲強化関数を登録
+        uiManager.GetButtonManager.powerUpButton.powerUpBombRangeEvent.AddListener(
             () => player.GetPowerUpItems.PowerUpBombRange(player));
     }
 }

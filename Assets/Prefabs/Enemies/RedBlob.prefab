@@ -58,15 +58,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8366358690053156200, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8068685255650976656, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -6833207351799687481, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
         type: 3}
       propertyPath: m_Name
       value: BlobBody
       objectReference: {fileID: 0}
+    - target: {fileID: -6833207351799687481, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5986407129120631687, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5500398069236439516, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4162041226704996639, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
         type: 3}
       propertyPath: m_Name
       value: BlobEye
+      objectReference: {fileID: 0}
+    - target: {fileID: -4162041226704996639, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -3325181782226859361, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -1305714453302288569, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
         type: 3}
@@ -75,8 +115,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
         type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
       propertyPath: m_TagString
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5098034880011203338, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5844622625683270731, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076782462519654784, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -116,7 +176,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -146,7 +206,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
