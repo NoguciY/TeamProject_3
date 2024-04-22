@@ -120,7 +120,10 @@ public class EnemyFlocking : MonoBehaviour
     public void Dead()
     {
         //群から自身を削除
-        flockManager.boids.Remove(this.gameObject);
+        if (flockManager != null)
+        {
+            flockManager.boids.Remove(this.gameObject);
+        }
         //自身を破棄
         Destroy(this.gameObject);
         //アイテムを生成
