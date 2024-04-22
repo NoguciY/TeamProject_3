@@ -41,6 +41,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ButtonManager buttonManager;
 
+    //仮で書いた後で消す
+    //private bool isClear = false;
 
     //ゲッター
     public GameObject GetGameOverPanel { get { return gameOverPanel; } }
@@ -51,12 +53,11 @@ public class UIManager : MonoBehaviour
 
 
     //ゲームクリアパネルを表示する
-    //private void GameClear()
-    //{
-    //    timerText.transform.position = new Vector3(1000.0f,600.0f, 0.0f);
-    //    Time.timeScale = 0;
-    //    gameClearPanel.SetActive(true);
-    //}
+    private void GameClear()
+    {
+        Time.timeScale = 0;
+        gameClearPanel.SetActive(true);
+    }
 
 
     //パネルを表示させるか
@@ -79,5 +80,12 @@ public class UIManager : MonoBehaviour
     {
         //経過時間テキストの更新
         timer.CountTimer(gameManager.GetDeltaTimeInMain);
+
+        //クリアの表示(仮で書いたので後で書き直す)
+        //if (isClear != gameManager.GetIsGameClear)
+        //{
+        //    isClear = true;
+        //    GameClear();
+        //}
     }
 }

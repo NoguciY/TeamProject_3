@@ -25,7 +25,8 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     public GameObject bombPrefab;
 
     //プレイヤーのイベントコンポーネント
-    public PlayerEvent playerEvent;
+    [SerializeField]
+    private PlayerEvent playerEvent;
 
     //体力コンポーネント
     [SerializeField]
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
     //ゲッター
     public PowerUpItems GetPowerUpItems { get { return powerUpItems; } }
-
+    public PlayerEvent GetPlayerEvent => playerEvent;
 
     private void Start()
     {
@@ -135,7 +136,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         float totalDamage = -damage + difence;
         lifeController.AddValueToLife(totalDamage);
         playerEvent.addLifeEvent.Invoke(totalDamage);
-        Debug.Log($"プレイヤーは{totalDamage}ダメージ食らった\n" +
+        Debug.Log($"プレイヤーは{-totalDamage}ダメージ食らった\n" +
             $"残りの体力：{lifeController.GetLife}");
     }
 
