@@ -20,8 +20,7 @@ public class ButtonManager : MonoBehaviour
 
 
     //ゲッター
-    public Button GetGameOverContinueButton { get { return gameOverContinueButton; } }
-    //public Button GetGameOverContinueButton => gameOverContinueButton;
+    public Button GetGameOverContinueButton => gameOverContinueButton;
 
     //ボタンの初期化(イベントの登録)
     public void InitButton(UIManager uIManager)

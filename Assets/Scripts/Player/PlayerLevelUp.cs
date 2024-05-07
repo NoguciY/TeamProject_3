@@ -24,8 +24,9 @@ public class PlayerLevelUp : MonoBehaviour
 
 
     //ƒQƒbƒ^[
-    public int GetExp { get { return exp; } }
-    public int GetNeedExp { get { return needExp; } }
+    public int GetLevel => level;
+    public int GetExp => exp;
+    public int GetNeedExp => needExp;
 
     //‰Šú‰»
     public void InitLevel()

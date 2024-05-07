@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     //private bool isGameClear = false;
 
     //ƒQƒbƒ^[
-    public float GetDeltaTimeInMain {  get { return deltaTimeInMain; } }
+    public float GetDeltaTimeInMain => deltaTimeInMain;
     //public bool GetIsGameClear => isGameClear;
 
     private void Update()
