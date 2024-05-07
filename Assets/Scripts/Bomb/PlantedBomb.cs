@@ -46,7 +46,7 @@ public class PlantedBomb : MonoBehaviour
     }
 
 
-    //”š’e‚Ì”¼•ª‚Ì‚‚³‚ğæ“¾‚·‚é
+    //”š’e‚Ì‚‚³‚Ì”¼•ª‚ğæ“¾‚·‚é
     public float GetHalfHeight()
     {
         float halfHeight;

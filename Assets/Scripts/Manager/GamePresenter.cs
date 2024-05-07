@@ -27,16 +27,17 @@ public class GamePresenter : MonoBehaviour
     {
         //プレイヤーのイベントにUIマネージャーの関数を登録する
 
-        //ゲームオーバー時に体力ゲージを0にする関数を登録
+        //ゲームオーバーイベントに関数を登録する
+        //体力ゲージを0にする
         player.GetPlayerEvent.gameOverEvent.AddListener(
             () => uiManager.GetLifeGauge.GameOverLifeGauge());
-        //ゲームオーバー時にゲームオーバーパネルを表示する関数を登録
+        //ゲームオーバーパネルを表示する
         player.GetPlayerEvent.gameOverEvent.AddListener(
             () => uiManager.ShoulShowPanel(uiManager.GetGameOverPanel, true));
-        //ゲームオーバー時にゲームをポーズする関数を登録
+        //ゲームをポーズする
         player.GetPlayerEvent .gameOverEvent.AddListener(
             () => Time.timeScale = 0);
-        //ゲームオーバー時にコンティニューボタンを選択する関数を登録
+        //コンティニューボタンを選択する
         player.GetPlayerEvent.gameOverEvent.AddListener(
             () => uiManager.GetButtonManager.GetGameOverContinueButton.Select());
 
@@ -52,10 +53,11 @@ public class GamePresenter : MonoBehaviour
         player.GetPlayerEvent.getMaxLifeEvent.AddListener(
             (maxLife) => uiManager.GetLifeGauge.InitializeGauge(maxLife));
 
-        //レベルアップ時にレベルアップパネルを表示する関数を登録
+        //レベルアップイベントに関数を登録する
+        //レベルアップパネルを表示する
         player.GetPlayerEvent.levelUpEvent.AddListener(
             () => uiManager.ShoulShowPanel(uiManager.GetLevelUpPanel, true));
-        //レベルアップ時にゲームをポーズする関数を登録
+        //ゲームをポーズする関数を登録
         player.GetPlayerEvent.levelUpEvent.AddListener(
             () => Time.timeScale = 0);
         //レベルアップ時に強化ボタンに強化イベントを登録する関数を登録
@@ -63,6 +65,19 @@ public class GamePresenter : MonoBehaviour
             () => uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents());
         //レベルアップ時に効果音を鳴らす関数を登録
         player.GetPlayerEvent.levelUpEvent.AddListener(
+            () => soundManager.Play("レベルアップ"));
+
+        //新しい爆弾を追加する時にレベルアップパネル(爆弾追加用)を表示する関数を登録
+        player.GetPlayerEvent.AddNewBombEvent.AddListener(
+            () => uiManager.ShoulShowPanel(uiManager.GetLevelUpBombPanel, true));
+        //新しい爆弾を追加する時にゲームをポーズする関数を登録
+        player.GetPlayerEvent.AddNewBombEvent.AddListener(
+            () => Time.timeScale = 0);
+        //新しい爆弾を追加する時に爆弾追加ボタンに爆弾追加イベントを登録する関数を登録
+        player.GetPlayerEvent.AddNewBombEvent.AddListener(
+            () => uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent());
+        //新しい爆弾を追加する時に効果音を鳴らす関数を登録
+        player.GetPlayerEvent.AddNewBombEvent.AddListener(
             () => soundManager.Play("レベルアップ"));
 
 
@@ -109,5 +124,9 @@ public class GamePresenter : MonoBehaviour
         //強化イベントに効果音を鳴らす関数を登録
         uiManager.GetButtonManager.powerUpButton.powerUpBombRangeEvent.AddListener(
             () => soundManager.Play("爆発範囲アップ"));
+
+        //爆弾追加イベントにフラグをオンにする関数を登録
+        //uiManager.GetButtonManager.powerUpButton.何とかイベント.AddListener(
+        //    () => player.NewBombEnabled());
     }
 }

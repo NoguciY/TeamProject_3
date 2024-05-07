@@ -5,7 +5,7 @@ using UnityEngine;
 
 //ゲームを通してのプレイヤーのステータスを保持する
 
-public class PlayerStatus : MonoBehaviour
+public class PlayerDefaultStatus : MonoBehaviour
 {
     //最大HP
     public float maxLife = 100;

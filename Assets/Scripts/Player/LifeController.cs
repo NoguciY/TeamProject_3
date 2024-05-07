@@ -12,7 +12,7 @@ public class LifeController : MonoBehaviour
     private float maxLife;
 
     //ƒQƒbƒ^[
-    public float GetLife { get { return life; } }
+    public float GetLife => life;
 
     //‘Ì—Í‚Ì‰Šú‰»(‘Ì—Í‚ğÅ‘å‚É‚·‚é)
     public void InitializeLife(float maxLife)
