@@ -48,7 +48,7 @@ public class enemy : MonoBehaviour
         if (applicableDamageObject != null)
         {
             //ƒ_ƒ[ƒW‚ğó‚¯‚³‚¹‚é
-            applicableDamageObject.RecieveDamage(10);
+            applicableDamageObject.ReceiveDamage(10);
         }
     }
 }

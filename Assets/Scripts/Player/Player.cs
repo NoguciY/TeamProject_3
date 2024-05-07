@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 
 public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 {
@@ -38,7 +39,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
     //プレイヤーステータスコンポーネント
     [SerializeField]
-    private PlayerStatus playerStatus;
+    private PlayerDefaultStatus playerStatus;
 
     //強化項目コンポーネント
     [SerializeField]
@@ -48,21 +49,34 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private GameManager gameManager;
 
+    //爆弾を管理するコンポーネント
+    [SerializeField]
+    private BombManager bombManager;
+
     //アイテム用のコライダーコンポーネント
     public CapsuleCollider capsuleColliderForItem;
 
     //爆弾の縦幅の半分
-    private float bombHelfHeight;
+    //private float bombHelfHeight;
 
     //設置型爆弾の回転値
-    private Quaternion bombRotation;
+    //private Quaternion bombRotation;
 
     //回復力のクールタイム
-    float resilienceCoolTime;
+    private float resilienceCoolTime;
+
+    //爆弾使用可能フラグ
+    private bool[] canUseBombFlags = new bool[3];
 
     //ゲッター
-    public PowerUpItems GetPowerUpItems { get { return powerUpItems; } }
+    public PowerUpItems GetPowerUpItems => powerUpItems;
     public PlayerEvent GetPlayerEvent => playerEvent;
+
+    //カメラ(仮)
+    private Camera mainCamera;
+
+    //新しいボムを追加するカウンター
+    private int newBombCounter = 0;
 
     private void Start()
     {
@@ -79,15 +93,16 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //体力ゲージを体力の最大値にする
         playerEvent.getMaxLifeEvent.Invoke(maxLife);
 
-        //爆弾関係の値を取得
-        bombHelfHeight = bombPrefab.GetComponent<PlantedBomb>().GetHalfHeight();
-        bombRotation = bombPrefab.transform.rotation;
-
         //レベルの初期化
         playerLevelUp.InitLevel();
 
         //回復力のクールタイム初期化
         resilienceCoolTime = 1f;
+
+        mainCamera = Camera.main;
+
+        //爆弾の初期化
+        bombManager.Initialize();
     }
 
     void Update()
@@ -112,26 +127,60 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             transform.position -= speed * transform.right * Time.deltaTime;
         }
 
+
+        var screenPos = mainCamera.WorldToScreenPoint(transform.position);
+
+        var direction = Input.mousePosition - screenPos;
+
+        var angle = Utilities.GetAngle(Vector3.zero, direction);
+
+        var angles = transform.localEulerAngles;
+        angles.y = angle - 0;
+        transform.localEulerAngles = angles;
+
+
         //爆弾を生成する
-        InstantiatePlantedBomb();
+        //GenerateBomb();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            bombManager.GeneratePlantedBomb();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            bombManager.GenerateKnockbackBomb();
+        }
 
         //自動回復する
         AutomaticRecovery();
 
         //レベルアップ
-        playerLevelUp.LevelUp(playerEvent.levelUpEvent);
+        if (playerLevelUp.GetLevel == 10)
+        {
+            playerLevelUp.LevelUp(playerEvent.AddNewBombEvent);
+        }
+        else if (playerLevelUp.GetLevel == 20)
+        {
+
+        }
+        else if (playerLevelUp.GetLevel == 30)
+        {
+
+        }
+        else
+            playerLevelUp.LevelUp(playerEvent.levelUpEvent);
+
 
         //体力が0になった場合、ゲームオーバー
         if (lifeController.IsDead())
         {
             //体力ゲージが０出ない場合、体力ゲージを0にする
-
             playerEvent.gameOverEvent.Invoke();
         }
     }
 
     //ダメージを受ける関数(インターフェースで実装)
-    public void RecieveDamage(float damage)
+    public void ReceiveDamage(float damage)
     {
         float totalDamage = -damage + difence;
         lifeController.AddValueToLife(totalDamage);
@@ -152,14 +201,24 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     }
 
 
-    //設置型爆弾を生成する
-    private void InstantiatePlantedBomb()
+    //爆弾を生成する
+    private void GenerateBomb()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //生成位置を計算して生成
-            Vector3 spawnPos = transform.position + Vector3.up * bombHelfHeight;
-            Instantiate(bombPrefab, spawnPos, bombRotation);
+            //設置型爆弾を生成
+            bombManager.GeneratePlantedBomb();
+        }
+
+        //10レベルの場合
+        if (canUseBombFlags[0])
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                //クールダウンが終わっている場合
+                //ノックバック爆弾を生成
+                bombManager.GenerateKnockbackBomb();
+            }
         }
     }
 
@@ -183,6 +242,20 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
                 resilienceCoolTime++;
             }
+        }
+    }
+
+    //新しい爆弾を使用可能にする
+    public void NewBombEnabled()
+    {
+        if (newBombCounter < canUseBombFlags.Length)
+        {
+            //爆弾を使用可能にするフラグをたてる
+            canUseBombFlags[newBombCounter] = true;
+            
+            //次にこの関数が呼ばれた時に、
+            //別の爆弾を使用可能にするフラグをたてるためにカウンターを加算する
+            newBombCounter++;
         }
     }
 }

@@ -20,8 +20,7 @@ public class EnemyFlocking : MonoBehaviour
     [SerializeField, Header("近隣の個体を検知する距離")]
     private float ditectingNeiborDistance;
 
-    //視野角
-    [SerializeField]
+    [SerializeField, Header("視野角")]
     private float fieldOfView;
 
     [SerializeField]
@@ -100,22 +99,22 @@ public class EnemyFlocking : MonoBehaviour
         AddNeighbors();
 
         //移動する
-        UpdateMove();
+        //UpdateMove();
 
         //Debug.Log($"velocity:{velocity}");
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        //ダメージを受けることができるオブジェクトを取得
-        var applicableDamageObject = other.gameObject.GetComponent<IApplicableDamage>();
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    //ダメージを受けることができるオブジェクトを取得
+    //    var applicableDamageObject = other.gameObject.GetComponent<IApplicableDamage>();
 
-        if(applicableDamageObject != null)
-        {
-            //ダメージを受けさせる
-            applicableDamageObject.RecieveDamage(10);
-        }
-    }
+    //    if(applicableDamageObject != null)
+    //    {
+    //        //ダメージを受けさせる
+    //        applicableDamageObject.RecieveDamage(10);
+    //    }
+    //}
 
     public void Dead()
     {
@@ -203,6 +202,38 @@ public class EnemyFlocking : MonoBehaviour
             myTransform.position += velocity * Time.deltaTime;
         }
         acceleration = Vector3.zero;
+    }
+
+
+    //力をまとめて速度として返す
+    public Vector3 Move()
+    {
+        //フレームごとに速度に加算する値(加速度)を求める
+        acceleration = SeparateNeighbors() * separationCoefficient
+                     + AlignNeighbors() * alignmentCoefficient
+                     + CombineNeighbors() * combiningCoefficient
+                     + CombinePlayer() * combiningPlayerCoefficient
+                     //+ CombineNearbyPlayer() * combiningPlayerCoefficient
+                     + StayWithinRange();
+
+        velocity += acceleration * Time.deltaTime;
+
+        float speed = velocity.magnitude;
+        Vector3 direction = velocity.normalized;
+
+        //速度を制限する
+        velocity = Mathf.Clamp(speed, minSpeed, maxSpeed) * direction;
+
+        if (direction != Vector3.zero)
+        {
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
+                                 Quaternion.LookRotation(direction),        //向かせたい方向
+                                 rotationSpeed * Time.deltaTime);
+        }
+        
+        acceleration = Vector3.zero;
+
+        return velocity;
     }
 
     //---------------------------------------------------------------------------------------------

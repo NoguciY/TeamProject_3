@@ -25,6 +25,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject levelUpPanel;
 
+    //レベルアップパネル(爆弾追加用)
+    [SerializeField]
+    private GameObject levelUpBombPanel;
+
     //経過時間テキストコンポーネント
     [SerializeField]
     private Timer timer;
@@ -41,23 +45,21 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ButtonManager buttonManager;
 
-    //仮で書いた後で消す
-    //private bool isClear = false;
-
     //ゲッター
-    public GameObject GetGameOverPanel { get { return gameOverPanel; } }
-    public GameObject GetLevelUpPanel { get { return levelUpPanel; } }
-    public LifeGauge GetLifeGauge { get { return lifeGauge; } }
-    public ExpGauge GetExperienceValueGauge { get {  return experienceValueGauge; } }
-    public ButtonManager GetButtonManager { get {  return buttonManager; } }
+    public GameObject GetGameOverPanel => gameOverPanel;
+    public GameObject GetLevelUpPanel => levelUpPanel;
+    public GameObject GetLevelUpBombPanel => levelUpBombPanel;
+    public LifeGauge GetLifeGauge => lifeGauge;
+    public ExpGauge GetExperienceValueGauge => experienceValueGauge;
+    public ButtonManager GetButtonManager => buttonManager;
 
 
     //ゲームクリアパネルを表示する
-    private void GameClear()
-    {
-        Time.timeScale = 0;
-        gameClearPanel.SetActive(true);
-    }
+    //private void GameClear()
+    //{
+    //    Time.timeScale = 0;
+    //    gameClearPanel.SetActive(true);
+    //}
 
 
     //パネルを表示させるか
@@ -70,7 +72,6 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        //Invoke("GameClear", endingTime);
         //ボタンの初期化
         buttonManager.InitButton(this);
     }
@@ -80,12 +81,5 @@ public class UIManager : MonoBehaviour
     {
         //経過時間テキストの更新
         timer.CountTimer(gameManager.GetDeltaTimeInMain);
-
-        //クリアの表示(仮で書いたので後で書き直す)
-        //if (isClear != gameManager.GetIsGameClear)
-        //{
-        //    isClear = true;
-        //    GameClear();
-        //}
     }
 }

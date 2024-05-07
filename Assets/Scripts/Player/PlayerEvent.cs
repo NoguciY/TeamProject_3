@@ -25,4 +25,8 @@ public class PlayerEvent : MonoBehaviour
     //レベルアップの場合に実行するイベント
     [NonSerialized]
     public UnityEvent levelUpEvent = new UnityEvent();
+
+    //レベルアップで新しい爆弾を追加する場合に実行するイベント
+    [NonSerialized]
+    public UnityEvent AddNewBombEvent = new UnityEvent();
 }
