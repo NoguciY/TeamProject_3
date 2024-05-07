@@ -18,8 +18,8 @@ public class BombManager : MonoBehaviour
     private GameObject knockbackBombPrefab;
 
     //誘導爆弾
-    //[SerializeField]
-    //private GameObject guidedBombPrefab;
+    [SerializeField]
+    private GameObject missileSpawnPrefab;
 
     //爆発エフェクト
     [SerializeField, Header("ノックバック爆弾の爆発エフェクト")]
@@ -44,6 +44,9 @@ public class BombManager : MonoBehaviour
     //生成されるノックバック爆弾の数
     //private int generatedKnockbackBombNum;
 
+    //誘導爆弾の高さの半分
+    private float homingBombHelfHeight;
+
     //定数を取得する
     public void Initialize()
     {
@@ -56,6 +59,9 @@ public class BombManager : MonoBehaviour
         knockbackHelfHeight = knockbackBombComponent.GetHalfHeight();
         toPlayerDistance = knockbackBombComponent.GetToPlayerDistance;
         knockbackBombComponent.explosionParticle = knockbackBombExplosionParticle;
+
+        //誘導爆弾の関係の値を取得
+        homingBombHelfHeight = missileSpawnPrefab.GetComponent<MissileSpawner>().GetBombHalfHeight;
     }
 
     //設置型爆弾を生成する
@@ -96,5 +102,14 @@ public class BombManager : MonoBehaviour
             //プレイヤーの位置をセット
             bombPrefab.GetComponent<KnockbackBomb>().playerTransform = playerTransform;
         }
+    }
+
+    public void GenerateHomingBomb()
+    {
+        Vector3 spawnPos = playerTransform.position + Vector3.up * homingBombHelfHeight * 10;
+        GameObject bombPrefab = Instantiate(missileSpawnPrefab, spawnPos, Quaternion.identity);
+
+        //プレイヤーの位置をセット
+        bombPrefab.GetComponent<MissileSpawner>().playerTransform = playerTransform;
     }
 }

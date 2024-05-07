@@ -150,6 +150,10 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         {
             bombManager.GenerateKnockbackBomb();
         }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            bombManager.GenerateHomingBomb();
+        }
 
         //Ž©“®‰ñ•œ‚·‚é
         AutomaticRecovery();
