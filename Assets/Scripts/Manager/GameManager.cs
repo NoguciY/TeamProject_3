@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -16,7 +17,8 @@ public class GameManager : MonoBehaviour
 
     //ƒQƒbƒ^[
     public float GetDeltaTimeInMain => deltaTimeInMain;
-    //public bool GetIsGameClear => isGameClear;
+
+    private static GameManager instance;
 
     private void Update()
     {
@@ -24,5 +26,41 @@ public class GameManager : MonoBehaviour
         deltaTimeInMain += Time.deltaTime;
 
         //isGameClear = enemyBossSpawn.CheckClearFlag();
+    }
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                SetupInstance();
+            }
+            return instance;
+        }
+    }
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    private static void SetupInstance()
+    {
+        instance = FindObjectOfType<GameManager>();
+
+        if (instance == null)
+        {
+            GameObject gameObj = new GameObject();
+            gameObj.name = "GameManager";
+            instance = gameObj.AddComponent<GameManager>();
+            DontDestroyOnLoad(gameObj);
+        }
     }
 }
