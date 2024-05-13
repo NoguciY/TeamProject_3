@@ -14,6 +14,7 @@ public class PlayerLevelUp : MonoBehaviour
     private int maxLevel = 300;
 
     //Œ»İ‚ÌƒŒƒxƒ‹
+    [SerializeField]
     private int level;
 
     //Œ»İ‚ÌŒoŒ±’l

@@ -25,7 +25,7 @@ public class ButtonManager : MonoBehaviour
     //ボタンの初期化(イベントの登録)
     public void InitButton(UIManager uIManager)
     {
-        //パワーアップボタンにポーズをやめる関数と
+        //事前にパワーアップボタンにポーズをやめる関数と
         //レベルアップパネルを非表示にする関数を登録する
         foreach (var button in powerUpButton.powerUpButtons)
         {
@@ -35,5 +35,11 @@ public class ButtonManager : MonoBehaviour
 
         //イベントに合った強化ボタンの画像を設定する
         powerUpButton.SetPowerUpButtoSprites();
+
+        //事前に爆弾追加ボタンにポーズをやめる関数と
+        //レベルアップパネルを非表示にする関数を登録する
+        powerUpButton.addNewBombButton.onClick.AddListener(() => Time.timeScale = 1);
+        powerUpButton.addNewBombButton.onClick.AddListener(
+            () => uIManager.ShoulShowPanel(uIManager.GetLevelUpBombPanel, false));
     }
 }

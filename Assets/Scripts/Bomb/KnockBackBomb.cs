@@ -20,7 +20,7 @@ public class KnockbackBomb : MonoBehaviour
     //[System.NonSerialized]ではなく[HideInInspector]を設定することで
     //フィールド非表示時も値を保持し続けるようになる
     [HideInInspector]
-    public ParticleSystem explosionParticle;
+    public GameObject explosionParticle;
 
     [SerializeField, Header("ダメージ量")]
     private float damage = 0;
@@ -131,13 +131,13 @@ public class KnockbackBomb : MonoBehaviour
         if (explosionParticle != null)
         {
             //爆発を生成
-            ParticleSystem newParticle = 
+            GameObject particle =
                 Instantiate(explosionParticle, myTransform.position, Quaternion.identity);
 
-            newParticle.Play();
+            particle.GetComponent<ParticleSystem>().Play();
 
             //particleLifeSpan秒後にパーティクルを消す
-            Destroy(newParticle, particleLifeSpan);
+            Destroy(particle, particleLifeSpan);
 
             Debug.Log("爆発!!");
         }
