@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 0ca4ff3bab6a62e41916eb3d91d83174,
         type: 3}
       propertyPath: m_Name
-      value: Bomb
+      value: PlantedBomb
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -98,8 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7572db01d8944c4fa6f0281eaa59119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionParticle: {fileID: 5501477371294378916, guid: 049de12343c8bc049b11056eeb6e0ea4,
+    type: 3}
   fuseTime: 3
   explosionRadius: 3
+  bombLifeSpan: 4
+  particleLifeSpan: 2
   sphereCollider: {fileID: 6689176789424128852}
 --- !u!135 &6689176789424128852
 SphereCollider:

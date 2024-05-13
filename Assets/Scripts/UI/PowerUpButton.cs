@@ -9,13 +9,10 @@ using UnityEngine.UI;
 public class PowerUpButton : MonoBehaviour
 {
     //強化項目ボタンの数
-    private const int powerUpButtonNum = 3;
+    private const int POWERUPBUTTONNUM = 3;
 
     //パワーアップボタン
-    public Button[] powerUpButtons = new Button[powerUpButtonNum];
-
-    //爆弾追加ボタン
-    public Button addNewBombButton;
+    public Button[] powerUpButtons = new Button[POWERUPBUTTONNUM];
 
     //強化イベント
     public class PowerUpEvent : UnityEvent
@@ -49,21 +46,25 @@ public class PowerUpButton : MonoBehaviour
     private List<Sprite> powerUpButtonSpriteList;
     
     //強化ボタンに登録する強化ボタン画像を格納する配列
-    private Sprite[] powerUpButtonsSprites = new Sprite[powerUpButtonNum];
+    private Sprite[] powerUpButtonSprites = new Sprite[POWERUPBUTTONNUM];
 
     //強化ボタンに登録する強化イベントを格納する配列
     [NonSerialized]
-    public UnityEvent[] powerUpEvents = new UnityEvent[powerUpButtonNum];
+    public UnityEvent[] powerUpEvents = new UnityEvent[POWERUPBUTTONNUM];
 
     //強化ボタンに登録する強化イベントを保持する配列(リスナー)
-    private UnityAction[] powerUpListeners = new UnityAction[powerUpButtonNum];
+    private UnityAction[] powerUpListeners = new UnityAction[POWERUPBUTTONNUM];
 
     //強化ボタンに登録する強化イベントの候補リスト
-    private List<PowerUpEvent> powerUpEventList = new List<PowerUpEvent>(powerUpButtonNum);
+    private List<PowerUpEvent> powerUpEventList = new List<PowerUpEvent>(POWERUPBUTTONNUM);
+
+
+    //爆弾追加ボタン
+    public Button addNewBombButton;
 
     //爆弾追加ボタン画像
     [SerializeField]
-    private Sprite[] addNewBombButtons;
+    private Sprite[] addNewBombButtonSprites;
 
     //爆弾追加ボタンに登録するイベント
     [NonSerialized]
@@ -71,6 +72,30 @@ public class PowerUpButton : MonoBehaviour
 
     //爆弾追加ボタンに登録するイベントを保持する
     private UnityAction addNewBombListener = null;
+
+    private void Awake()
+    {
+        //powerUpButtons = new Button[POWERUPBUTTONNUM];
+
+        //powerUpMaxLifeEvent = new PowerUpEvent { };
+        //powerUpSpeedEvent = new PowerUpEvent { };
+        //powerUpDifenceEvent = new PowerUpEvent { };
+        //powerUpCollectionRangeRateEvent = new PowerUpEvent { };
+        //powerUpResilienceEvent = new PowerUpEvent { };
+        //powerUpBombRangeEvent = new PowerUpEvent { };
+
+        //powerUpButtonSprites = new Sprite[POWERUPBUTTONNUM];
+
+        //powerUpEvents = new UnityEvent[POWERUPBUTTONNUM];
+
+        //powerUpListeners = new UnityAction[POWERUPBUTTONNUM];
+
+        //powerUpEventList = new List<PowerUpEvent>(POWERUPBUTTONNUM);
+
+
+        //addNewBombEvent = new UnityEvent();
+        //addNewBombListener = null;
+    }
 
     //強化イベントクラスのspriteに強化ボタン画像を設定
     public void SetPowerUpButtoSprites()
@@ -92,7 +117,7 @@ public class PowerUpButton : MonoBehaviour
         //リストからランダムに強化項目ボタンの数分、配列に格納
         GetRandomPowerUpItemEvents();
 
-        for (int i = 0; i < powerUpButtonNum; i++)
+        for (int i = 0; i < POWERUPBUTTONNUM; i++)
         {
             //前回ボタンに登録したリスナー(強化関数のみ)を削除する
             if (powerUpListeners[i] != null)
@@ -108,7 +133,7 @@ public class PowerUpButton : MonoBehaviour
             powerUpButtons[i].onClick.AddListener(powerUpListeners[i]);
 
             //ボタンの画像を変更
-            powerUpButtons[i].image.sprite = powerUpButtonsSprites[i];
+            powerUpButtons[i].image.sprite = powerUpButtonSprites[i];
         }
     }
 
@@ -143,7 +168,7 @@ public class PowerUpButton : MonoBehaviour
 
         int i = 0;
 
-        while(i < powerUpButtonNum)
+        while(i < POWERUPBUTTONNUM)
         {
             //0からリストの数-1の整数からランダムな値を格納
             int rnd = UnityEngine.Random.Range(0, listNum);
@@ -154,7 +179,7 @@ public class PowerUpButton : MonoBehaviour
                 //Debug.Log($"rnd:{rnd}");
                 //配列に追加する
                 powerUpEvents[i] = powerUpEventList[rnd];
-                powerUpButtonsSprites[i] = powerUpEventList[rnd].powerUpButtonSprite;
+                powerUpButtonSprites[i] = powerUpEventList[rnd].powerUpButtonSprite;
                 Debug.Log($"powerUpEvents[{i}]にevents[{rnd}]を追加");
 
                 //1回目のランダムな値を格納
@@ -168,23 +193,21 @@ public class PowerUpButton : MonoBehaviour
         }
     }
 
-    //爆弾追加イベントで呼ばれる
+    //爆弾追加イベントに登録する関数
     //爆弾追加ボタンに爆弾追加関数を登録する
-    public void RegisterAddNewBombEvent()
+    public void RegisterAddNewBombEvent(int index)
     {
         //前回ボタンに登録したリスナー(爆弾追加関数のみ)を削除する
-        //addNewBombButton.onClick.RemoveListener(addNewBombListener);
+        if(addNewBombListener != null)
+        addNewBombButton.onClick.RemoveListener(addNewBombListener);
 
-        //ラムダ式で引数ありのリスナーを登録するために必要
+        //ボタンを押した時に実行するイベントを登録する
+        addNewBombListener = () => addNewBombEvent.Invoke();
 
-
-        //ボタンに登録するリスナーを保持する
-
-
-        //ボタンに登録するリスナーを登録する
-        //addNewBombButton.onClick.AddListener(powerUpListeners);
+        //ボタンにリスナーを登録する
+        addNewBombButton.onClick.AddListener(addNewBombListener);
 
         //ボタンの画像を変更
-        //addNewBombButton.image.sprite = 
+        addNewBombButton.image.sprite = addNewBombButtonSprites[index];
     }
 }

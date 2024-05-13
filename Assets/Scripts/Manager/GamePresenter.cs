@@ -23,7 +23,7 @@ public class GamePresenter : MonoBehaviour
     private SoundManager soundManager;
 
 
-    private void Awake()
+    private void Start()
     {
         //ƒvƒŒƒCƒ„[‚ÌƒCƒxƒ“ƒg‚ÉUIƒ}ƒl[ƒWƒƒ[‚ÌŠÖ”‚ð“o˜^‚·‚é
 
@@ -75,7 +75,7 @@ public class GamePresenter : MonoBehaviour
             () => Time.timeScale = 0);
         //V‚µ‚¢”š’e‚ð’Ç‰Á‚·‚éŽž‚É”š’e’Ç‰Áƒ{ƒ^ƒ“‚É”š’e’Ç‰ÁƒCƒxƒ“ƒg‚ð“o˜^‚·‚éŠÖ”‚ð“o˜^
         player.GetPlayerEvent.AddNewBombEvent.AddListener(
-            () => uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent());
+            () => uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent(player.GetNewBombCounter));
         //V‚µ‚¢”š’e‚ð’Ç‰Á‚·‚éŽž‚ÉŒø‰Ê‰¹‚ð–Â‚ç‚·ŠÖ”‚ð“o˜^
         player.GetPlayerEvent.AddNewBombEvent.AddListener(
             () => soundManager.Play("ƒŒƒxƒ‹ƒAƒbƒv"));
@@ -125,8 +125,8 @@ public class GamePresenter : MonoBehaviour
         uiManager.GetButtonManager.powerUpButton.powerUpBombRangeEvent.AddListener(
             () => soundManager.Play("”š”­”ÍˆÍƒAƒbƒv"));
 
-        //”š’e’Ç‰ÁƒCƒxƒ“ƒg‚Éƒtƒ‰ƒO‚ðƒIƒ“‚É‚·‚éŠÖ”‚ð“o˜^
-        //uiManager.GetButtonManager.powerUpButton.‰½‚Æ‚©ƒCƒxƒ“ƒg.AddListener(
-        //    () => player.NewBombEnabled());
+        //”š’e’Ç‰ÁƒCƒxƒ“ƒg‚ÉV‚µ‚¢”š’e‚ðŽg—p‰Â”\‚É‚·‚éŠÖ”‚ð“o˜^
+        uiManager.GetButtonManager.powerUpButton.addNewBombEvent.AddListener(
+            () => player.NewBombEnabled());
     }
 }
