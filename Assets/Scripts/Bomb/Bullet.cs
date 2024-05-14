@@ -1,0 +1,123 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
+using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+
+public class Bullet : MonoBehaviour
+{
+    public float fuseTime;          //爆発するまでの時間
+    public float explosionRadius;   //範囲
+
+    public float maxUpwardHeight = 5f; // 上昇する最大高さ
+    public float moveSpeed = 10f; // 移動速度
+
+    private bool isAscending = true; // 上昇中かどうかのフラグ
+    private Vector3 initialPosition; // 初期位置
+    private Transform target; // 現在のターゲット
+    internal GameObject Target;
+
+    //コライダーコンポーネント
+    [SerializeField]
+    private CapsuleCollider capsuleCollider;
+
+    // 前方の基準となるローカル空間ベクトル
+    [SerializeField] private Vector3 _forward = Vector3.forward;
+
+    //スフィアキャストの最大距離
+    private float maxDistance;
+
+    void Start()
+    {
+        initialPosition = transform.position;
+        SetRandomTarget(); // 最初のターゲットを設定
+        Invoke("Detonate", fuseTime);
+        maxDistance = 0;
+    }
+
+    void Update()
+    {
+        if (isAscending)
+        {
+            // 上昇
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+
+            // 一定の高さまで上昇したら
+            if (transform.position.y >= initialPosition.y + maxUpwardHeight)
+            {
+                isAscending = false;
+                SetRandomTarget(); // ターゲットを設定
+            }
+        }
+        else if (isAscending == false)
+        {
+            if (target == null)
+            {
+                // 上昇
+                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+                isAscending = true;
+                return;
+            }
+            // ターゲットに向かって移動
+            transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+
+            // ターゲットへの向きベクトル計算
+            var dir = target.position - transform.position;
+            // ターゲットの方向への回転
+            var lookAtRotation = Quaternion.LookRotation(dir, Vector3.up);
+            // 回転補正
+            var offsetRotation = Quaternion.FromToRotation(_forward, Vector3.forward);
+
+            // 回転補正→ターゲット方向への回転の順に、自身の向きを操作する
+            transform.rotation = lookAtRotation * offsetRotation;
+
+            // ターゲットに到達したら
+            if (Vector3.Distance(transform.position, target.position) < 0.1f)
+            {
+                Detonate();
+            }
+        }
+    }
+
+    void SetRandomTarget()
+    {
+        GameObject[] targetObjects = GameObject.FindGameObjectsWithTag("Enemy"); // "Target"タグのオブジェクトを取得
+        if (targetObjects.Length > 0)
+        {
+            // ランダムにターゲットを選択
+            int randomIndex = Random.Range(0, targetObjects.Length);
+            target = targetObjects[randomIndex].transform;
+        }
+    }
+    void Detonate()
+    {
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, explosionRadius, Vector3.forward, maxDistance);
+
+        foreach (var hit in hits)
+        {
+            Player playe = hit.collider.gameObject.GetComponent<Player>();
+            if (hit.collider.gameObject.CompareTag("Enemy"))
+            {
+                //敵に当たった場合、ダメージを与える
+                hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
+            }
+        }
+
+        Destroy(gameObject);
+    }
+    public float GetHalfHeight()
+    {
+        float halfHeight;
+        return halfHeight =
+            transform.localScale.y * capsuleCollider.radius; 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Field"))
+        {
+            Detonate();
+        }
+    }
+}
