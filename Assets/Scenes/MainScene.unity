@@ -482,7 +482,7 @@ GameObject:
   - component: {fileID: 406388052}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -4723,6 +4723,12 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
         type: 3}
+      propertyPath: throwingBombExplosionParticle
+      value: 
+      objectReference: {fileID: 8969231326653961610, guid: 21e4eaed78185e24fa11dfc96f2626d6,
+        type: 3}
+    - target: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
+        type: 3}
       propertyPath: knockbackBombExplosionParticle
       value: 
       objectReference: {fileID: 637259989962001759, guid: 049de12343c8bc049b11056eeb6e0ea4,
@@ -4920,6 +4926,7 @@ MonoBehaviour:
     type: 3}
   knockbackBombExplosionParticle: {fileID: 5501477371294378916, guid: 049de12343c8bc049b11056eeb6e0ea4,
     type: 3}
+  throwingBombExplosionParticle: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

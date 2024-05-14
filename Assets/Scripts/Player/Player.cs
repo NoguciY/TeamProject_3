@@ -147,7 +147,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
         //爆弾生成テスト用、後で消す
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            bombManager.GenerateThrowingBomb();
+            bombManager.GenerateHomingBomb();
 
         //自動回復する
         AutomaticRecovery();
@@ -207,6 +207,8 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //爆弾を生成する
     private void GenerateBomb()
     {
+
+
         //時間で自動生成されるようにする
         if (Input.GetMouseButtonDown(0))
             //投擲爆弾を生成

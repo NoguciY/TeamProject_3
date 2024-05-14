@@ -7,11 +7,11 @@ public class MissileSpawner : MonoBehaviour
     [SerializeField]
     GameObject prefab;
     [SerializeField, Min(1)]
-    int iterationCount = 3;
+    int iterationCount = 3;     //一度に放出する弾の数
     [SerializeField]
-    float interval = 0.1f;
+    float interval = 0.1f;      //生成間隔
     [SerializeField]
-    float lifeTime = 2;
+    float lifeTime = 2;         //消去時間
 
     //プレイヤーのトランスフォーム
     public Transform playerTransform;
@@ -23,6 +23,8 @@ public class MissileSpawner : MonoBehaviour
     Transform thisTransform;
     WaitForSeconds intervalWait;
 
+    private Quaternion bombRotation;
+
     public float GetBombHalfHeight => bombHalfHeight;
 
     void Start()
@@ -32,8 +34,9 @@ public class MissileSpawner : MonoBehaviour
         Destroy(gameObject, lifeTime);
 
         //爆弾の高さの半分を取得する
-        SphereCollider sphereCollider = prefab.GetComponent<SphereCollider>();
-        bombHalfHeight = prefab.transform.localScale.y * sphereCollider.radius; ;
+        CapsuleCollider capsuleCollider = prefab.GetComponent<CapsuleCollider>();
+        bombHalfHeight = prefab.transform.localScale.y * capsuleCollider.radius;
+        bombRotation = prefab.transform.rotation;
     }
 
     void Update()
@@ -55,11 +58,11 @@ public class MissileSpawner : MonoBehaviour
 
         //Vector3 euler;
         //Quaternion rot;
-        HomingSample homing;
+        Bullet homing;
 
         for (int i = 0; i < iterationCount; i++)
         {
-            homing = Instantiate(prefab, thisTransform.position, Quaternion.identity).GetComponent<HomingSample>();
+            homing = Instantiate(prefab, thisTransform.position, bombRotation).GetComponent<Bullet>();
             homing.Target = target;
         }
 

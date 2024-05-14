@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum SceneType
+{
+    Title,      //タイトル
+    MainGame,   //メインゲーム
+    GameOver,   //ゲームオーバー
+    Result,     //リザルト
+}
+
 public class GameManager : MonoBehaviour
 {
     //メイン画面の経過時間(秒)
     private float deltaTimeInMain;
-
-    //ゲームクリア判定をするため
-    //[SerializeField]
-    //private EnemyBossSpawn enemyBossSpawn;
-
-    //ゲームクリアかどうか
-    //private bool isGameClear = false;
 
     //ゲッター
     public float GetDeltaTimeInMain => deltaTimeInMain;
@@ -22,10 +23,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //メインゲーム画面の場合
+
         //時間を計測
         deltaTimeInMain += Time.deltaTime;
 
-        //isGameClear = enemyBossSpawn.CheckClearFlag();
     }
 
     public static GameManager Instance
