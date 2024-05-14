@@ -54,21 +54,11 @@ public class UIManager : MonoBehaviour
     public ButtonManager GetButtonManager => buttonManager;
 
 
-    //ゲームクリアパネルを表示する
-    //private void GameClear()
-    //{
-    //    Time.timeScale = 0;
-    //    gameClearPanel.SetActive(true);
-    //}
-
-
     //パネルを表示させるか
     public void ShoulShowPanel(GameObject panel, bool shoudShow)
     {
         panel.SetActive(shoudShow);
     }
-
-    //ボタンを選択する
 
     private void Start()
     {

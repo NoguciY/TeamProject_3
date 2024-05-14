@@ -25,6 +25,9 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //爆弾プレハブ
     public GameObject bombPrefab;
 
+    //アイテム用のコライダーコンポーネント
+    public CapsuleCollider capsuleColliderForItem;
+
     //プレイヤーのイベントコンポーネント
     [SerializeField]
     private PlayerEvent playerEvent;
@@ -53,33 +56,34 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private BombManager bombManager;
 
-    //アイテム用のコライダーコンポーネント
-    public CapsuleCollider capsuleColliderForItem;
-
-    //爆弾の縦幅の半分
-    //private float bombHelfHeight;
-
-    //設置型爆弾の回転値
-    //private Quaternion bombRotation;
-
     //回復力のクールタイム
     private float resilienceCoolTime;
 
     //爆弾使用可能フラグ
-    private bool[] canUseBombFlags = new bool[3];
-
-    //ゲッター
-    public PowerUpItems GetPowerUpItems => powerUpItems;
-    public PlayerEvent GetPlayerEvent => playerEvent;
+    private bool[] canUseBombFlags;
 
     //カメラ(仮)
     private Camera mainCamera;
 
     //新しいボムを追加するカウンター
-    private int newBombCounter = 0;
+    private int newBombCounter;
+
+    //新しいボムを追加する直前のレベル(10,20,30で追加したい)
+    private int addBombLevel;
+
+    //トランスフォーム
+    private Transform myTransform; 
+
+
+    //ゲッター
+    public PowerUpItems GetPowerUpItems => powerUpItems;
+    public PlayerEvent GetPlayerEvent => playerEvent;
+    public int GetNewBombCounter => newBombCounter;
 
     private void Start()
     {
+        myTransform = transform;
+
         //ステータスの初期化
         maxLife = playerStatus.maxLife;
         speed = playerStatus.speed;
@@ -103,6 +107,14 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
         //爆弾の初期化
         bombManager.Initialize();
+
+        canUseBombFlags = new bool[3];
+
+        //0から爆弾の種類数-1までカウントする
+        newBombCounter = 0;
+
+        //初期値は最初にボムを追加したい1つ前のレベル
+        addBombLevel = 9;
     }
 
     void Update()
@@ -110,77 +122,47 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //例えば、WDを一緒に押すとWを押しているときより、速く進んでいるので修正する
         if (Input.GetKey(KeyCode.W))
         {
-            transform.position += speed * transform.forward * Time.deltaTime;
+            myTransform.position += speed * myTransform.forward * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            transform.position -= speed * transform.forward * Time.deltaTime;
+            myTransform.position -= speed * myTransform.forward * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.position += speed * transform.right * Time.deltaTime;
+            myTransform.position += speed * myTransform.right * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.position -= speed * transform.right * Time.deltaTime;
+            myTransform.position -= speed * myTransform.right * Time.deltaTime;
         }
 
-
-        var screenPos = mainCamera.WorldToScreenPoint(transform.position);
-
-        var direction = Input.mousePosition - screenPos;
-
-        var angle = Utilities.GetAngle(Vector3.zero, direction);
-
-        var angles = transform.localEulerAngles;
-        angles.y = angle - 0;
-        transform.localEulerAngles = angles;
-
+        //マウスカーソルの方向を向かせる
+        UpdateRotationForMouse();
 
         //爆弾を生成する
-        //GenerateBomb();
+        GenerateBomb();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            bombManager.GeneratePlantedBomb();
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            bombManager.GenerateKnockbackBomb();
-        }
-        else if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            bombManager.GenerateHomingBomb();
-        }
+        //爆弾生成テスト用、後で消す
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            bombManager.GenerateThrowingBomb();
 
         //自動回復する
         AutomaticRecovery();
 
         //レベルアップ
-        if (playerLevelUp.GetLevel == 10)
-        {
+        if (playerLevelUp.GetLevel == addBombLevel * (newBombCounter + 1))
             playerLevelUp.LevelUp(playerEvent.AddNewBombEvent);
-        }
-        else if (playerLevelUp.GetLevel == 20)
-        {
-
-        }
-        else if (playerLevelUp.GetLevel == 30)
-        {
-
-        }
         else
             playerLevelUp.LevelUp(playerEvent.levelUpEvent);
 
 
-        //体力が0になった場合、ゲームオーバー
+        //ゲームオーバー
         if (lifeController.IsDead())
-        {
             //体力ゲージが０出ない場合、体力ゲージを0にする
             playerEvent.gameOverEvent.Invoke();
-        }
     }
 
     //ダメージを受ける関数(インターフェースで実装)
@@ -204,24 +186,55 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         playerEvent.expEvent.Invoke(playerLevelUp.GetExp, playerLevelUp.GetNeedExp);
     }
 
+    //マウスカーソル方向に回転座標を更新する
+    private void UpdateRotationForMouse()
+    {
+        //プレイヤーのワールド空間座標をスクリーン座標に変換
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(myTransform.position);
+
+        //プレイヤーからマウスカーソルの方向
+        Vector3 direction = Input.mousePosition - screenPos;
+
+        //2つのベクトルのなす角を取得
+        float angle = Utilities.GetAngle(Vector3.zero, direction);
+
+        //プレイヤーの回転座標の更新
+        Vector3 angles = myTransform.localEulerAngles;
+        angles.y = angle;
+        myTransform.localEulerAngles = angles;
+    }
 
     //爆弾を生成する
     private void GenerateBomb()
     {
+        //時間で自動生成されるようにする
         if (Input.GetMouseButtonDown(0))
-        {
-            //設置型爆弾を生成
-            bombManager.GeneratePlantedBomb();
-        }
+            //投擲爆弾を生成
+            bombManager.GenerateThrowingBomb();
 
-        //10レベルの場合
+        //1つ目の爆弾使用可能フラグがtrueの場合
         if (canUseBombFlags[0])
-        {
             if (Input.GetKeyDown(KeyCode.Alpha1))
+                //クールダウンが終わっている場合
+                //設置型爆弾を生成
+                bombManager.GeneratePlantedBomb();
+
+        //2つ目の爆弾使用可能フラグがtrueの場合
+        if (canUseBombFlags[1])
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 //クールダウンが終わっている場合
                 //ノックバック爆弾を生成
-                bombManager.GenerateKnockbackBomb();
+                bombManager.GenerateKnockbackBombs();
+            }
+        }
+        //3つ目の爆弾使用可能フラグがtrueの場合
+        if (canUseBombFlags[2])
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                Debug.Log("誘導爆弾！");
             }
         }
     }
@@ -244,7 +257,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
                 //体力ゲージを回復力分増加
                 playerEvent.addLifeEvent.Invoke(resilience);
 
-                resilienceCoolTime++;
+                resilienceCoolTime += resilienceCoolTime;
             }
         }
     }

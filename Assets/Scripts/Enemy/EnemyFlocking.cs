@@ -265,15 +265,15 @@ public class EnemyFlocking : MonoBehaviour
     {
         Vector3 avoidanceForce = Vector3.zero;
 
-        if (neighbors.Count == 0)
-        {
+        if (neighbors.Count <= 0)
             return avoidanceForce;
-        }
 
         //近くの群から離れるベクトルを求める
         foreach (GameObject neighbor in neighbors)
         {
-            avoidanceForce += (myTransform.position - neighbor.transform.position);
+            //オブジェクトが破棄されていない場合
+            if (neighbor != null)
+                avoidanceForce += (myTransform.position - neighbor.transform.position);
         }
 
         return avoidanceForce.normalized;
@@ -297,10 +297,13 @@ public class EnemyFlocking : MonoBehaviour
         //近隣の群の平均ベクトルを返す
         foreach (GameObject neighbor in neighbors)
         {
-            //float flockDistance = Vector3.Distance(myTransform.position, neighbor.transform.position);
-
-            EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
-            averageVelocity += anotherFlock.velocity;
+            //オブジェクトが破棄されていない場合
+            if (neighbor != null)
+            {
+                //float flockDistance = Vector3.Distance(myTransform.position, neighbor.transform.position);
+                EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
+                averageVelocity += anotherFlock.velocity;
+            }
         }
 
         averageVelocity /= neighbors.Count;
@@ -314,15 +317,17 @@ public class EnemyFlocking : MonoBehaviour
         Vector3 averageVelocity = Vector3.zero;
 
         if (neighbors.Count == 0)
-        {
             return averageVelocity;
-        }
 
         //近くの群の平均速度を求める
         foreach (GameObject neighbor in neighbors)
         {
-            EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
-            averageVelocity += anotherFlock.velocity;
+            //オブジェクトが破棄されていない場合
+            if (neighbor != null)
+            {
+                EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
+                averageVelocity += anotherFlock.velocity;
+            }
         }
         averageVelocity /= neighbors.Count;
 
@@ -340,13 +345,13 @@ public class EnemyFlocking : MonoBehaviour
         Vector3 centerPos = Vector3.zero;
 
         if (neighbors.Count == 0)
-        {
             return centerPos;
-        }
 
         //群の中心の位置の計算
         foreach (GameObject neighbor in neighbors)
         {
+            //オブジェクトが破棄されていない場合
+            if (neighbor != null)
             centerPos += neighbor.transform.position;
         }
         centerPos /= neighbors.Count;
@@ -361,15 +366,14 @@ public class EnemyFlocking : MonoBehaviour
         Vector3 centerPos = Vector3.zero;
 
         if (neighbors.Count == 0)
-        {
             return centerPos;
-        }
 
         //近くの群の中心に近づくベクトルを求める
         foreach (GameObject neighbor in neighbors)
-        {
-            centerPos += neighbor.transform.position;
-        }
+            //オブジェクトが破棄されていない場合
+            if (neighbor != null)
+                centerPos += neighbor.transform.position;
+
         centerPos /= neighbors.Count;
 
         //中心方向へ向かう力を返す
