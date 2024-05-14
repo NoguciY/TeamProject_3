@@ -87,6 +87,7 @@ public class PlantedBomb : MonoBehaviour
                 //敵に当たった場合、ダメージを与える
                 hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
             }
+            //Debug.Log(hit.collider.name);
         }
 
         //爆弾を爆発パーティクル破棄後に破棄する
