@@ -40,6 +40,7 @@ public class PlantedBomb : MonoBehaviour
                 //敵に当たった場合、ダメージを与える
                 hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
             }
+            //Debug.Log(hit.collider.name);
         }
 
         Destroy(this.gameObject);
