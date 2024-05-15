@@ -11,7 +11,7 @@ public class BombManager : MonoBehaviour
     private GameObject throwingBombPrefab;
 
     //投擲爆弾のタイマー
-    private float throwingBombTimer;
+    //private float throwingBombTimer;
 
     //設置型爆弾------------------------------------------------
     //プレハブ
@@ -51,6 +51,9 @@ public class BombManager : MonoBehaviour
     [SerializeField, Header("ノックバック爆弾の爆発エフェクト")]
     private GameObject knockbackBombExplosionParticle;
 
+    [SerializeField, Header("投擲爆弾の爆発エフェクト")]
+    private GameObject throwingBombExplosionParticle;
+
     //プレイヤーのTransformコンポーネント
     //[SerializeField]
     private Transform playerTransform;
@@ -61,6 +64,11 @@ public class BombManager : MonoBehaviour
     //プレイヤーの高さの半分
     private float playerHalfHeight;
 
+    //経過時間
+    private float[] deltaTime;
+
+    //爆弾の種数
+    const int BOMBTYPENUM = 3;
 
     //爆弾関係のものを初期化する
     public void Initialize()
@@ -69,11 +77,13 @@ public class BombManager : MonoBehaviour
         playerTransform = transform;
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
         playerHalfHeight = playerTransform.localScale.y * playerCapsuleCollider.height * 0.5f;
+        
+        deltaTime = new float[BOMBTYPENUM];
 
         //投擲爆弾関係の値の設定
         var throwingBombComponent = throwingBombPrefab.GetComponent<ThrowingBomb>();
-        throwingBombComponent.explosionParticle = knockbackBombExplosionParticle;
-        throwingBombTimer = 0;
+        throwingBombComponent.explosionParticle = throwingBombExplosionParticle;
+        //throwingBombTimer = 0;
 
         //設置型爆弾関係の値を取得
         var plantedBombComponent = plantedBombPrefab.GetComponent<PlantedBomb>();
@@ -154,8 +164,15 @@ public class BombManager : MonoBehaviour
     }
 
     //爆弾のクールタイムを計る
-    public void CountBombCoolTime()
+    public void CountBombCoolTime(int NumBombType, float coolTime)
     {
-
+        //爆弾のクールタイムをカウント
+        deltaTime[NumBombType] += Time.deltaTime;
+        //
+        if (deltaTime[NumBombType] >= coolTime)
+        {
+            //
+            //return
+        }
     }
 }

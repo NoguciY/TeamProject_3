@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         //ƒ{ƒ^ƒ“‚Ì‰Šú‰»
-        buttonManager.InitButton(this);
+        buttonManager.Initialize(this);
     }
 
 

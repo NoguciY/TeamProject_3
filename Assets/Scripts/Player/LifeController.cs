@@ -17,7 +17,8 @@ public class LifeController : MonoBehaviour
     //体力の初期化(体力を最大にする)
     public void InitializeLife(float maxLife)
     {
-        SetMaxLife(maxLife);
+        //SetMaxLife(maxLife);
+        this.maxLife = maxLife;
         life = maxLife;
     }
 
@@ -30,11 +31,12 @@ public class LifeController : MonoBehaviour
         //体力が最大値を超えないようにする
         if (life > maxLife)
             life = maxLife;
+        Debug.Log("体力更新");
     }
 
 
     //体力の最大値を設定する
-    public void SetMaxLife(float maxLife)
+    private void SetMaxLife(float maxLife)
     {
         this.maxLife = maxLife;
     }

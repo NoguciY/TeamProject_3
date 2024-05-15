@@ -1,8 +1,8 @@
-using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using Unity.VisualScripting;
+//using System.Reflection;
+//using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -23,7 +23,7 @@ public class ButtonManager : MonoBehaviour
     public Button GetGameOverContinueButton => gameOverContinueButton;
 
     //ボタンの初期化(イベントの登録)
-    public void InitButton(UIManager uIManager)
+    public void Initialize(UIManager uIManager)
     {
         //事前にパワーアップボタンにポーズをやめる関数と
         //レベルアップパネルを非表示にする関数を登録する

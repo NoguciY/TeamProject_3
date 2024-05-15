@@ -109,7 +109,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         if (applicableDamageObject != null)
         {
             //É_ÉÅÅ[ÉWÇéÛÇØÇ≥ÇπÇÈ
-            applicableDamageObject.ReceiveDamage(0);
+            applicableDamageObject.ReceiveDamage(10);
         }
     }
 }
