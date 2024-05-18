@@ -232,6 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyFlocking: {fileID: 8322740730087215012}
+  expPrefab: {fileID: 8991318842181600726, guid: 99cea730d544d31429171d7879d3b241,
+    type: 3}
   rigidb: {fileID: 6406612591629680958}
   animator: {fileID: 0}
   isHitting: 0
@@ -248,8 +250,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flockManager: {fileID: 0}
-  itemPrefab: {fileID: 1513542311294343622, guid: a419a53d5094bdc48b06082f55b5738c,
-    type: 3}
   ditectingNeiborDistance: 10
   fieldOfView: 200
   rotationSpeed: 3

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//MVPパターンを使ってゲームオーバーを作る
+//MVPパターンのプレゼンター
+//UIとプレイヤーのイベントに登録する
 //これだけだと、このスクリプトを書かずにプレイヤーのPlayerコンポーネントのインスペクターに
 //UIマネージャーの関数を登録すればいいと思う
 //イベントの引数が動的な引数なら使う価値があるだろう
@@ -17,7 +18,7 @@ public class GamePresenter : MonoBehaviour
     //UIマネージャー
     [SerializeField]
     private UIManager uiManager;
-
+    
     //サウンドマネージャー
     [SerializeField]
     private SoundManager soundManager;
@@ -130,6 +131,6 @@ public class GamePresenter : MonoBehaviour
         //爆弾追加イベント
         //新しい爆弾を使用可能にする
         uiManager.GetButtonManager.powerUpButton.addNewBombEvent.AddListener(
-            () => player.NewBombEnabled());
+            () => player.EnableNewBomb());
     }
 }

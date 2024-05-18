@@ -19,6 +19,10 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     [SerializeField]
     private EnemyFlocking enemyFlocking;
 
+    //経験値オブジェクト
+    [SerializeField]
+    private GameObject expPrefab;
+
     [SerializeField]
     private Rigidbody rigidb;
 
@@ -99,6 +103,19 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     public void ReceiveDamage(float damage)
     {
         Debug.Log($"敵は{damage} を受けた");
+    }
+
+    public void Dead()
+    {
+        //群から自身を削除
+        if (enemyFlocking.flockManager != null)
+        {
+            enemyFlocking.flockManager.boids.Remove(this.gameObject);
+        }
+        //自身を破棄
+        Destroy(this.gameObject);
+        //アイテムを生成
+        Instantiate(expPrefab, this.transform.position, expPrefab.transform.rotation);
     }
 
     private void OnTriggerEnter(Collider other)

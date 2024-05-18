@@ -7,6 +7,15 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Bullet : MonoBehaviour
 {
+    //爆発パーティクル
+    //[System.NonSerialized]ではなく[HideInInspector]を設定することで
+    //フィールド非表示時も値を保持し続けるようになる
+    [HideInInspector]
+    public GameObject explosionParticle;
+
+    [SerializeField, Header("爆発パーティクル生成後から破棄するまでの時間(秒)")]
+    private float particleLifeSpan = 3f;
+
     public float fuseTime;          //爆発するまでの時間
     public float explosionRadius;   //範囲
 
@@ -75,6 +84,7 @@ public class Bullet : MonoBehaviour
             // ターゲットに到達したら
             if (Vector3.Distance(transform.position, target.position) < 0.1f)
             {
+                Explode();
                 Detonate();
             }
         }
@@ -100,7 +110,7 @@ public class Bullet : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("Enemy"))
             {
                 //敵に当たった場合、ダメージを与える
-                hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
+                //hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
             }
         }
 
@@ -113,10 +123,32 @@ public class Bullet : MonoBehaviour
             transform.localScale.y * capsuleCollider.radius; 
     }
 
+    //爆発させる
+    private void Explode()
+    {
+        if (explosionParticle != null)
+        {
+            //爆発を生成
+            GameObject particle =
+                Instantiate(explosionParticle, transform.position, Quaternion.identity);
+
+            particle.GetComponent<PlayParticles>().Play();
+
+            //particleLifeSpan秒後にパーティクルを消す
+            Destroy(particle, particleLifeSpan);
+
+            Debug.Log("爆発!!");
+        }
+        else
+            Debug.LogWarning("パーティクルがありません");
+    }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Field"))
         {
+            Explode();
             Detonate();
         }
     }

@@ -8,10 +8,6 @@ using UnityEngine;
 
 public class EnemyFlockManager : MonoBehaviour
 {
-    //ゲームマネージャー
-    [SerializeField]
-    private GameManager gameManager;
-
     //プレイヤーコンポーネント
     [SerializeField]
     private Player player;
@@ -63,7 +59,7 @@ public class EnemyFlockManager : MonoBehaviour
     private void Update()
     {
         //間隔 = 経過時間 / 生成間隔 の余り
-        float interval = gameManager.GetDeltaTimeInMain % generatedInterval;
+        float interval = GameManager.Instance.GetDeltaTimeInMain % generatedInterval;
 
         //設定した秒数毎に繰り返す
         if (interval < beforeInterval)

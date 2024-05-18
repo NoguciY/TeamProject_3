@@ -90,6 +90,6 @@ public class PowerUpItems : MonoBehaviour
     //ノックバック爆弾を使用可能にする
     public void AddNewBomb(Player player)
     {
-        player.NewBombEnabled();
+        player.EnableNewBomb();
     }
 }

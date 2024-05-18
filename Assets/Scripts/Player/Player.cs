@@ -68,7 +68,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //新しいボムを追加するカウンター
     private int newBombCounter;
 
-    //新しいボムを追加する直前のレベル(10,20,30で追加したい)
+    //新しいボムを追加する直前のレベル(10,20,30で追加)
     private int addBombLevel;
 
     //トランスフォーム
@@ -79,6 +79,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     public PowerUpItems GetPowerUpItems => powerUpItems;
     public PlayerEvent GetPlayerEvent => playerEvent;
     public int GetNewBombCounter => newBombCounter;
+
 
     private void Start()
     {
@@ -175,7 +176,6 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             $"残りの体力：{lifeController.GetLife}");
     }
 
-
     //経験値を取得する関数(インターフェースで実装)
     public void GetExp(int exp)
     {
@@ -207,12 +207,14 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //爆弾を生成する
     private void GenerateBomb()
     {
-
+        //爆弾のクールタイムを計測する
+        for(int i = 0; i < BombManager.BOMBTYPENUM; i++)
+            bombManager.CountBombCoolTime(i);
 
         //時間で自動生成されるようにする
-        if (Input.GetMouseButtonDown(0))
-            //投擲爆弾を生成
-            bombManager.GenerateThrowingBomb();
+        //if (bombManager.isUsingBomb)
+        //投擲爆弾を生成
+        bombManager.GenerateThrowingBomb();
 
         //1つ目の爆弾使用可能フラグがtrueの場合
         if (canUseBombFlags[0])
@@ -265,7 +267,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     }
 
     //新しい爆弾を使用可能にする
-    public void NewBombEnabled()
+    public void EnableNewBomb()
     {
         if (newBombCounter < canUseBombFlags.Length)
         {

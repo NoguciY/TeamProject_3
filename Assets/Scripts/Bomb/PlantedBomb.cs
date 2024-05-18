@@ -20,6 +20,9 @@ public class PlantedBomb : MonoBehaviour
     [HideInInspector]
     public GameObject explosionParticle;
 
+    [SerializeField, Header("ダメージ量")]
+    private float damage = 3;
+
     //爆発するまでの時間
     public float fuseTime;
 
@@ -32,6 +35,9 @@ public class PlantedBomb : MonoBehaviour
     [SerializeField, Header("爆発パーティクル生成後から破棄するまでの時間(秒)")]
     private float particleLifeSpan = 3f;
 
+    [SerializeField, Header("クールタイム(秒)")]
+    private float coolTime = 3f;
+
     //コライダーコンポーネント
     [SerializeField]
     private SphereCollider sphereCollider;
@@ -40,6 +46,9 @@ public class PlantedBomb : MonoBehaviour
 
     //レイを飛ばす最大距離
     private float maxDistance;
+
+    //ゲッター
+    public float GetCoolTime => coolTime;
 
     private void Start()
     {
@@ -81,13 +90,15 @@ public class PlantedBomb : MonoBehaviour
         
         foreach (var hit in hits)
         {
-            //Player playe = hit.collider.gameObject.GetComponent<Player>();
+            //ダメージを受けることができるオブジェクトを取得
+            var applicableDamageObject = hit.collider.gameObject.GetComponent<IApplicableDamageEnemy>();
             if (hit.collider.gameObject.CompareTag("Enemy"))
             {
                 //敵に当たった場合、ダメージを与える
-                hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
+                //hit.collider.gameObject.GetComponent<EnemyManager>().Dead();
             }
-            //Debug.Log(hit.collider.name);
+            if (applicableDamageObject != null)
+                applicableDamageObject.ReceiveDamage(damage);
         }
 
         //爆弾を爆発パーティクル破棄後に破棄する

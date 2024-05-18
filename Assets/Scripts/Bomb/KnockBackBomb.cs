@@ -1,8 +1,6 @@
-//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UIElements;
 using static UnityEngine.ParticleSystem;
 
 //ノックバック爆弾
@@ -43,8 +41,8 @@ public class KnockbackBomb : MonoBehaviour
     [SerializeField, Header("生成される爆弾数")]
     private int generatedBombNum = 2;
 
-    //クールタイム(秒)
-    //private float coolTime = 60f;
+    [SerializeField, Header("クールタイム(秒)")]
+    private float coolTime = 60f;
 
     //コライダーコンポーネント
     [SerializeField]
@@ -65,6 +63,7 @@ public class KnockbackBomb : MonoBehaviour
     //ゲッター
     public float GetToPlayerDistance => toPlayerDistance;
     public int GetGeneratedBombNum => generatedBombNum;
+    public float GetCoolTime => coolTime;
 
     private void Start()
     {
