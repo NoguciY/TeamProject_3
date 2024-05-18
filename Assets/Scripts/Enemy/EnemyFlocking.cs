@@ -1,4 +1,3 @@
-//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +10,9 @@ using UnityEngine.Events;
 
 public class EnemyFlocking : MonoBehaviour
 {
+    //群の生成と管理をするコンポーネント
     public EnemyFlockManager flockManager;
-
   
-    [SerializeField]
-    private GameObject itemPrefab;
-
     [SerializeField, Header("近隣の個体を検知する距離")]
     private float ditectingNeiborDistance;
 
@@ -51,7 +47,6 @@ public class EnemyFlocking : MonoBehaviour
     //最大速度
     [SerializeField]
     private float maxSpeed;
-
 
     //処理の最初に１度インスタンスを取得して、
     //取得したインスタンスにアクセスする
@@ -102,31 +97,6 @@ public class EnemyFlocking : MonoBehaviour
         //UpdateMove();
 
         //Debug.Log($"velocity:{velocity}");
-    }
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    //ダメージを受けることができるオブジェクトを取得
-    //    var applicableDamageObject = other.gameObject.GetComponent<IApplicableDamage>();
-
-    //    if(applicableDamageObject != null)
-    //    {
-    //        //ダメージを受けさせる
-    //        applicableDamageObject.RecieveDamage(10);
-    //    }
-    //}
-
-    public void Dead()
-    {
-        //群から自身を削除
-        if (flockManager != null)
-        {
-            flockManager.boids.Remove(this.gameObject);
-        }
-        //自身を破棄
-        Destroy(this.gameObject);
-        //アイテムを生成
-        Instantiate(itemPrefab, this.transform.position, itemPrefab.transform.rotation);
     }
 
     /// <summary>

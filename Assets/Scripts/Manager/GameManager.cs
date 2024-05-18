@@ -13,34 +13,15 @@ public enum SceneType
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance;
+
     //メイン画面の経過時間(秒)
     private float deltaTimeInMain;
 
     //ゲッター
     public float GetDeltaTimeInMain => deltaTimeInMain;
 
-    private static GameManager instance;
 
-    private void Update()
-    {
-        //メインゲーム画面の場合
-
-        //時間を計測
-        deltaTimeInMain += Time.deltaTime;
-
-    }
-
-    public static GameManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                SetupInstance();
-            }
-            return instance;
-        }
-    }
     private void Awake()
     {
         if (instance == null)
@@ -53,10 +34,36 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void Update()
+    {
+        //メインゲーム画面の場合
+
+        //時間を計測
+        deltaTimeInMain += Time.deltaTime;
+    }
+
+    //GameManagerインスタンスにアクセスする
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                //インスタンスをセット
+                SetupInstance();
+            }
+            return instance;
+        }
+    }
+
+    //インスタンスをセットする
     private static void SetupInstance()
     {
+        //シーン内に存在するGameManagerを検索
         instance = FindObjectOfType<GameManager>();
 
+        //シーン内にない場合、インスタンスを作成する
         if (instance == null)
         {
             GameObject gameObj = new GameObject();

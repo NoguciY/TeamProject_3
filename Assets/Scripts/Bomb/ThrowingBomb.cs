@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
+//using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,17 +17,21 @@ public class ThrowingBomb : MonoBehaviour
     [HideInInspector]
     public GameObject explosionParticle;
 
+    //爆発SE
+
+
+
     [SerializeField, Header("ダメージ量")]
     private float damage;
 
-    [SerializeField,Header("発射数")]
-    private int count;
+    //[SerializeField,Header("発射数")]
+    //private int count;
 
     [SerializeField, Header("弾速(m/s)")]
     private float speed;
 
     [SerializeField, Header("発射間隔")]
-    private float interval;
+    private float coolTime;
 
     [SerializeField, Header("1秒間に回転する角度(degree/s)")]
     private float angleOfRotationPerSecond;
@@ -44,9 +48,10 @@ public class ThrowingBomb : MonoBehaviour
     //速度
     private Vector3 velocity;
 
-    //発射タイミングを管理
-    //private float timer;
 
+    //ゲッター
+    public float GetCoolTime => coolTime;
+    
     private void Start()
     {
         myTransform = transform;
@@ -55,28 +60,8 @@ public class ThrowingBomb : MonoBehaviour
     // 毎フレーム呼び出される関数
     private void Update()
     {
-        //timer += Time.deltaTime;
-
-        //if(playerTransform != null)
         // 移動する
         myTransform.localPosition += velocity * Time.deltaTime;
-
-        //                                            プレイヤーのポジション
-        //var screenPos = Camera.main.WorldToScreenPoint(transform.position);
-
-        ////
-        //var direction = Input.mousePosition - screenPos;
-
-        ////
-        //var angle = Utilities.GetAngle(Vector3.zero, direction);
-
-        //if (timer < interval) return;
-
-        //弾の発射タイミングを管理するタイマーをリセットする
-        //timer = 0;
-
-        //弾を発射する
-        //ShootNWay(speed, count);
 
         //回転する
         Rotate();
@@ -97,30 +82,11 @@ public class ThrowingBomb : MonoBehaviour
         }
     }
 
-    //
-    //private void ShootNWay(float speed, int count)
-    //{
-    //    var pos = transform.localPosition;  //プレイヤーの位置
-    //    var rot = transform.localRotation;  //プレイヤーの向き
-
-    //    if (count == 1)
-    //    {
-    //        //発射する弾を生成する
-    //        var shot = Instantiate(gameObject, pos, rot);
-
-    //        //弾を発射する方向と速さを設定する
-    //        //Init(speed);
-    //    }
-    //}
 
     //x軸を軸に回転する
     private void Rotate()
     {
-        //角速度(単位をrad/s)にする)
-        //float angularVelocity = angleOfRotationPerSecond * Mathf.Rad2Deg;
-
         //1フレームに回転する角度
-        //float angle = angularVelocity * Time.deltaTime;
         float angle = angleOfRotationPerSecond * Time.deltaTime;
 
         //毎フレーム回転させる
