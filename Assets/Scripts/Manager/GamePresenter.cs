@@ -18,10 +18,12 @@ public class GamePresenter : MonoBehaviour
     //UIマネージャー
     [SerializeField]
     private UIManager uiManager;
-    
+
     //サウンドマネージャー
     //[SerializeField]
     //private SoundManager soundManager;
+
+
 
 
     private void Awake()
@@ -41,6 +43,8 @@ public class GamePresenter : MonoBehaviour
         //コンティニューボタンを選択する
         player.GetPlayerEvent.gameOverEvent.AddListener(
             () => uiManager.GetButtonManager.GetGameOverContinueButton.Select());
+        player.GetPlayerEvent.gameOverEvent.AddListener(
+            () => GameManager.Instance.lastPlayerLevel = player.GetPlayerLevelUp.GetLevel);
         //シーンタイプを変更する
         player.GetPlayerEvent.gameOverEvent.AddListener(
             () => GameManager.Instance.ChangeSceneType(SceneType.GameOver));

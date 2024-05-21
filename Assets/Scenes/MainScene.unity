@@ -576,12 +576,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!136 &479818036 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 8548936213273355496, guid: 3af907046d283604d86ac8fdeb1cd519,
-    type: 3}
-  m_PrefabInstance: {fileID: 6157688494345587353}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &479818037 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
@@ -1033,6 +1027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab8b694273485234bb29438e81c29964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastPlayerLevel: 0
+  deadEnemyMun: 0
 --- !u!1 &730520817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,6 +1934,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274962805}
   m_CullTransparentMesh: 1
+--- !u!136 &1280509685 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 4712395242851268497, guid: 3af907046d283604d86ac8fdeb1cd519,
+    type: 3}
+  m_PrefabInstance: {fileID: 6157688494345587353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1287184056 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8010535169947496647, guid: 0b30944a27040d74195160c5c5bbc887,
@@ -3615,9 +3617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 713fcaf57b9cf3c40986a1e1b346682e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 669923613}
   mainPanel: {fileID: 489907963}
-  gameClearPanel: {fileID: 0}
   gameOverPanel: {fileID: 1472314519}
   levelUpPanel: {fileID: 1163757663}
   levelUpBombPanel: {fileID: 959143096}
@@ -4046,12 +4046,22 @@ PrefabInstance:
         type: 3}
       propertyPath: capsuleColliderForItem
       value: 
-      objectReference: {fileID: 479818036}
+      objectReference: {fileID: 1280509685}
+    - target: {fileID: 4712395242851268497, guid: 3af907046d283604d86ac8fdeb1cd519,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8180825191912411354, guid: 3af907046d283604d86ac8fdeb1cd519,
         type: 3}
       propertyPath: experienceValue
       value: 
       objectReference: {fileID: 479818038}
+    - target: {fileID: 8548936213273355496, guid: 3af907046d283604d86ac8fdeb1cd519,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
         type: 3}
       propertyPath: bombExplosionParticle
