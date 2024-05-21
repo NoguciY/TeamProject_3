@@ -12,7 +12,6 @@ public class PlayParticles : MonoBehaviour
         for(int i = 0; i < particleSystems.Length; i++)
         {
             particleSystems[i].Play();
-            Debug.Log("再生！");
         }
     }
 }

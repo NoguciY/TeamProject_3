@@ -16,6 +16,9 @@ public class Bullet : MonoBehaviour
     [SerializeField, Header("爆発パーティクル生成後から破棄するまでの時間(秒)")]
     private float particleLifeSpan = 3f;
 
+    [SerializeField, Header("ダメージ量")]
+    private float damage = 3;
+
     public float fuseTime;          //爆発するまでの時間
     public float explosionRadius;   //範囲
 
@@ -106,12 +109,11 @@ public class Bullet : MonoBehaviour
 
         foreach (var hit in hits)
         {
+            var applicableDamageObject = hit.collider.gameObject.GetComponent<IApplicableDamageEnemy>();
+
             Player playe = hit.collider.gameObject.GetComponent<Player>();
-            if (hit.collider.gameObject.CompareTag("Enemy"))
-            {
-                //敵に当たった場合、ダメージを与える
-                //hit.collider.gameObject.GetComponent<EnemyFlocking>().Dead();
-            }
+            if (applicableDamageObject != null)
+                applicableDamageObject.ReceiveDamage(damage);
         }
 
         Destroy(gameObject);

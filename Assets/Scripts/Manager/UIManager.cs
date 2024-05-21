@@ -5,17 +5,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    //ゲームマネージャー
-    [SerializeField]
-    private GameManager gameManager;
-
     //メインゲームパネル
     [SerializeField]
     private GameObject mainPanel;
-
-    //ゲートクリアパネル
-    [SerializeField]
-    private GameObject gameClearPanel;
 
     //ゲームオーバーパネル
     [SerializeField]
@@ -70,6 +62,6 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         //経過時間テキストの更新
-        timer.CountTimer(gameManager.GetDeltaTimeInMain);
+        timer.CountTimer(GameManager.Instance.GetDeltaTimeInMain);
     }
 }

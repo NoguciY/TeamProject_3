@@ -131,7 +131,10 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         //ŒQ‚©‚ç©g‚ğíœ
         if (flockManager != null)
             flockManager.boids.Remove(this.gameObject);
-        
+
+        //“|‚µ‚½“G‚Ì”‚ğ‘‚â‚·
+        GameManager.Instance.deadEnemyMun++;
+
         //©g‚ğ”jŠü
         Destroy(this.gameObject);
         //ƒAƒCƒeƒ€‚ğ¶¬

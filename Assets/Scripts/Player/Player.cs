@@ -77,6 +77,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     public PowerUpItems GetPowerUpItems => powerUpItems;
     public PlayerEvent GetPlayerEvent => playerEvent;
     public int GetNewBombCounter => newBombCounter;
+    public PlayerLevelUp GetPlayerLevelUp => playerLevelUp;
 
 
     private void Start()
@@ -121,21 +122,21 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //例えば、WDを一緒に押すとWを押しているときより、速く進んでいるので修正する
         if (Input.GetKey(KeyCode.W))
         {
-            myTransform.position += speed * myTransform.forward * Time.deltaTime;
+            myTransform.position += speed * Vector3.forward * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            myTransform.position -= speed * myTransform.forward * Time.deltaTime;
+            myTransform.position -= speed * Vector3.forward * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            myTransform.position += speed * myTransform.right * Time.deltaTime;
+            myTransform.position += speed * Vector3.right * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            myTransform.position -= speed * myTransform.right * Time.deltaTime;
+            myTransform.position -= speed * Vector3.right * Time.deltaTime;
         }
 
         //マウスカーソルの方向を向かせる
@@ -144,24 +145,19 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //爆弾を生成する
         GenerateBomb();
 
-        //爆弾生成テスト用、後で消す
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            bombManager.GenerateKnockbackBombs();
-
-        //自動回復する
-        AutomaticRecovery();
-
         //レベルアップ
         if (playerLevelUp.GetLevel == addBombLevel * (newBombCounter + 1))
             playerLevelUp.LevelUp(playerEvent.addNewBombEvent);
         else
             playerLevelUp.LevelUp(playerEvent.levelUpEvent);
 
-
         //ゲームオーバー
         if (lifeController.IsDead())
             //体力ゲージが０出ない場合、体力ゲージを0にする
             playerEvent.gameOverEvent.Invoke();
+
+        //自動回復する
+        AutomaticRecovery();
     }
 
     //ダメージを受ける関数(インターフェースで実装)
@@ -236,7 +232,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         {
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                Debug.Log("誘導爆弾！");
+                bombManager.GenerateHomingBomb();
             }
         }
     }

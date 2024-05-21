@@ -48,4 +48,5 @@ MonoBehaviour:
   iterationCount: 1
   interval: 0.5
   lifeTime: 2
+  coolTime: 15
   playerTransform: {fileID: 0}
