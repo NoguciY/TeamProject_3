@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
       propertyPath: m_Name
-      value: Player (1)
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
@@ -146,14 +146,13 @@ MonoBehaviour:
   resilience: 0
   bombPrefab: {fileID: 3513634871006304099, guid: e792f143c64e5424ea35924c3bbff37b,
     type: 3}
-  capsuleColliderForItem: {fileID: 0}
-  playerEvent: {fileID: 0}
-  lifeController: {fileID: 0}
-  playerLevelUp: {fileID: 0}
-  playerStatus: {fileID: 0}
-  powerUpItems: {fileID: 0}
-  gameManager: {fileID: 0}
-  bombManager: {fileID: 0}
+  capsuleColliderForItem: {fileID: 4712395242851268497}
+  playerEvent: {fileID: 4096368864057113706}
+  lifeController: {fileID: 91907527049660430}
+  playerLevelUp: {fileID: 8180825191912411354}
+  playerStatus: {fileID: 8334417278564009396}
+  powerUpItems: {fileID: 236893246262876744}
+  bombManager: {fileID: 9017726956107907413}
 --- !u!114 &91907527049660430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce54d7223d2aa44a98c026762ad6465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  experienceValue: {fileID: 0}
+  experienceValue: {fileID: 4379404434032715048}
   level: 0
 --- !u!114 &4096368864057113706
 MonoBehaviour:
@@ -260,7 +259,13 @@ MonoBehaviour:
     type: 3}
   missileSpawnPrefab: {fileID: 49437768128436809, guid: e7dd9a4bf911cfa4894de8654f5e2bab,
     type: 3}
-  knockbackBombExplosionParticle: {fileID: 5501477371294378916, guid: 049de12343c8bc049b11056eeb6e0ea4,
+  throwingBombExplosionParticle: {fileID: 8969231326653961610, guid: 21e4eaed78185e24fa11dfc96f2626d6,
+    type: 3}
+  plantedBombExplosionParticle: {fileID: 637259989962001759, guid: 049de12343c8bc049b11056eeb6e0ea4,
+    type: 3}
+  knockbackBombExplosionParticle: {fileID: 2305783336696801891, guid: 5b5b34a107bfd954bb932a6c6c87718a,
+    type: 3}
+  homingBombExplosionParticle: {fileID: 100000, guid: f881607407b15cc46b24d6bda799037a,
     type: 3}
 --- !u!136 &8548936213273355496
 CapsuleCollider:

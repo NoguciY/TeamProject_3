@@ -61,6 +61,9 @@ public class BombManager : MonoBehaviour
     [SerializeField, Header("投擲爆弾の爆発エフェクト")]
     private GameObject throwingBombExplosionParticle;
 
+    [SerializeField, Header("設置型爆弾の爆発エフェクト")]
+    private GameObject plantedBombExplosionParticle;
+
     [SerializeField, Header("ノックバック爆弾の爆発エフェクト")]
     private GameObject knockbackBombExplosionParticle;
 
@@ -110,7 +113,7 @@ public class BombManager : MonoBehaviour
         //設置型爆弾関係の値を取得
         var plantedBombComponent = plantedBombPrefab.GetComponent<PlantedBomb>();
         plantedBombHalfHeight = plantedBombComponent.GetHalfHeight();
-        plantedBombComponent.explosionParticle = knockbackBombExplosionParticle;
+        plantedBombComponent.explosionParticle = plantedBombExplosionParticle;
         plantedBombRotation = plantedBombPrefab.transform.rotation;
         coolTime[(int)BombType.Planted] = plantedBombComponent.GetCoolTime;
 

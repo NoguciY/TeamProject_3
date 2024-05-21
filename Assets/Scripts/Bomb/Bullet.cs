@@ -137,6 +137,9 @@ public class Bullet : MonoBehaviour
             //particleLifeSpan秒後にパーティクルを消す
             Destroy(particle, particleLifeSpan);
 
+            //効果音を再生
+            SoundManager.uniqueInstance.Play("爆発1");
+
             Debug.Log("爆発!!");
         }
         else

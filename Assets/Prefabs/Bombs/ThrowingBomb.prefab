@@ -46,10 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f7aee65f31ee64f81007ecd0ff8eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionParticle: {fileID: 5501477371294378916, guid: 049de12343c8bc049b11056eeb6e0ea4,
+  explosionParticle: {fileID: 8969231326653961610, guid: 21e4eaed78185e24fa11dfc96f2626d6,
     type: 3}
-  damage: 0
-  count: 1
+  damage: 3
   speed: 8
   coolTime: 2
   angleOfRotationPerSecond: 270

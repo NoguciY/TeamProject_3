@@ -19,6 +19,9 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     [SerializeField]
     private EnemyFlocking enemyFlocking;
 
+    //群の生成と管理をするコンポーネント
+    public EnemyFlockManager flockManager;
+
     //経験値オブジェクト
     [SerializeField]
     private GameObject expPrefab;
@@ -31,10 +34,16 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     private Animator animator;
 
     //爆弾に当たったかどうか
-    public bool isHitting = false;
+    public bool isHitting;
 
     //ノックバック時の敵の停止時間(秒)
     private float knockbackPauseTime = 1f;
+
+    //体力
+    private float health;
+
+    //敵の情報
+    public EnemySetting.EnemyData enemyData;
 
     //ゲッター
     public EnemyFlocking GetEnemyFlocking => enemyFlocking;
@@ -56,10 +65,16 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
 
         ////ステート開始
         //stateMachine.OnStart((int)StateType.Idle);
+
+        //敵の初期化
+        isHitting = false;
+        health = enemyData.maxHealth;
     }
 
     private void Update()
     {
+        //近隣の個体を取得する
+       enemyFlocking.AddNeighbors(flockManager);
         //stateMachine.OnUpdate();
     }
 
@@ -93,7 +108,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         Debug.Log($"{knockbackDistance * knockbackForce}でノックバック!!");
     }
 
-    //移動を再開させる
+    //ノックバックされた場合に移動を再開させる
     private void RestartMoving()
     {
         isHitting = false;
@@ -102,16 +117,21 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     //ダメージを受ける(インターフェースで実装)
     public void ReceiveDamage(float damage)
     {
+        health -= damage;
         Debug.Log($"敵は{damage} を受けた");
+
+        //体力が0になった場合、死亡
+        if (health <= 0)
+            Dead();
     }
 
-    public void Dead()
+    //死亡した時の処理
+    private void Dead()
     {
         //群から自身を削除
-        if (enemyFlocking.flockManager != null)
-        {
-            enemyFlocking.flockManager.boids.Remove(this.gameObject);
-        }
+        if (flockManager != null)
+            flockManager.boids.Remove(this.gameObject);
+        
         //自身を破棄
         Destroy(this.gameObject);
         //アイテムを生成
@@ -124,9 +144,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         var applicableDamageObject = other.gameObject.GetComponent<IApplicableDamage>();
 
         if (applicableDamageObject != null)
-        {
             //ダメージを受けさせる
-            applicableDamageObject.ReceiveDamage(10);
-        }
+            applicableDamageObject.ReceiveDamage(enemyData.attack);
     }
 }

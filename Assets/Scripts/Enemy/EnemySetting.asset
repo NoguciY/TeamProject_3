@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemySetting
   m_EditorClassIdentifier: 
   enemyDataList:
-  - name: "\u3053\u3046\u3082\u308A"
+  - name: RedBlob
     ditectingNeiborDistance: 10
     fieldOfView: 90
     rotationSpeed: 3
@@ -22,5 +22,8 @@ MonoBehaviour:
     combiningCoefficient: 1
     restitutionCoefficient: 1
     restitutionDistance: 1
+    combiningPlayerCoefficient: 3
     minSpeed: 3
     maxSpeed: 5
+    maxHealth: 1
+    attack: 3

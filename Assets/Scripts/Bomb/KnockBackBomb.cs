@@ -125,7 +125,7 @@ public class KnockbackBomb : MonoBehaviour
     }
 
     //爆発させる
-    private void Explosion()
+    private void Explode()
     {
         if (explosionParticle != null)
         {
@@ -133,13 +133,18 @@ public class KnockbackBomb : MonoBehaviour
             GameObject particle =
                 Instantiate(explosionParticle, myTransform.position, Quaternion.identity);
 
-            particle.GetComponent<ParticleSystem>().Play();
+            particle.GetComponent<PlayParticles>().Play();
 
             //particleLifeSpan秒後にパーティクルを消す
             Destroy(particle, particleLifeSpan);
 
+            //効果音を再生
+            SoundManager.uniqueInstance.Play("爆発1");
+
             Debug.Log("爆発!!");
         }
+        else
+            Debug.LogWarning("パーティクルがありません");
     }
 
 
@@ -154,7 +159,7 @@ public class KnockbackBomb : MonoBehaviour
             gameObject.SetActive(false);
 
             //爆発する
-            Explosion();
+            Explode();
 
             //ダメージを与える
             applicableDamageObject.ReceiveDamage(damage);
