@@ -16,6 +16,10 @@ public class EnemyFlockManager : MonoBehaviour
     [SerializeField]
     private GameObject enemy;
 
+    //敵の情報
+    [SerializeField]
+    private EnemySetting enemySetting;
+
     //生成する最小範囲
     [SerializeField]
     private float generatedMinRange;
@@ -24,18 +28,18 @@ public class EnemyFlockManager : MonoBehaviour
     [SerializeField]
     private float generatedMaxRange;
 
-    //生成する数
-    [SerializeField]
+    [SerializeField, Header("生成する敵")]
+    private GameObject[] enemyPrefab;
+
+    [SerializeField,Header("生成する数")]
     private int generatedNum;
 
     [SerializeField, Header("生成間隔(秒)")]
     private float generatedInterval;
 
-    // 円の中心点
     [SerializeField, Header("円状に生成する際の中心座標")]
     private Vector3 centerPos;
 
-    // 円の半径
     [SerializeField, Header("円状に生成する際の半径")]
     private float radius;
 
@@ -45,15 +49,22 @@ public class EnemyFlockManager : MonoBehaviour
     //前回の間隔
     private float beforeInterval;
 
+    // sin の周期は 2π
+    float oneCycle = 2.0f * Mathf.PI; 
 
-    float oneCycle = 2.0f * Mathf.PI; // sin の周期は 2π
+    //敵の情報
+    //private EnemySetting.EnemyData enemyData;
+
+    //敵の名前とプレハブがセットのディクショナリー
+    private Dictionary<string, GameObject> enemyDictionary;
 
 
     private void Awake()
     {
-        //敵をランダムな位置に生成する
-        //AddBoid();
-        //GenerateEnemiesInCircle(enemy, radius, generatedNum);
+        enemyDictionary = new Dictionary<string, GameObject>();
+        //敵の名前とプレハブをセットする
+        foreach (GameObject enemy in enemyPrefab)
+            enemyDictionary.Add(enemy.name, enemy);
     }
 
     private void Update()
@@ -74,7 +85,19 @@ public class EnemyFlockManager : MonoBehaviour
         //AddBoid();
 
         //常に設定した数をプレイヤーを中心に円状に生成する
-        AddBoidInCircle();
+        AddBoidInCircle("RedBlob");
+    }
+
+    //指定した敵の情報を返す
+    private EnemySetting.EnemyData GetEnemyData(string name)
+    {
+        foreach (EnemySetting.EnemyData enemyData in enemySetting.enemyDataList)
+        {
+            if (enemyData.name == name)
+                return enemyData;
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -94,7 +117,7 @@ public class EnemyFlockManager : MonoBehaviour
 
             //敵の生成
             GameObject boid = Instantiate(enemy, generationPos, Quaternion.identity, parent);
-            boid.GetComponent<EnemyFlocking>().flockManager = this;
+            boid.GetComponent<EnemyManager>().flockManager = this;
             
             //リストに追加
             boids.Add(boid);
@@ -125,7 +148,7 @@ public class EnemyFlockManager : MonoBehaviour
 
             //オブジェクトの生成
             GameObject boid = Instantiate(generatedPrefab, spawnPos, Quaternion.identity, parent);
-            boid.GetComponent<EnemyFlocking>().flockManager = this;
+            boid.GetComponent<EnemyManager>().flockManager = this;
 
             //リストに追加
             boids.Add(boid);
@@ -151,7 +174,7 @@ public class EnemyFlockManager : MonoBehaviour
             var spawnPos = new Vector3(x, centerPos.y, z);
 
             GameObject boid = Instantiate(generatedPrefab,spawnPos,Quaternion.identity,transform);
-            boid.GetComponent<EnemyFlocking>().flockManager = this;
+            boid.GetComponent<EnemyManager>().flockManager = this;
 
             //リストに追加
             boids.Add(boid);
@@ -160,8 +183,20 @@ public class EnemyFlockManager : MonoBehaviour
 
     //円状に敵を生成する
     //常に設定した数がフィールドにいるようにする
-    private void AddBoidInCircle()
+    private void AddBoidInCircle(string name)
     {
+        //生成する敵を取得する
+        GameObject generatedEnemy = null;
+
+        if (generatedEnemy == null)
+        {
+            //ディクショナリーに格納された敵の名前からプレハブを取得する
+            if (enemyDictionary.TryGetValue(name, out var enemyPrefab))
+                generatedEnemy = enemyPrefab;
+            else
+                Debug.LogError($"ディクショナリーに{name}が登録されていません");
+        }
+
         //生成数が設定した生成数より小さい場合
         if (boids.Count < generatedNum)
         {
@@ -179,8 +214,13 @@ public class EnemyFlockManager : MonoBehaviour
             //生成位置
             var spawnPos = new Vector3(x, centerPos.y, z);
 
-            GameObject boid = Instantiate(enemy, spawnPos, Quaternion.identity, transform);
-            boid.GetComponent<EnemyFlocking>().flockManager = this;
+            //敵を生成する
+            GameObject boid = Instantiate(generatedEnemy, spawnPos, Quaternion.identity, transform);
+            var enemyManager = boid.GetComponent<EnemyManager>();
+            enemyManager.flockManager = this;
+
+            //敵の情報をセットする
+            enemyManager.enemyData = GetEnemyData(name);
 
             //リストに追加
             boids.Add(boid);

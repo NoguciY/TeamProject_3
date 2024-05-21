@@ -40,10 +40,19 @@ public class EnemySetting : ScriptableObject
         [Header("壁からの力が掛かり始める距離")]
         public float restitutionDistance;
 
+        [Header("プレイヤーに結合する力の係数")]
+        public float combiningPlayerCoefficient;
+
         [Header("最小速度")]
         public float minSpeed;
 
         [Header("最大速度")]
         public float maxSpeed;
+
+        [Header("最大体力")]
+        public float maxHealth;
+
+        [Header("攻撃力")]
+        public float attack;
     }
 }

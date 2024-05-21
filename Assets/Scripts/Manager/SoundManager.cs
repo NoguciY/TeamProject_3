@@ -16,18 +16,36 @@ public class SoundManager : MonoBehaviour
         public AudioClip audioClip;
     }
 
+    //シングルトンインスタンス
+    public static SoundManager uniqueInstance;
+
     //音の別名とそれに対応した音をインスペクターで編集、管理するための配列
     [SerializeField]
     private SoundData[] soundDatas;
 
     //AudioSource（スピーカー）を同時に鳴らしたい音の数だけ用意(仮で20個)
-    private AudioSource[] audioSources = new AudioSource[20];
+    private AudioSource[] audioSources;
 
     //別名(spondName)をキーとした管理用Dictionary
-    private Dictionary<string, SoundData> soundDictionary = new Dictionary<string, SoundData>();
+    private Dictionary<string, SoundData> soundDictionary;
+
+    //AudioSourceの数
+    private const int AUDIOSOURCENUM = 20;
 
     private void Awake()
     {
+        if(uniqueInstance == null)
+        {
+            uniqueInstance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+            Destroy(gameObject);
+
+        audioSources = new AudioSource[AUDIOSOURCENUM];
+
+        soundDictionary = new Dictionary<string, SoundData>();
+
         //auidioSourceList配列の数だけAudioSourceを自分自身に生成して配列に格納
         for (int i = 0; i < audioSources.Length; ++i)
             audioSources[i] = gameObject.AddComponent<AudioSource>();
@@ -53,7 +71,7 @@ public class SoundManager : MonoBehaviour
     {
         AudioSource audioSource = GetUnusedAudioSource();
 
-        //オーディオスースがない場合。再生させない
+        //オーディオソースがない場合。再生させない
         if (audioSource == null) return;
       
         audioSource.clip = clip;

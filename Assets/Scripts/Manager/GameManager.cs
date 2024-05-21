@@ -13,7 +13,11 @@ public enum SceneType
 
 public class GameManager : MonoBehaviour
 {
+    //シングルトンインスタンス
     private static GameManager instance;
+
+    //現在のシーン
+    private SceneType currentSceneType;
 
     //メイン画面の経過時間(秒)
     private float deltaTimeInMain;
@@ -30,15 +34,16 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
         else
-        {
             Destroy(gameObject);
-        }
+        
+        //開始時のシーン
+        currentSceneType = SceneType.MainGame;
     }
 
     private void Update()
     {
         //メインゲーム画面の場合
-
+        if(currentSceneType == SceneType.MainGame)
         //時間を計測
         deltaTimeInMain += Time.deltaTime;
     }
@@ -49,10 +54,8 @@ public class GameManager : MonoBehaviour
         get
         {
             if (instance == null)
-            {
                 //インスタンスをセット
                 SetupInstance();
-            }
             return instance;
         }
     }
@@ -71,5 +74,34 @@ public class GameManager : MonoBehaviour
             instance = gameObj.AddComponent<GameManager>();
             DontDestroyOnLoad(gameObj);
         }
+    }
+
+    /// <summary>
+    /// 現在のシーンを変更する
+    /// </summary>
+    /// <param name="nextSceneType">次のシーン</param>
+    public void ChangeSceneType(SceneType nextSceneType)
+    {
+        currentSceneType = nextSceneType;
+        Debug.Log($"現在のシーン：{currentSceneType}");
+    }
+
+    /// <summary>
+    /// 現在のシーンを変更する
+    /// </summary>
+    /// <param name="loadSceneName">次のシーン名</param>
+    public void ChangeSceneType(string nextSceneName)
+    {
+        //シーン名からSceneTypeに変換
+        if (nextSceneName == "TitleScene")
+            currentSceneType = SceneType.Title;
+        else if (nextSceneName == "MainScene")
+            currentSceneType = SceneType.MainGame;
+        else if(nextSceneName == "ResultScene")
+            currentSceneType = SceneType.Result;
+        else
+            Debug.LogWarning($"{nextSceneName}を現在のシーンに変更できません");
+
+        Debug.Log($"現在のシーン：{currentSceneType}");
     }
 }

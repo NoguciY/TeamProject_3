@@ -48,10 +48,6 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private PowerUpItems powerUpItems;
 
-    //ゲームマネージャー
-    [SerializeField]
-    private GameManager gameManager;
-
     //爆弾を管理するコンポーネント
     [SerializeField]
     private BombManager bombManager;
@@ -72,8 +68,10 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     private int addBombLevel;
 
     //トランスフォーム
-    private Transform myTransform; 
+    private Transform myTransform;
 
+    //追加される爆弾の数
+    private const int ADDEDBOMBNUM = 3;
 
     //ゲッター
     public PowerUpItems GetPowerUpItems => powerUpItems;
@@ -109,7 +107,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //爆弾の初期化
         bombManager.Initialize();
 
-        canUseBombFlags = new bool[3];
+        canUseBombFlags = new bool[ADDEDBOMBNUM];
 
         //0から爆弾の種類数-1までカウントする
         newBombCounter = 0;
@@ -148,7 +146,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
         //爆弾生成テスト用、後で消す
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            bombManager.GenerateHomingBomb();
+            bombManager.GenerateKnockbackBombs();
 
         //自動回復する
         AutomaticRecovery();
@@ -251,7 +249,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         if (resilience > 0　&& !lifeController.IsDead())
         {
             //経過時間
-            float deltaTime = gameManager.GetDeltaTimeInMain;
+            float deltaTime = GameManager.Instance.GetDeltaTimeInMain;
             
             //回復にはクールタイムを設ける
             if (deltaTime >= resilienceCoolTime)

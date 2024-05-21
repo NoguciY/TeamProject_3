@@ -59,7 +59,7 @@ public class PlantedBomb : MonoBehaviour
     }
 
     //爆発させる
-    private void Explosion()
+    private void Explode()
     {
         if (explosionParticle != null)
         {
@@ -72,6 +72,9 @@ public class PlantedBomb : MonoBehaviour
             //particleLifeSpan秒後にパーティクルを消す
             Destroy(particle, particleLifeSpan);
 
+            //効果音を再生
+            SoundManager.uniqueInstance.Play("爆発1");
+
             Debug.Log("爆発!!");
         }
     }
@@ -83,7 +86,7 @@ public class PlantedBomb : MonoBehaviour
         gameObject.SetActive(false);
         
         //爆発する
-        Explosion();
+        Explode();
 
         //球状のレイにヒットした全てのコライダーを取得する：引数(球の中心、球の半径、レイを飛ばす方向、飛ばす最大距離)
         RaycastHit[] hits = Physics.SphereCastAll(myTransform.position, explosionRadius, Vector3.forward, maxDistance);

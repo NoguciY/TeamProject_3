@@ -11,6 +11,9 @@ public class LifeController : MonoBehaviour
     //Å‘å‘Ì—Í
     private float maxLife;
 
+    //Ž€–S‚µ‚½‚©
+    private bool dead;
+
     //ƒQƒbƒ^[
     public float GetLife => life;
 
@@ -20,6 +23,7 @@ public class LifeController : MonoBehaviour
         //SetMaxLife(maxLife);
         this.maxLife = maxLife;
         life = maxLife;
+        dead = false;
     }
 
 
@@ -44,11 +48,9 @@ public class LifeController : MonoBehaviour
     //Ž€–S(‘Ì—Í‚ª0)‚ð”»’è‚·‚é
     public bool IsDead()
     {
-        bool dead = false;
+        if (!dead && life <= 0)
+            return dead = true;
 
-        if (life <= 0)
-            dead = true;
-
-        return dead;
+        return false;
     }
 }

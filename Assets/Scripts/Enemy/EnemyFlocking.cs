@@ -10,43 +10,9 @@ using UnityEngine.Events;
 
 public class EnemyFlocking : MonoBehaviour
 {
-    //群の生成と管理をするコンポーネント
-    public EnemyFlockManager flockManager;
-  
-    [SerializeField, Header("近隣の個体を検知する距離")]
-    private float ditectingNeiborDistance;
-
-    [SerializeField, Header("視野角")]
-    private float fieldOfView;
-
+    //敵Manager
     [SerializeField]
-    private float rotationSpeed;
-
-    [SerializeField, Header("分離する力の係数")]
-    private float separationCoefficient;
-
-    [SerializeField, Header("整列する力の係数")]
-    private float alignmentCoefficient;
-
-    [SerializeField, Header("結合する力の係数")]
-    private float combiningCoefficient;
-
-    [SerializeField, Header("壁から遠ざける力の係数")]
-    private float restitutionCoefficient;
-
-    [SerializeField, Header("壁からの力が掛かり始める距離")]
-    private float restitutionDistance;
-
-    [SerializeField, Header("プレイヤーに結合する力の係数")]
-    private float combiningPlayerCoefficient;
-
-    //最小速度
-    [SerializeField]
-    private float minSpeed;
-
-    //最大速度
-    [SerializeField]
-    private float maxSpeed;
+    private EnemyManager enemyManager;
 
     //処理の最初に１度インスタンスを取得して、
     //取得したインスタンスにアクセスする
@@ -80,18 +46,18 @@ public class EnemyFlocking : MonoBehaviour
         myTransform = transform;
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
-        speed = Random.Range(minSpeed, maxSpeed);
+        speed = Random.Range(enemyManager.enemyData.minSpeed, enemyManager.enemyData.maxSpeed);
 
         velocity = speed * Vector3.forward;
 
         //視野角を内積の閾値に使う
-        innerProductThred = Mathf.Cos(fieldOfView * Mathf.Deg2Rad);
+        innerProductThred = Mathf.Cos(enemyManager.enemyData.fieldOfView * Mathf.Deg2Rad);
     }
 
     private void Update()
     {
-        //近隣の個体を取得する
-        AddNeighbors();
+        ////近隣の個体を取得する
+        //AddNeighbors();
 
         //移動する
         //UpdateMove();
@@ -102,7 +68,7 @@ public class EnemyFlocking : MonoBehaviour
     /// <summary>
     /// 近隣の仲間を探してリストに追加
     /// </summary>
-    private void AddNeighbors()
+    public void AddNeighbors(EnemyFlockManager flockManager)
     {
         //リストをクリア
         neighbors.Clear();
@@ -118,7 +84,9 @@ public class EnemyFlocking : MonoBehaviour
                 float sqrDistance = toOtherVec.sqrMagnitude;
 
                 //自身と仲間の距離がditectingNeiborDistance以下の場合
-                if (sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
+                //if (sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
+                if (sqrDistance <= 
+                    Mathf.Pow(enemyManager.enemyData.ditectingNeiborDistance, 2))
                 {
                     //自身から仲間の方向と自身の進行方向
                     Vector3 direction = toOtherVec.normalized;
@@ -145,10 +113,10 @@ public class EnemyFlocking : MonoBehaviour
         //             + CombineNeighbors(combiningCoefficient)
         //             + CombinePlayer(combiningPlayerCoefficient);
 
-        acceleration = SeparateNeighbors() * separationCoefficient
-                     + AlignNeighbors() * alignmentCoefficient
-                     + CombineNeighbors() * combiningCoefficient
-                     + CombinePlayer() * combiningPlayerCoefficient
+        acceleration = SeparateNeighbors() * enemyManager.enemyData.separationCoefficient
+                     + AlignNeighbors() * enemyManager.enemyData.alignmentCoefficient
+                     + CombineNeighbors() * enemyManager.enemyData.combiningCoefficient
+                     + CombinePlayer() * enemyManager.enemyData.combiningPlayerCoefficient
                      //+ CombineNearbyPlayer() * combiningPlayerCoefficient
                      + StayWithinRange();
 
@@ -159,13 +127,13 @@ public class EnemyFlocking : MonoBehaviour
         Vector3 direction = velocity.normalized;
 
         //速度を制限する
-        velocity = Mathf.Clamp(speed, minSpeed, maxSpeed) * direction;
+        velocity = Mathf.Clamp(speed, enemyManager.enemyData.minSpeed, enemyManager.enemyData.maxSpeed) * direction;
 
         if (direction != Vector3.zero)
         {
             myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
                                  Quaternion.LookRotation(direction),        //向かせたい方向
-                                 rotationSpeed * Time.deltaTime);
+                                 enemyManager.enemyData.rotationSpeed * Time.deltaTime);
         }
         if (!float.IsNaN(velocity.x) && !float.IsNaN(velocity.y) && !float.IsNaN(velocity.z))
         {
@@ -179,10 +147,10 @@ public class EnemyFlocking : MonoBehaviour
     public Vector3 Move()
     {
         //フレームごとに速度に加算する値(加速度)を求める
-        acceleration = SeparateNeighbors() * separationCoefficient
-                     + AlignNeighbors() * alignmentCoefficient
-                     + CombineNeighbors() * combiningCoefficient
-                     + CombinePlayer() * combiningPlayerCoefficient
+        acceleration = SeparateNeighbors() * enemyManager.enemyData.separationCoefficient
+                     + AlignNeighbors() * enemyManager.enemyData.alignmentCoefficient
+                     + CombineNeighbors() * enemyManager.enemyData.combiningCoefficient
+                     + CombinePlayer() * enemyManager.enemyData.combiningPlayerCoefficient
                      //+ CombineNearbyPlayer() * combiningPlayerCoefficient
                      + StayWithinRange();
 
@@ -192,13 +160,13 @@ public class EnemyFlocking : MonoBehaviour
         Vector3 direction = velocity.normalized;
 
         //速度を制限する
-        velocity = Mathf.Clamp(speed, minSpeed, maxSpeed) * direction;
+        velocity = Mathf.Clamp(speed, enemyManager.enemyData.minSpeed, enemyManager.enemyData.maxSpeed) * direction;
 
         if (direction != Vector3.zero)
         {
             myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
                                  Quaternion.LookRotation(direction),        //向かせたい方向
-                                 rotationSpeed * Time.deltaTime);
+                                 enemyManager.enemyData.rotationSpeed * Time.deltaTime);
         }
         
         acceleration = Vector3.zero;
@@ -381,12 +349,13 @@ public class EnemyFlocking : MonoBehaviour
         Vector3 restitutionForce = Vector3.zero;
 
         //壁との距離がある値より小さくなった場合
-        if (Mathf.Abs(toWallDistance) < restitutionDistance)
+        if (Mathf.Abs(toWallDistance) < enemyManager.enemyData.restitutionDistance)
         {
             //壁の内側方向の力を加える
             //壁との距離が近いほど力は大きくなる
             restitutionForce = fromWallDirection * 
-                (restitutionCoefficient / (Mathf.Abs(toWallDistance / restitutionDistance)));
+                (enemyManager.enemyData.restitutionCoefficient / 
+                (Mathf.Abs(toWallDistance / enemyManager.enemyData.restitutionDistance)));
         }
 
         return restitutionForce;
@@ -442,9 +411,8 @@ public class EnemyFlocking : MonoBehaviour
 
         //プレイヤーとの距離が設定した値以下の場合
         float sqrDistance = playerPos.sqrMagnitude;
-        if (sqrDistance <= (ditectingNeiborDistance * ditectingNeiborDistance))
+        if (sqrDistance <= Mathf.Pow(enemyManager.enemyData.ditectingNeiborDistance, 2))
         {
-
             Vector3 direction = playerPos.normalized;
             Vector3 forward = velocity.normalized;
 
