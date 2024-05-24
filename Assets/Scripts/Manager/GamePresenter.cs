@@ -54,7 +54,7 @@ public class GamePresenter : MonoBehaviour
                 uiManager.GetButtonManager.GetGameOverContinueButton.Select();
 
                 //プレイヤーの最終レベルを取得する
-                GameManager.Instance.lastPlayerLevel = player.GetPlayerLevelUp.GetLevel;
+                GameManager.Instance.playerLevel = player.GetPlayerLevelUp.GetLevel;
             });
 
         //レベルアップイベント
@@ -71,6 +71,8 @@ public class GamePresenter : MonoBehaviour
 
                 //レベルアップ時に効果音を鳴らす
                 SoundManager.uniqueInstance.Play("レベルアップ");
+
+                GameManager.Instance.playerLevel++;
             });
 
         //爆弾追加用レベルアップイベント

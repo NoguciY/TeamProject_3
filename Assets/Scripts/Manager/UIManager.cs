@@ -24,6 +24,10 @@ public class UIManager : MonoBehaviour
     //経過時間テキストコンポーネント
     [SerializeField]
     private Timer timer;
+    
+    //現在レベルテキストコンポーネント
+    [SerializeField]
+    private PlayerLevel level;
 
     //体力ゲージコンポーネント
     [SerializeField]
@@ -63,5 +67,8 @@ public class UIManager : MonoBehaviour
     {
         //経過時間テキストの更新
         timer.CountTimer(GameManager.Instance.GetDeltaTimeInMain);
+
+        //現在のレベルテキストの更新
+        level.CountLevel(GameManager.Instance.playerLevel);
     }
 }
