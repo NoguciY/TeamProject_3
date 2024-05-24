@@ -21,7 +21,7 @@ public class ResultManager : MonoBehaviour
         timerText.text = ((int)survivalTime / 60).ToString("00") + ":" + ((int)survivalTime % 60).ToString("00");
 
         //Œ»İ‚ÌƒŒƒxƒ‹‚ğ•\¦
-        levelText.text = GameManager.Instance.lastPlayerLevel.ToString() + "Lv";
+        levelText.text = GameManager.Instance.playerLevel.ToString() + "Lv";
 
         //“|‚µ‚½“G‚Ì”‚ğ•\¦
         enemyCountText.text = GameManager.Instance.deadEnemyMun.ToString() + "‘Ì";

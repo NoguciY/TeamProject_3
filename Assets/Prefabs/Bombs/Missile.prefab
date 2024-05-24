@@ -113,8 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22b9244c775d8240828afb42bec7f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionParticle: {fileID: 0}
+  particleLifeSpan: 3
+  damage: 3
   fuseTime: 3
-  explosionRadius: 1
+  explosionRadius: 10
   maxUpwardHeight: 10
   moveSpeed: 10
   capsuleCollider: {fileID: 1631253602513066645}
