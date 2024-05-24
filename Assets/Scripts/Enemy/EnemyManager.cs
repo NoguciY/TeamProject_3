@@ -141,10 +141,11 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         Instantiate(expPrefab, this.transform.position, expPrefab.transform.rotation);
     }
 
-    private void OnTriggerEnter(Collider other)
+    //プレイヤーのisTriggerでないコライダーと当たり判定を行う
+    private void OnCollisionEnter(Collision collision)
     {
         //ダメージを受けることができるオブジェクトを取得
-        var applicableDamageObject = other.gameObject.GetComponent<IApplicableDamage>();
+        var applicableDamageObject = collision.gameObject.GetComponent<IApplicableDamage>();
 
         if (applicableDamageObject != null)
             //ダメージを受けさせる

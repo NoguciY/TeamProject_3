@@ -60,7 +60,8 @@ public class GameManager : MonoBehaviour
             //時間を計測
             deltaTimeInMain += Time.deltaTime;
 
-        
+        Debug.Log($"現在のシーン:{currentSceneType}");
+        Debug.Log($"前のシーン:{preSceneType}");
     }
 
     //GameManagerインスタンスにアクセスする
@@ -91,7 +92,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetResult()
+    //リザルトでの値をリセットする
+    private void ResetResult()
     {
         deltaTimeInMain = 0;
         lastPlayerLevel = 0;
@@ -104,9 +106,13 @@ public class GameManager : MonoBehaviour
     /// <param name="nextSceneType">次のシーン</param>
     public void ChangeSceneType(SceneType nextSceneType)
     {
-        preSceneType = currentSceneType;
-        currentSceneType = nextSceneType;
-        Debug.Log($"現在のシーン：{currentSceneType}");
+        //前回と同じシーンに変更させない
+        if (preSceneType != currentSceneType)
+        {
+            preSceneType = currentSceneType;
+            currentSceneType = nextSceneType;
+            //Debug.Log($"現在のシーン：{currentSceneType}");
+        }
     }
 
     /// <summary>
@@ -117,19 +123,27 @@ public class GameManager : MonoBehaviour
     {
         preSceneType = currentSceneType;
 
-        //シーン名からSceneTypeに変換
+        //シーン名から現在のSceneTypeを変更
+
         if (nextSceneName == "TitleScene")
-        { 
-            currentSceneType = SceneType.Title; 
-            ResetResult(); 
+        {
+            currentSceneType = SceneType.Title;
+            ResetResult();
+            SoundManager.uniqueInstance.PlayBgm("タイトルBGM");
         }
         else if (nextSceneName == "MainScene")
+        {
             currentSceneType = SceneType.MainGame;
+            SoundManager.uniqueInstance.PlayBgm("メインゲームBGM");
+        }
         else if (nextSceneName == "ResultScene")
+        {
             currentSceneType = SceneType.Result;
+            SoundManager.uniqueInstance.PlayBgm("リザルトBGM");
+        }
         else
             Debug.LogWarning($"{nextSceneName}を現在のシーンに変更できません");
 
-        Debug.Log($"現在のシーン：{currentSceneType}");
+        //Debug.Log($"現在のシーン：{currentSceneType}");
     }
 }

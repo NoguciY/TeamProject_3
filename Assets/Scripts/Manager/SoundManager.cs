@@ -32,6 +32,10 @@ public class SoundManager : MonoBehaviour
     //AudioSource‚Ì”
     private const int AUDIOSOURCENUM = 20;
 
+    //BGM—p‚ÌAudioSource
+    [SerializeField]
+    private AudioSource bgmAudioSource;
+
     private void Awake()
     {
         if(uniqueInstance == null)
@@ -86,6 +90,21 @@ public class SoundManager : MonoBehaviour
         if (soundDictionary.TryGetValue(name, out var soundData)) 
             //Œ©‚Â‚©‚Á‚½ê‡AÄ¶
             Play(soundData.audioClip);
+        else
+            Debug.LogWarning($"‚»‚Ì•Ê–¼‚Í“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ:{name}");
+    }
+
+    //BGM‚ğÄ¶‚·‚é
+    public void PlayBgm(string name)
+    {
+        //ŠÇ——pDictionary ‚©‚çA•Ê–¼‚Å’Tõ
+        if (soundDictionary.TryGetValue(name, out var soundData))
+        {
+            //Œ©‚Â‚©‚Á‚½ê‡AÄ¶
+            bgmAudioSource.clip = soundData.audioClip;
+            bgmAudioSource.Play();
+            bgmAudioSource.Play();
+        }
         else
             Debug.LogWarning($"‚»‚Ì•Ê–¼‚Í“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ:{name}");
     }

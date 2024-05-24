@@ -15,14 +15,14 @@ MonoBehaviour:
   enemyDataList:
   - name: RedBlob
     ditectingNeiborDistance: 10
-    fieldOfView: 90
+    fieldOfView: 200
     rotationSpeed: 3
-    separationCoefficient: 1
-    alignmentCoefficient: 1
+    separationCoefficient: 3
+    alignmentCoefficient: 6
     combiningCoefficient: 1
-    restitutionCoefficient: 1
+    restitutionCoefficient: 0
     restitutionDistance: 1
-    combiningPlayerCoefficient: 3
+    combiningPlayerCoefficient: 5
     minSpeed: 3
     maxSpeed: 5
     maxHealth: 1

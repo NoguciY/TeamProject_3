@@ -48,9 +48,17 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private PowerUpItems powerUpItems;
 
+    //移動に関するコンポーネント
+    [SerializeField]
+    private PlayerMove playerMove;
+
     //爆弾を管理するコンポーネント
     [SerializeField]
     private BombManager bombManager;
+
+    //アニメーションに関するコンポーネント
+    [SerializeField]
+    private PlayerAnimation playerAnimation;
 
     //回復力のクールタイム
     private float resilienceCoolTime;
@@ -119,53 +127,57 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
     void Update()
     {
-        //例えば、WDを一緒に押すとWを押しているときより、速く進んでいるので修正する
-        if (Input.GetKey(KeyCode.W))
+        //ゲームオーバーかどうか
+        if (!lifeController.IsDead())
         {
-            myTransform.position += speed * Vector3.forward * Time.deltaTime;
+            if (playerMove.InputMove(speed) != Vector3.zero)
+            {
+                //移動する
+                myTransform.position += playerMove.InputMove(speed);
+
+                //走りアニメーション再生
+                playerAnimation.SetRunAnimation();
+            }
+            else
+                //待機アニメーション再生
+                playerAnimation.SetIdleAnimation();
+
+            //マウスカーソルの方向を向かせる
+            UpdateRotationForMouse();
+
+            //爆弾を生成する
+            GenerateBomb();
+
+            //レベルアップ
+            if (playerLevelUp.GetLevel == addBombLevel * (newBombCounter + 1))
+                playerLevelUp.LevelUp(playerEvent.addNewBombEvent);
+            else
+                playerLevelUp.LevelUp(playerEvent.levelUpEvent);
+
+            //自動回復する
+            AutomaticRecovery();
         }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            myTransform.position -= speed * Vector3.forward * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            myTransform.position += speed * Vector3.right * Time.deltaTime;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            myTransform.position -= speed * Vector3.right * Time.deltaTime;
-        }
-
-        //マウスカーソルの方向を向かせる
-        UpdateRotationForMouse();
-
-        //爆弾を生成する
-        GenerateBomb();
-
-        //レベルアップ
-        if (playerLevelUp.GetLevel == addBombLevel * (newBombCounter + 1))
-            playerLevelUp.LevelUp(playerEvent.addNewBombEvent);
         else
-            playerLevelUp.LevelUp(playerEvent.levelUpEvent);
-
-        //ゲームオーバー
-        if (lifeController.IsDead())
-            //体力ゲージが０出ない場合、体力ゲージを0にする
+        {
+            //ゲームオーバーイベント発火
             playerEvent.gameOverEvent.Invoke();
 
-        //自動回復する
-        AutomaticRecovery();
+            //シーンタイプを変更する
+            GameManager.Instance.ChangeSceneType(SceneType.GameOver);
+        }
+
     }
 
     //ダメージを受ける関数(インターフェースで実装)
     public void ReceiveDamage(float damage)
     {
+
         float totalDamage = -damage + difence;
+        
         lifeController.AddValueToLife(totalDamage);
+        
         playerEvent.addLifeEvent.Invoke(totalDamage);
+        
         Debug.Log($"プレイヤーは{-totalDamage}ダメージ食らった\n" +
             $"残りの体力：{lifeController.GetLife}");
     }

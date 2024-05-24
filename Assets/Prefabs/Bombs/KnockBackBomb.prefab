@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad5044164e28b94b87f19a659d70237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionParticle: {fileID: 5501477371294378916, guid: 049de12343c8bc049b11056eeb6e0ea4,
+  explosionParticle: {fileID: 2305783336696801891, guid: 5b5b34a107bfd954bb932a6c6c87718a,
     type: 3}
   damage: 0
   knockbackForce: 10
@@ -107,7 +107,7 @@ MonoBehaviour:
   bombLifeSpan: 5
   particleLifeSpan: 3
   generatedBombNum: 2
-  coolTime: 60
+  coolTime: 3
   sphereCollider: {fileID: 3236423170858552858}
 --- !u!135 &3236423170858552858
 SphereCollider:
