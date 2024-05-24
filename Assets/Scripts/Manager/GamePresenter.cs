@@ -19,125 +19,146 @@ public class GamePresenter : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;
 
-    //サウンドマネージャー
-    //[SerializeField]
-    //private SoundManager soundManager;
-
-
-
-
     private void Awake()
     {
-        //プレイヤーのイベントにUIマネージャーとサウンドマネージャーの関数を登録する
+        //プレイヤーのイベントに関数を登録する
 
-        //ゲームオーバーイベント
-        //体力ゲージを0にする
-        player.GetPlayerEvent.gameOverEvent.AddListener(
-            () => uiManager.GetLifeGauge.GameOverLifeGauge());
-        //ゲームオーバーパネルを表示する
-        player.GetPlayerEvent.gameOverEvent.AddListener(
-            () => uiManager.ShoulShowPanel(uiManager.GetGameOverPanel, true));
-        //ゲームをポーズする
-        player.GetPlayerEvent .gameOverEvent.AddListener(
-            () => Time.timeScale = 0);
-        //コンティニューボタンを選択する
-        player.GetPlayerEvent.gameOverEvent.AddListener(
-            () => uiManager.GetButtonManager.GetGameOverContinueButton.Select());
-        player.GetPlayerEvent.gameOverEvent.AddListener(
-            () => GameManager.Instance.lastPlayerLevel = player.GetPlayerLevelUp.GetLevel);
-        //シーンタイプを変更する
-        player.GetPlayerEvent.gameOverEvent.AddListener(
-            () => GameManager.Instance.ChangeSceneType(SceneType.GameOver));
-
-        //経験値取得時に経験値ゲージを更新する
-        player.GetPlayerEvent.expEvent.AddListener(
-            (currentExp, needExp) => uiManager.GetExperienceValueGauge.UpdateExpGauge(currentExp, needExp));
-        
-        //ダメージを受けた際に体力ゲージの更新する
-        player.GetPlayerEvent.addLifeEvent.AddListener(
-            (damage) => uiManager.GetLifeGauge.UpdateGauge(damage));
-
-        //ゲーム開始時に体力ゲージの初期化する
+        //最大体力取得イベント
+        //体力ゲージの初期化する
         player.GetPlayerEvent.getMaxLifeEvent.AddListener(
             (maxLife) => uiManager.GetLifeGauge.InitializeGauge(maxLife));
 
+        //経験値取得イベント
+        //経験値ゲージを更新する
+        player.GetPlayerEvent.expEvent.AddListener(
+            (currentExp, needExp) => uiManager.GetExperienceValueGauge.UpdateExpGauge(currentExp, needExp));
+
+        //被ダメージイベント
+        //体力ゲージの更新する
+        player.GetPlayerEvent.addLifeEvent.AddListener(
+            (damage) => uiManager.GetLifeGauge.UpdateGauge(damage));
+
+        //ゲームオーバーイベント
+        player.GetPlayerEvent.gameOverEvent.AddListener(
+            () =>{
+                //体力ゲージを0にする
+                uiManager.GetLifeGauge.GameOverLifeGauge();
+
+                //ゲームオーバーパネルを表示する
+                uiManager.ShoulShowPanel(uiManager.GetGameOverPanel, true);
+
+                //ゲームをポーズする
+                Time.timeScale = 0;
+
+                //コンティニューボタンを選択する
+                uiManager.GetButtonManager.GetGameOverContinueButton.Select();
+
+                //プレイヤーの最終レベルを取得する
+                GameManager.Instance.lastPlayerLevel = player.GetPlayerLevelUp.GetLevel;
+            });
+
         //レベルアップイベント
-        //レベルアップパネルを表示する
         player.GetPlayerEvent.levelUpEvent.AddListener(
-            () => uiManager.ShoulShowPanel(uiManager.GetLevelUpPanel, true));
-        //ゲームをポーズする
-        player.GetPlayerEvent.levelUpEvent.AddListener(
-            () => Time.timeScale = 0);
-        //強化ボタンに強化イベントを登録する
-        player.GetPlayerEvent.levelUpEvent.AddListener(
-            () => uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents());
-        //レベルアップ時に効果音を鳴らす
-        player.GetPlayerEvent.levelUpEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("レベルアップ"));
+            () => {
+                //レベルアップパネルを表示する
+                uiManager.ShoulShowPanel(uiManager.GetLevelUpPanel, true);
+
+                //ゲームをポーズする
+                Time.timeScale = 0;
+
+                //強化ボタンに強化イベントを登録する
+                uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents();
+
+                //レベルアップ時に効果音を鳴らす
+                SoundManager.uniqueInstance.Play("レベルアップ");
+            });
 
         //爆弾追加用レベルアップイベント
-        //レベルアップパネル(爆弾追加用)を表示する
         player.GetPlayerEvent.addNewBombEvent.AddListener(
-            () => uiManager.ShoulShowPanel(uiManager.GetLevelUpBombPanel, true));
-        //ゲームをポーズする
-        player.GetPlayerEvent.addNewBombEvent.AddListener(
-            () => Time.timeScale = 0);
-        //爆弾追加ボタンに爆弾追加イベントを登録する
-        player.GetPlayerEvent.addNewBombEvent.AddListener(
-            () => uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent(player.GetNewBombCounter));
-        //効果音を鳴らす
-        player.GetPlayerEvent.addNewBombEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("レベルアップ"));
+            () =>{
+                //レベルアップパネル(爆弾追加用)を表示する
+                uiManager.ShoulShowPanel(uiManager.GetLevelUpBombPanel, true);
+
+                //ゲームをポーズする
+                Time.timeScale = 0;
+
+                //爆弾追加ボタンに爆弾追加イベントを登録する
+                uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent(player.GetNewBombCounter);
+
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("レベルアップ");
+            });
 
 
-        //UIマネージャーのイベントにプレイヤーとサウンドマネージャーの関数を登録する
+        //UIマネージャーのイベントに関数を登録する
 
-        //強化イベント
-        //プレイヤーの最大体力強化
-        uiManager.GetButtonManager.powerUpButton.powerUpMaxLifeEvent.AddListener(
-            () => player.GetPowerUpItems.PowerUpMaxLife(player));
-        //効果音を鳴らす
-        uiManager.GetButtonManager.powerUpButton.powerUpMaxLifeEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("最大体力アップ"));
+        //最大体力強化イベント
+        uiManager.GetButtonManager.powerUpButton.powerUpMaxLifeEvent.AddListener( 
+            () => {
+                //プレイヤーの最大体力強化
+                player.GetPowerUpItems.PowerUpMaxLife(player);
 
-        //プレイヤーの移動速度強化
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("最大体力アップ");
+            });
+
+        //移動速度強化イベント
         uiManager.GetButtonManager.powerUpButton.powerUpSpeedEvent.AddListener(
-            () => player.GetPowerUpItems.PowerUpSpeed(player));
-        //効果音を鳴らす
-        uiManager.GetButtonManager.powerUpButton.powerUpSpeedEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("移動速度アップ"));
+            () =>{
+                //プレイヤーの移動速度強化
+                player.GetPowerUpItems.PowerUpSpeed(player);
 
-        //プレイヤーの回収範囲強化
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("移動速度アップ");
+            });
+
+        //回収範囲強化イベント
         uiManager.GetButtonManager.powerUpButton.powerUpCollectionRangeRateEvent.AddListener(
-            () => player.GetPowerUpItems.PowerUpCollectionRangeRate(player));
-        //効果音を鳴らす
-        uiManager.GetButtonManager.powerUpButton.powerUpCollectionRangeRateEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("回収範囲アップ"));
+            () => {
+                //プレイヤーの回収範囲強化
+                player.GetPowerUpItems.PowerUpCollectionRangeRate(player);
 
-        //プレイヤーの防御力強化
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("回収範囲アップ");
+            });
+        
+        //防御力強化イベント
         uiManager.GetButtonManager.powerUpButton.powerUpDifenceEvent.AddListener(
-            () => player.GetPowerUpItems.PowerUpDifence(player));
-        //効果音を鳴らす
-        uiManager.GetButtonManager.powerUpButton.powerUpDifenceEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("防御力アップ"));
+            () =>{
+                //プレイヤーの防御力強化
+                player.GetPowerUpItems.PowerUpDifence(player);
 
-        //プレイヤーの回復力強化
-        uiManager.GetButtonManager.powerUpButton.powerUpResilienceEvent.AddListener(
-            () => player.GetPowerUpItems.PowerUpResilience(player));
-        //効果音を鳴らす
-        uiManager.GetButtonManager.powerUpButton.powerUpResilienceEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("回復力アップ"));
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("防御力アップ");
+            });
 
-        //プレイヤーの爆弾の爆発範囲強化
+        //回復力強化イベント
+        uiManager.GetButtonManager.powerUpButton.powerUpResilienceEvent.AddListener(
+            () =>{
+                //プレイヤーの回復力強化
+                player.GetPowerUpItems.PowerUpResilience(player);
+
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("回復力アップ");
+            });
+
+        //爆弾の爆発範囲強化イベント
         uiManager.GetButtonManager.powerUpButton.powerUpBombRangeEvent.AddListener(
-            () => player.GetPowerUpItems.PowerUpBombRange(player));
-        //効果音を鳴らす
-        uiManager.GetButtonManager.powerUpButton.powerUpBombRangeEvent.AddListener(
-            () => SoundManager.uniqueInstance.Play("爆発範囲アップ"));
+            () => {
+                //プレイヤーの爆弾の爆発範囲強化
+                player.GetPowerUpItems.PowerUpBombRange(player);
+
+                //効果音を鳴らす
+                SoundManager.uniqueInstance.Play("爆発範囲アップ");
+            });
 
         //爆弾追加イベント
-        //新しい爆弾を使用可能にする
         uiManager.GetButtonManager.powerUpButton.addNewBombEvent.AddListener(
-            () => player.EnableNewBomb());
+            () =>{
+                //新しい爆弾を使用可能にする
+                player.EnableNewBomb();
+
+
+            });
     }
 }

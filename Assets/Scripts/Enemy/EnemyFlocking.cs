@@ -54,17 +54,6 @@ public class EnemyFlocking : MonoBehaviour
         innerProductThred = Mathf.Cos(enemyManager.enemyData.fieldOfView * Mathf.Deg2Rad);
     }
 
-    private void Update()
-    {
-        ////‹ß—×‚ÌŒÂ‘Ì‚ðŽæ“¾‚·‚é
-        //AddNeighbors();
-
-        //ˆÚ“®‚·‚é
-        //UpdateMove();
-
-        //Debug.Log($"velocity:{velocity}");
-    }
-
     /// <summary>
     /// ‹ß—×‚Ì’‡ŠÔ‚ð’T‚µ‚ÄƒŠƒXƒg‚É’Ç‰Á
     /// </summary>

@@ -95,11 +95,6 @@ public class PlantedBomb : MonoBehaviour
         {
             //ダメージを受けることができるオブジェクトを取得
             var applicableDamageObject = hit.collider.gameObject.GetComponent<IApplicableDamageEnemy>();
-            if (hit.collider.gameObject.CompareTag("Enemy"))
-            {
-                //敵に当たった場合、ダメージを与える
-                //hit.collider.gameObject.GetComponent<EnemyManager>().Dead();
-            }
             if (applicableDamageObject != null)
                 applicableDamageObject.ReceiveDamage(damage);
         }
