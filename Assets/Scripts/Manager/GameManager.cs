@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public enum SceneType
 {
@@ -25,11 +27,13 @@ public class GameManager : MonoBehaviour
     //メイン画面の経過時間(秒)
     private float deltaTimeInMain = 0;
 
-    //最終レベル
-    public int lastPlayerLevel = 0;
+    //レベル
+    [NonSerialized]
+    public int playerLevel = 1;
 
     //倒した敵の数
     public int deadEnemyMun = 0;
+
 
     //ゲッター
     public float GetDeltaTimeInMain => deltaTimeInMain;
@@ -62,6 +66,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"現在のシーン:{currentSceneType}");
         Debug.Log($"前のシーン:{preSceneType}");
+
     }
 
     //GameManagerインスタンスにアクセスする
@@ -96,7 +101,7 @@ public class GameManager : MonoBehaviour
     private void ResetResult()
     {
         deltaTimeInMain = 0;
-        lastPlayerLevel = 0;
+        playerLevel = 1;
         deadEnemyMun = 0;
     }
 
