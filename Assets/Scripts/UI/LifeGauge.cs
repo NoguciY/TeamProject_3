@@ -31,4 +31,13 @@ public class LifeGauge : MonoBehaviour
         if(lifeGauge.value >= 0)
             lifeGauge.value = 0;
     }
+
+    //ゲージの最大値の設定
+    public float SetMaxValue
+    {
+        set{ 
+            lifeGauge.maxValue = value;
+            Debug.Log($"体力ゲージの最大値:{lifeGauge.maxValue}");
+        }
+    }
 }

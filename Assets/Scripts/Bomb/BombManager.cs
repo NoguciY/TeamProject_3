@@ -6,7 +6,7 @@ using UnityEngine;
 public class BombManager : MonoBehaviour
 {
     //爆弾のタイプ
-    private enum BombType
+    public enum BombType
     {
         Throwing,   //投擲型
         Planted,    //設置型
@@ -18,7 +18,9 @@ public class BombManager : MonoBehaviour
     //投擲爆弾--------------------------------------------------
     //プレハブ
     [SerializeField]
-    private GameObject throwingBombPrefab;
+    private BombThrowing throwingBomb;
+
+    public BombThrowing GetBombThrowing => throwingBomb; 
 
     //投擲爆弾のタイマー
     //private float throwingBombTimer;
@@ -26,7 +28,7 @@ public class BombManager : MonoBehaviour
     //設置型爆弾------------------------------------------------
     //プレハブ
     [SerializeField]
-    private GameObject plantedBombPrefab;
+    private BombPlanted plantedBomb;
 
     //設置型爆弾の高さの半分
     private float plantedBombHalfHeight;
@@ -34,10 +36,12 @@ public class BombManager : MonoBehaviour
     //設置型爆弾の回転値
     private Quaternion plantedBombRotation;
 
+    public BombPlanted GetBombPlanted => plantedBomb;
+
     //ノックバック爆弾------------------------------------------
     //プレハブ
     [SerializeField]
-    private GameObject knockbackBombPrefab;
+    private BombKnockback knockbackBomb;
 
     //ノックバック爆弾の高さの半分
     private float knockbackHalfHeight;
@@ -51,7 +55,7 @@ public class BombManager : MonoBehaviour
     //誘導爆弾--------------------------------------------------
     //プレハブ
     [SerializeField]
-    private GameObject missileSpawnPrefab;
+    private HomingBombSpawner homingBombSpawn;
 
     //誘導爆弾の高さの半分
     private float homingBombHelfHeight;
@@ -89,10 +93,6 @@ public class BombManager : MonoBehaviour
     //爆弾を使ったかどうか
     private bool[] isUsingBomb;
 
-    //爆弾の種数
-    //constは、他クラスから参照した場合にバージョン管理問題が起こる可能性がある
-    public static readonly int BOMBTYPENUM = 4;
-
     //爆弾関係のものを初期化する
     public void Initialize()
     {
@@ -101,38 +101,36 @@ public class BombManager : MonoBehaviour
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
         playerHalfHeight = playerTransform.localScale.y * playerCapsuleCollider.height * 0.5f;
         
-        deltaTime = new float[BOMBTYPENUM];
-        coolTime = new float[BOMBTYPENUM];
-        isUsingBomb = new bool[BOMBTYPENUM];
+        deltaTime = new float[Utilities.BOMBTYPENUM];
+        coolTime = new float[Utilities.BOMBTYPENUM];
+        isUsingBomb = new bool[Utilities.BOMBTYPENUM];
 
         //投擲爆弾関係の値の設定
-        var throwingBombComponent = throwingBombPrefab.GetComponent<ThrowingBomb>();
-        throwingBombComponent.explosionParticle = throwingBombExplosionParticle;
-        coolTime[(int)BombType.Throwing] = throwingBombComponent.GetCoolTime;
+        throwingBomb.explosionParticle = throwingBombExplosionParticle;
+        coolTime[(int)BombType.Throwing] = throwingBomb.GetCoolTime;
 
         //設置型爆弾関係の値を取得
-        var plantedBombComponent = plantedBombPrefab.GetComponent<PlantedBomb>();
-        plantedBombHalfHeight = plantedBombComponent.GetHalfHeight();
-        plantedBombComponent.explosionParticle = plantedBombExplosionParticle;
-        plantedBombRotation = plantedBombPrefab.transform.rotation;
-        coolTime[(int)BombType.Planted] = plantedBombComponent.GetCoolTime;
+        //var plantedBombComponent = plantedBomb.GetComponent<BombPlanted>();
+        plantedBombHalfHeight = plantedBomb.GetHalfHeight();
+        plantedBomb.explosionParticle = plantedBombExplosionParticle;
+        plantedBombRotation = plantedBomb.transform.rotation;
+        coolTime[(int)BombType.Planted] = plantedBomb.GetCoolTime;
 
         //ノックバック爆弾関係の値を取得、設定
-        var knockbackBombComponent = knockbackBombPrefab.GetComponent<KnockbackBomb>();
-        knockbackHalfHeight = knockbackBombComponent.GetHalfHeight();
-        toPlayerDistance = knockbackBombComponent.GetToPlayerDistance;
-        knockbackBombComponent.explosionParticle = knockbackBombExplosionParticle;
-        coolTime[(int)BombType.Knockback] = knockbackBombComponent.GetCoolTime;
+        knockbackHalfHeight = knockbackBomb.GetHalfHeight();
+        toPlayerDistance = knockbackBomb.GetToPlayerDistance;
+        knockbackBomb.explosionParticle = knockbackBombExplosionParticle;
+        coolTime[(int)BombType.Knockback] = knockbackBomb.GetCoolTime;
 
         //誘導爆弾の関係の値を取得
         //ミサイルスポナーオブジェクトのMissileSpawnerを取得
-        var homingBombComponent = missileSpawnPrefab.GetComponent<MissileSpawner>();
+        //var homingBombSpawnerComponent = homingBombSpawn.GetComponent<HomingBombSpawner>();
         //MissileSpawnerのプレハブのBulletを取得
-        var bulletComponent = homingBombComponent.GetPrefab.GetComponent<Bullet>();
+        var homingBombComponent = homingBombSpawn.GetPrefab.GetComponent<BombHoming>();
         //bulletコンポーネントのパーティクルに参照している誘導爆弾用の爆発パーティクルをセットする
-        bulletComponent.explosionParticle = homingBombExplosionParticle;
-        homingBombHelfHeight = homingBombComponent.GetBombHalfHeight;
-        coolTime[(int)BombType.Homing] = homingBombComponent.GetCoolTime;
+        homingBombComponent.explosionParticle = homingBombExplosionParticle;
+        homingBombHelfHeight = homingBombSpawn.GetBombHalfHeight;
+        coolTime[(int)BombType.Homing] = homingBombSpawn.GetCoolTime;
     }
 
     //投擲爆弾を生成する
@@ -142,13 +140,14 @@ public class BombManager : MonoBehaviour
         {
             //生成位置を計算して生成
             Vector3 spawnPos = playerTransform.position + Vector3.up * playerHalfHeight;
-            GameObject bombPrefab = Instantiate(throwingBombPrefab, spawnPos, playerTransform.rotation);
+            GameObject bombPrefab = Instantiate(throwingBomb.gameObject, spawnPos, playerTransform.rotation);
 
             //プレイヤーの位置をセット
-            var throwingBombComponent = bombPrefab.GetComponent<ThrowingBomb>();
+            var throwingBombComponent = bombPrefab.GetComponent<BombThrowing>();
             throwingBombComponent.playerTransform = playerTransform;
             throwingBombComponent.Init();
 
+            //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Throwing] = true;
         }
     }
@@ -160,8 +159,9 @@ public class BombManager : MonoBehaviour
         {
             //生成位置を計算して生成
             Vector3 spawnPos = playerTransform.position + Vector3.up * plantedBombHalfHeight;
-            GameObject bombPrefab = Instantiate(plantedBombPrefab, spawnPos, plantedBombRotation);
+            GameObject bombPrefab = Instantiate(plantedBomb.gameObject, spawnPos, plantedBombRotation);
 
+            //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Planted] = true;
         }
     }
@@ -172,33 +172,31 @@ public class BombManager : MonoBehaviour
         if (!isUsingBomb[(int)BombType.Knockback])
         {
             //生成される爆弾数は変化するためここで取得する
-            int generatedKnockbackBombNum =
-            knockbackBombPrefab.GetComponent<KnockbackBomb>().GetGeneratedBombNum;
+            int generatedKnockbackBombNum = knockbackBomb.GetGeneratedBombNum;
 
             //爆弾を円状に等間隔に置くための角度
             float degree = 360 / generatedKnockbackBombNum;
 
-            Debug.Log($"爆弾生成数:{generatedKnockbackBombNum}");
-
             //y座標を除く爆弾の基準位置
-            Vector3 standardPos;
+            Vector3 offsetPos;
 
             for (int i = 0; i < generatedKnockbackBombNum; i++)
             {
                 //爆弾を等間隔に配置する
-                standardPos = new Vector3(Mathf.Sin(degree * i * Mathf.Deg2Rad),
+                offsetPos = new Vector3(Mathf.Sin(degree * i * Mathf.Deg2Rad),
                     0, Mathf.Cos(degree * i * Mathf.Deg2Rad));
 
                 //生成位置(プレイヤーを中心に円状に等間隔に配置)
                 Vector3 spawnPos = playerTransform.position +
-                    standardPos * toPlayerDistance + Vector3.up * knockbackHalfHeight;
+                    offsetPos * toPlayerDistance + Vector3.up * knockbackHalfHeight;
 
-                GameObject bombPrefab = Instantiate(knockbackBombPrefab, spawnPos, Quaternion.identity);
+                GameObject bombPrefab = Instantiate(knockbackBomb.gameObject, spawnPos, Quaternion.identity);
 
                 //プレイヤーの位置をセット
-                bombPrefab.GetComponent<KnockbackBomb>().playerTransform = playerTransform;
+                bombPrefab.GetComponent<BombKnockback>().playerTransform = playerTransform;
             }
 
+            //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Knockback] = true;
         }
     }
@@ -208,11 +206,12 @@ public class BombManager : MonoBehaviour
         if (!isUsingBomb[(int)BombType.Homing])
         {
             Vector3 spawnPos = playerTransform.position + Vector3.up * homingBombHelfHeight * 10;
-            GameObject bombPrefab = Instantiate(missileSpawnPrefab, spawnPos, Quaternion.identity);
+            GameObject bombPrefab = Instantiate(homingBombSpawn.gameObject, spawnPos, Quaternion.identity);
 
             //プレイヤーの位置をセット
-            bombPrefab.GetComponent<MissileSpawner>().playerTransform = playerTransform;
+            bombPrefab.GetComponent<HomingBombSpawner>().playerTransform = playerTransform;
 
+            //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Homing] = true;
         }
     }

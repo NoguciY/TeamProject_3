@@ -809,10 +809,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8334417278564009396}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 236893246262876744}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
@@ -861,22 +857,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b792162f7a06c944c8ef2503d20fd610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLife: 0
+  maxLife: 100
   speed: 3
   collectionRangeRate: 1
-  difence: 0
+  difense: 0
   resilience: 0
-  bombPrefab: {fileID: 3513634871006304099, guid: e792f143c64e5424ea35924c3bbff37b,
-    type: 3}
+  resilienceCoolTime: 0
   capsuleColliderForItem: {fileID: 4712395242851268497}
   playerEvent: {fileID: 4096368864057113706}
   lifeController: {fileID: 91907527049660430}
   playerLevelUp: {fileID: 8180825191912411354}
-  playerStatus: {fileID: 8334417278564009396}
   powerUpItems: {fileID: 236893246262876744}
   playerMove: {fileID: 6946072252918920581}
   bombManager: {fileID: 9017726956107907413}
   playerAnimation: {fileID: 8205812797517041320}
+  addBombLevels: 09000000130000001d000000
 --- !u!114 &91907527049660430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,23 +911,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96372ae5d392b6a47aa8d74a4a4e32eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8334417278564009396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374337298138495439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b822fc752e64e4479512650da2d6018, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxLife: 100
-  speed: 3
-  collectionRangeRate: 1
-  difence: 0
-  resilience: 0
 --- !u!114 &236893246262876744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -942,15 +920,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 374337298138495439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 791fa9bc720f65747be5b1b9255bda45, type: 3}
+  m_Script: {fileID: 11500000, guid: 827a7c5a6cf4a794bbdda71932801800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLifeIncreaseRate: 0.1
-  speedIncreaseRate: 0.05
+  maxLifeIncreaseRate: 0.2
+  speedIncreaseRate: 0.2
   collectionRangeIncreaseRate: 0.25
-  difenceIncreaseRate: 1
-  resilienceIncreaseRate: 0.2
-  bombRangeIncreaseRate: 0.05
+  difenceIncreaseValue: 1
+  resilienceIncreaseValue: 0.2
+  bombRangeIncreaseRate: 0.5
 --- !u!114 &4379404434032715048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,13 +965,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a27cd4b712395542ab793e45b4555f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwingBombPrefab: {fileID: 2820055856542999450, guid: e98622279429f764a8a715cb9fc9f73c,
+  throwingBomb: {fileID: 3014016806776822594, guid: e98622279429f764a8a715cb9fc9f73c,
     type: 3}
-  plantedBombPrefab: {fileID: 3513634871006304099, guid: e792f143c64e5424ea35924c3bbff37b,
+  plantedBomb: {fileID: 5639652239449266219, guid: e792f143c64e5424ea35924c3bbff37b,
     type: 3}
-  knockbackBombPrefab: {fileID: 1455736878046657890, guid: 24a23e45b51426843a085f70193b955d,
+  knockbackBomb: {fileID: -3276229988403619832, guid: 24a23e45b51426843a085f70193b955d,
     type: 3}
-  missileSpawnPrefab: {fileID: 49437768128436809, guid: e7dd9a4bf911cfa4894de8654f5e2bab,
+  homingBombSpawn: {fileID: 3556812819693148378, guid: e7dd9a4bf911cfa4894de8654f5e2bab,
     type: 3}
   throwingBombExplosionParticle: {fileID: 8969231326653961610, guid: 21e4eaed78185e24fa11dfc96f2626d6,
     type: 3}

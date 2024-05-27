@@ -95,15 +95,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3513634871006304099}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7572db01d8944c4fa6f0281eaa59119, type: 3}
+  m_Script: {fileID: 11500000, guid: e5f3361ceceadbb40af55486e674811a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionParticle: {fileID: 5501477371294378916, guid: 049de12343c8bc049b11056eeb6e0ea4,
-    type: 3}
+  explosionParticle: {fileID: 0}
+  damage: 3
   fuseTime: 3
   explosionRadius: 3
-  bombLifeSpan: 4
-  particleLifeSpan: 2
+  bombLifeSpan: 5
+  particleLifeSpan: 3
+  coolTime: 3
   sphereCollider: {fileID: 6689176789424128852}
 --- !u!135 &6689176789424128852
 SphereCollider:

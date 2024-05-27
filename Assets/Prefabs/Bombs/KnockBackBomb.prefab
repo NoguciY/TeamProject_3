@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1455736878046657890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ad5044164e28b94b87f19a659d70237, type: 3}
+  m_Script: {fileID: 11500000, guid: 34f4bb89c9fc8e44fae80b73975b2dae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   explosionParticle: {fileID: 2305783336696801891, guid: 5b5b34a107bfd954bb932a6c6c87718a,
@@ -107,7 +107,7 @@ MonoBehaviour:
   bombLifeSpan: 5
   particleLifeSpan: 3
   generatedBombNum: 2
-  coolTime: 3
+  coolTime: 2
   sphereCollider: {fileID: 3236423170858552858}
 --- !u!135 &3236423170858552858
 SphereCollider:

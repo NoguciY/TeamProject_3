@@ -502,7 +502,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab8b694273485234bb29438e81c29964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lastPlayerLevel: 0
   deadEnemyMun: 0
 --- !u!4 &446785037
 Transform:
@@ -1902,7 +1901,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: cc1ab101ed1df654babc96fe6c68e880, type: 3}
+      objectReference: {fileID: 8300000, guid: 4729fa1f0b9bd25458c0f9d9931be076, type: 3}
     - target: {fileID: 5371553014076663881, guid: efc317168959a1b4e88463135de83d35,
         type: 3}
       propertyPath: m_Name

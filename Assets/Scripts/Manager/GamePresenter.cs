@@ -55,6 +55,12 @@ public class GamePresenter : MonoBehaviour
 
                 //プレイヤーの最終レベルを取得する
                 GameManager.Instance.playerLevel = player.GetPlayerLevelUp.GetLevel;
+
+                //シーンタイプを変更する
+                GameManager.Instance.ChangeSceneType(SceneType.GameOver);
+
+                //BGMを流す
+                SoundManager.uniqueInstance.PlayBgm("ゲームオーバー");
             });
 
         //レベルアップイベント
@@ -67,11 +73,12 @@ public class GamePresenter : MonoBehaviour
                 Time.timeScale = 0;
 
                 //強化ボタンに強化イベントを登録する
-                uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents();
+                uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents(player);
 
                 //レベルアップ時に効果音を鳴らす
                 SoundManager.uniqueInstance.Play("レベルアップ");
 
+                //ゲームマネージャーに保存しているプレイヤーレベルをインクリメント
                 GameManager.Instance.playerLevel++;
             });
 
@@ -89,6 +96,9 @@ public class GamePresenter : MonoBehaviour
 
                 //効果音を鳴らす
                 SoundManager.uniqueInstance.Play("レベルアップ");
+
+                //ゲームマネージャーに保存しているプレイヤーレベルをインクリメント
+                GameManager.Instance.playerLevel++;
             });
 
 
@@ -99,6 +109,9 @@ public class GamePresenter : MonoBehaviour
             () => {
                 //プレイヤーの最大体力強化
                 player.GetPowerUpItems.PowerUpMaxLife(player);
+
+                //体力ゲージの最大値を更新する
+                uiManager.GetLifeGauge.SetMaxValue = player.maxLife;
 
                 //効果音を鳴らす
                 SoundManager.uniqueInstance.Play("最大体力アップ");
@@ -125,7 +138,7 @@ public class GamePresenter : MonoBehaviour
             });
         
         //防御力強化イベント
-        uiManager.GetButtonManager.powerUpButton.powerUpDifenceEvent.AddListener(
+        uiManager.GetButtonManager.powerUpButton.powerUpDifenseEvent.AddListener(
             () =>{
                 //プレイヤーの防御力強化
                 player.GetPowerUpItems.PowerUpDifence(player);

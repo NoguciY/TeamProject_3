@@ -20,6 +20,7 @@ public class PowerUpButton : MonoBehaviour
         //イベントに合った強化ボタン画像
         public Sprite powerUpButtonSprite; 
     }
+
     //最大HP強化イベント
     public PowerUpEvent powerUpMaxLifeEvent = new PowerUpEvent { };
 
@@ -27,7 +28,7 @@ public class PowerUpButton : MonoBehaviour
     public PowerUpEvent powerUpSpeedEvent = new PowerUpEvent { };
     
     //防御力強化イベント
-    public PowerUpEvent powerUpDifenceEvent = new PowerUpEvent { };
+    public PowerUpEvent powerUpDifenseEvent = new PowerUpEvent { };
     
     //回収範囲強化イベント
     public PowerUpEvent powerUpCollectionRangeRateEvent = new PowerUpEvent { };
@@ -79,7 +80,7 @@ public class PowerUpButton : MonoBehaviour
 
         //powerUpMaxLifeEvent = new PowerUpEvent { };
         //powerUpSpeedEvent = new PowerUpEvent { };
-        //powerUpDifenceEvent = new PowerUpEvent { };
+        //powerUpDifenseEvent = new PowerUpEvent { };
         //powerUpCollectionRangeRateEvent = new PowerUpEvent { };
         //powerUpResilienceEvent = new PowerUpEvent { };
         //powerUpBombRangeEvent = new PowerUpEvent { };
@@ -102,7 +103,7 @@ public class PowerUpButton : MonoBehaviour
     {
         powerUpMaxLifeEvent.powerUpButtonSprite = powerUpButtonSpriteList[0];
         powerUpSpeedEvent.powerUpButtonSprite = powerUpButtonSpriteList[1];
-        powerUpDifenceEvent.powerUpButtonSprite = powerUpButtonSpriteList[2];
+        powerUpDifenseEvent.powerUpButtonSprite = powerUpButtonSpriteList[2];
         powerUpCollectionRangeRateEvent.powerUpButtonSprite = powerUpButtonSpriteList[3];
         powerUpResilienceEvent.powerUpButtonSprite = powerUpButtonSpriteList[4];
         powerUpBombRangeEvent.powerUpButtonSprite = powerUpButtonSpriteList[5];
@@ -110,10 +111,10 @@ public class PowerUpButton : MonoBehaviour
 
     //レベルアップイベントで呼ばれる
     //強化ボタンに強化関数を登録する
-    public void RegisterPowerUpItemEvents()
+    public void RegisterPowerUpItemEvents(Player player)
     {
         //リストに強化可能な強化イベントを追加する
-        SetPowerUpItemsList();
+        SetPowerUpItemsList(player);
         //リストからランダムに強化項目ボタンの数分、配列に格納
         GetRandomPowerUpItemEvents();
 
@@ -138,7 +139,7 @@ public class PowerUpButton : MonoBehaviour
     }
 
     //リストに強化可能な強化イベントを追加する
-    private void SetPowerUpItemsList()
+    private void SetPowerUpItemsList(Player player)
     {
         powerUpEventList.Clear();
 
@@ -147,12 +148,19 @@ public class PowerUpButton : MonoBehaviour
         powerUpEventList.Add(powerUpMaxLifeEvent);
         powerUpEventList.Add(powerUpSpeedEvent);
         powerUpEventList.Add(powerUpCollectionRangeRateEvent);
-        powerUpEventList.Add(powerUpDifenceEvent);
+
+        //防御力が上限値より下の場合、追加
+        if (player.difense < Utilities.DEFENSEUPPERLIMIT)
+            powerUpEventList.Add(powerUpDifenseEvent);
+
         powerUpEventList.Add(powerUpResilienceEvent);
         powerUpEventList.Add(powerUpBombRangeEvent);
 
         //追加される強化項目や最終強化して削除される強化項目があるため
         //ここでリストに追加や削除をする処理も記述する
+
+        
+
     }
 
     //強化イベントリストからランダムに強化項目ボタンの数だけ、配列に格納
