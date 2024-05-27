@@ -20,7 +20,6 @@ public class LifeController : MonoBehaviour
     //‘Ì—Í‚Ì‰Šú‰»(‘Ì—Í‚ğÅ‘å‚É‚·‚é)
     public void InitializeLife(float maxLife)
     {
-        //SetMaxLife(maxLife);
         this.maxLife = maxLife;
         life = maxLife;
         dead = false;
@@ -40,9 +39,12 @@ public class LifeController : MonoBehaviour
 
 
     //‘Ì—Í‚ÌÅ‘å’l‚ğİ’è‚·‚é
-    private void SetMaxLife(float maxLife)
+    public float SetMaxLife
     {
-        this.maxLife = maxLife;
+        set { 
+            this.maxLife = value;
+            Debug.Log($"Å‘å‘Ì—Í:{maxLife}");
+        }
     }
 
     //€–S(‘Ì—Í‚ª0)‚ğ”»’è‚·‚é

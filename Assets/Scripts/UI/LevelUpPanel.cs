@@ -16,7 +16,7 @@ public class LevelUpPanel : MonoBehaviour
 
     //強化項目コンポーネント
     [SerializeField]
-    private PowerUpItems powerUpItems;
+    private PlayerPowerUpItems powerUpItems;
 
     //強化項目ボタン
     int maxlife;
@@ -27,7 +27,7 @@ public class LevelUpPanel : MonoBehaviour
 
 
     //強化項目画像と強化項目クラスのディクショナリ
-    private Dictionary<Image, PowerUpItems> powerUpItemsDictionary;
+    private Dictionary<Image, PlayerPowerUpItems> powerUpItemsDictionary;
 
     //強化項目の初期化
     public void InitPowerUpItems()

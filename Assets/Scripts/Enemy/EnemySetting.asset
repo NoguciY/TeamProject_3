@@ -26,4 +26,4 @@ MonoBehaviour:
     minSpeed: 3
     maxSpeed: 5
     maxHealth: 1
-    attack: 3
+    attack: 5

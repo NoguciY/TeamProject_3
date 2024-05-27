@@ -2,28 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Diagnostics;
+using static BombManager;
 
 public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 {
-    //最大HP
     //値はレベルアップによって増加されるため、public
     //privateにするいい方法は何かないか
+    [Header("最大HP")]
     public float maxLife;
 
-    //移動速度
+    [Header("移動速度")] 
     public float speed;
 
-    //回収範囲率
+    [Header("回収範囲率")]
     public float collectionRangeRate;
 
-    //防御力
-    public float difence;
+    [Header("防御力")]
+    public float difense;
 
-    //回復力
+    [Header("回復力")]
     public float resilience;
 
-    //爆弾プレハブ
-    public GameObject bombPrefab;
+    [SerializeField, Header("回復力のクールタイム(秒)")]
+    private float resilienceCoolTime;
 
     //アイテム用のコライダーコンポーネント
     public CapsuleCollider capsuleColliderForItem;
@@ -40,13 +41,9 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private PlayerLevelUp playerLevelUp;
 
-    //プレイヤーステータスコンポーネント
-    [SerializeField]
-    private PlayerDefaultStatus playerStatus;
-
     //強化項目コンポーネント
     [SerializeField]
-    private PowerUpItems powerUpItems;
+    private PlayerPowerUpItems powerUpItems;
 
     //移動に関するコンポーネント
     [SerializeField]
@@ -60,44 +57,40 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private PlayerAnimation playerAnimation;
 
-    //回復力のクールタイム
-    private float resilienceCoolTime;
+    //回復力の経過時間
+    private float deltaTimeResilience;
 
     //爆弾使用可能フラグ
-    private bool[] canUseBombFlags;
+    private bool[] enableBombs;
 
-    //カメラ(仮)
+    //カメラ
     private Camera mainCamera;
 
     //新しいボムを追加するカウンター
+    //[SerializeField]
     private int newBombCounter;
 
     //新しいボムを追加する直前のレベル(10,20,30で追加)
-    private int addBombLevel;
+    [SerializeField]
+    private int[] addBombLevels;
 
     //トランスフォーム
     private Transform myTransform;
 
-    //追加される爆弾の数
-    private const int ADDEDBOMBNUM = 3;
-
     //ゲッター
-    public PowerUpItems GetPowerUpItems => powerUpItems;
+    public PlayerPowerUpItems GetPowerUpItems => powerUpItems;
     public PlayerEvent GetPlayerEvent => playerEvent;
+    public LifeController GetLifeController => lifeController;
     public int GetNewBombCounter => newBombCounter;
     public PlayerLevelUp GetPlayerLevelUp => playerLevelUp;
+    public BombManager GetBombManager => bombManager;
 
 
     private void Start()
     {
         myTransform = transform;
 
-        //ステータスの初期化
-        maxLife = playerStatus.maxLife;
-        speed = playerStatus.speed;
-        collectionRangeRate = playerStatus.collectionRangeRate;
-        difence = playerStatus.difence;
-        resilience = playerStatus.resilience;
+        mainCamera = Camera.main;
 
         //体力の初期化
         lifeController.InitializeLife(maxLife);
@@ -109,20 +102,18 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         playerLevelUp.InitLevel();
 
         //回復力のクールタイム初期化
-        resilienceCoolTime = 1f;
-
-        mainCamera = Camera.main;
+        //resilienceCoolTime = 1f;
 
         //爆弾の初期化
         bombManager.Initialize();
 
-        canUseBombFlags = new bool[ADDEDBOMBNUM];
+        enableBombs = new bool[Utilities.ADDEDBOMBNUM];
 
         //0から爆弾の種類数-1までカウントする
         newBombCounter = 0;
 
         //初期値は最初にボムを追加したい1つ前のレベル
-        addBombLevel = 9;
+        //addBombLevels = 9;
     }
 
     void Update()
@@ -148,35 +139,54 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             //爆弾を生成する
             GenerateBomb();
 
+            //爆弾テスト
+            //if (Input.GetKeyDown(KeyCode.Alpha1))
+            //{
+            //    bombManager.GeneratePlantedBomb();
+            //}
+            //if (Input.GetKeyDown(KeyCode.Alpha2))
+            //{
+            //    bombManager.GenerateKnockbackBombs();
+            //}
+            //if (Input.GetKeyDown(KeyCode.Alpha3))
+            //{
+            //    bombManager.GenerateHomingBomb();
+            //}
+
+
+
             //レベルアップ
-            if (playerLevelUp.GetLevel == addBombLevel * (newBombCounter + 1))
+            if (playerLevelUp.GetLevel == addBombLevels[newBombCounter])
                 playerLevelUp.LevelUp(playerEvent.addNewBombEvent);
             else
                 playerLevelUp.LevelUp(playerEvent.levelUpEvent);
 
             //自動回復する
-            AutomaticRecovery();
+            HealAutomatically();
         }
         else
         {
             //ゲームオーバーイベント発火
-            playerEvent.gameOverEvent.Invoke();
-
-            //シーンタイプを変更する
-            GameManager.Instance.ChangeSceneType(SceneType.GameOver);
+            playerEvent.gameOverEvent.Invoke();   
         }
-
     }
 
     //ダメージを受ける関数(インターフェースで実装)
     public void ReceiveDamage(float damage)
     {
 
-        float totalDamage = -damage + difence;
+        float totalDamage = -damage + difense;
         
+        //ダメージが正の値にならないようにする
+        if(totalDamage > 0)
+            totalDamage = 0;
+
         lifeController.AddValueToLife(totalDamage);
         
         playerEvent.addLifeEvent.Invoke(totalDamage);
+
+        //効果音を流す
+        SoundManager.uniqueInstance.Play("ダメージ");
         
         Debug.Log($"プレイヤーは{-totalDamage}ダメージ食らった\n" +
             $"残りの体力：{lifeController.GetLife}");
@@ -214,23 +224,21 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     private void GenerateBomb()
     {
         //爆弾のクールタイムを計測する
-        for(int i = 0; i < BombManager.BOMBTYPENUM; i++)
+        for(int i = 0; i < Utilities.BOMBTYPENUM; i++)
             bombManager.CountBombCoolTime(i);
 
-        //時間で自動生成されるようにする
-        //if (bombManager.isUsingBomb)
         //投擲爆弾を生成
         bombManager.GenerateThrowingBomb();
 
         //1つ目の爆弾使用可能フラグがtrueの場合
-        if (canUseBombFlags[0])
+        if (enableBombs[0])
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 //クールダウンが終わっている場合
                 //設置型爆弾を生成
                 bombManager.GeneratePlantedBomb();
 
         //2つ目の爆弾使用可能フラグがtrueの場合
-        if (canUseBombFlags[1])
+        if (enableBombs[1])
         {
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -240,7 +248,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             }
         }
         //3つ目の爆弾使用可能フラグがtrueの場合
-        if (canUseBombFlags[2])
+        if (enableBombs[2])
         {
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
@@ -250,24 +258,25 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     }
 
     //体力を自動回復する
-    private void AutomaticRecovery()
+    private void HealAutomatically()
     {
         //回復力が０より大きい場合かつ
         //ゲームオーバーでない場合
-        if (resilience > 0　&& !lifeController.IsDead())
+        if (resilience > 0)
         {
             //経過時間
-            float deltaTime = GameManager.Instance.GetDeltaTimeInMain;
+            deltaTimeResilience += Time.deltaTime;
             
             //回復にはクールタイムを設ける
-            if (deltaTime >= resilienceCoolTime)
+            if (deltaTimeResilience >= resilienceCoolTime)
             {
                 //体力を回復力分増加
                 lifeController.AddValueToLife(resilience);
+
                 //体力ゲージを回復力分増加
                 playerEvent.addLifeEvent.Invoke(resilience);
 
-                resilienceCoolTime += resilienceCoolTime;
+                deltaTimeResilience = 0;
             }
         }
     }
@@ -275,13 +284,14 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //新しい爆弾を使用可能にする
     public void EnableNewBomb()
     {
-        if (newBombCounter < canUseBombFlags.Length)
+        if (newBombCounter < enableBombs.Length)
         {
             //爆弾を使用可能にするフラグをたてる
-            canUseBombFlags[newBombCounter] = true;
+            enableBombs[newBombCounter] = true;
             
             //次にこの関数が呼ばれた時に、
             //別の爆弾を使用可能にするフラグをたてるためにカウンターを加算する
+            if(newBombCounter <= 1)
             newBombCounter++;
         }
     }

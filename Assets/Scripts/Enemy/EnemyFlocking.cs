@@ -36,7 +36,7 @@ public class EnemyFlocking : MonoBehaviour
     private float speed;
 
     //ステージの大きさ
-    private float stageScale = Utilities.stageSize * 0.5f;
+    private float stageScale = Utilities.STAGESIZE * 0.5f;
 
     //内積の閾値
     private float innerProductThred;

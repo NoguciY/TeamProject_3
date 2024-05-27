@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//’è”‚ğ’è‹`‚·‚é
 public static class Utilities
 {
     //ƒXƒe[ƒW‚Ì‘å‚«‚³
-    public static float stageSize = 50f;
+    public static readonly float STAGESIZE = 50f;
 
+    //–hŒä—Í‚ÌãŒÀ
+    public static readonly int DEFENSEUPPERLIMIT = 3;
+
+    //’Ç‰Á‚³‚ê‚é”š’e‚Ì”
+    public static readonly int ADDEDBOMBNUM = 3;
+
+    //”š’e‚Ìí”
+    public static readonly int BOMBTYPENUM = 4;
 
     /// <summary>
     /// Šp“x‚ğæ“¾‚·‚é
@@ -22,15 +31,4 @@ public static class Utilities
         var rad = Mathf.Atan2(dx, dy);
         return rad * Mathf.Rad2Deg;
     }
-
-    //Šp“x‚©‚ç•ûŒü‚ğæ“¾‚·‚é
-    //public static Vector3 GetDirection(float angle)
-    //{
-    //    return new Vector3
-    //    (
-    //        Mathf.Cos(angle * Mathf.Deg2Rad),
-    //        Mathf.Sin(angle * Mathf.Deg2Rad),
-    //        0
-    //    );
-    //}
 }

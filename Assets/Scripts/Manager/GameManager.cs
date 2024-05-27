@@ -112,12 +112,12 @@ public class GameManager : MonoBehaviour
     public void ChangeSceneType(SceneType nextSceneType)
     {
         //前回と同じシーンに変更させない
-        if (preSceneType != currentSceneType)
-        {
+        //if (preSceneType != currentSceneType)
+        //{
             preSceneType = currentSceneType;
             currentSceneType = nextSceneType;
             //Debug.Log($"現在のシーン：{currentSceneType}");
-        }
+        //}
     }
 
     /// <summary>
@@ -134,17 +134,17 @@ public class GameManager : MonoBehaviour
         {
             currentSceneType = SceneType.Title;
             ResetResult();
-            SoundManager.uniqueInstance.PlayBgm("タイトルBGM");
+            SoundManager.uniqueInstance.PlayBgm("タイトル");
         }
         else if (nextSceneName == "MainScene")
         {
             currentSceneType = SceneType.MainGame;
-            SoundManager.uniqueInstance.PlayBgm("メインゲームBGM");
+            SoundManager.uniqueInstance.PlayBgm("メインゲーム");
         }
         else if (nextSceneName == "ResultScene")
         {
             currentSceneType = SceneType.Result;
-            SoundManager.uniqueInstance.PlayBgm("リザルトBGM");
+            SoundManager.uniqueInstance.PlayBgm("リザルト");
         }
         else
             Debug.LogWarning($"{nextSceneName}を現在のシーンに変更できません");
