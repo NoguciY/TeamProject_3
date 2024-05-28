@@ -24,7 +24,7 @@ public class EnemyFlocking : MonoBehaviour
 
     //近隣の個体を格納する
     [SerializeField]
-    private List<GameObject> neighbors = new List<GameObject>();
+    private List<GameObject> neighbors;// = new List<GameObject>();
 
     //移動処理に使う速度
     private Vector3 velocity;
@@ -36,28 +36,30 @@ public class EnemyFlocking : MonoBehaviour
     private float speed;
 
     //ステージの大きさ
-    private float stageScale = Utilities.STAGESIZE * 0.5f;
+    private float stageScale;
 
     //内積の閾値
-    private float innerProductThred;
+    //private float innerProductThred;
 
     private void Start()
     {
         myTransform = transform;
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
+        stageScale = Utilities.STAGESIZE * 0.5f;
+
         speed = Random.Range(enemyManager.enemyData.minSpeed, enemyManager.enemyData.maxSpeed);
 
         velocity = speed * Vector3.forward;
 
-        //視野角を内積の閾値に使う
-        innerProductThred = Mathf.Cos(enemyManager.enemyData.fieldOfView * Mathf.Deg2Rad);
+        ////視野角を内積の閾値に使う
+        //innerProductThred = Mathf.Cos(enemyManager.enemyData.fieldOfView * Mathf.Deg2Rad);
     }
 
     /// <summary>
     /// 近隣の仲間を探してリストに追加
     /// </summary>
-    public void AddNeighbors(EnemyFlockManager flockManager)
+    public void AddNeighbors(EnemyFlockManager flockManager, float innerProductThred)
     {
         //リストをクリア
         neighbors.Clear();
@@ -387,7 +389,7 @@ public class EnemyFlocking : MonoBehaviour
     }
 
     //視角内のプレイヤーの方向へ向かう力を返す
-    private Vector3 CombineNearbyPlayer()
+    private Vector3 CombineNearbyPlayer(float innerProductThred)
     {
         //プレイヤーに向かおうとする力
         Vector3 combineForce = Vector3.zero;
