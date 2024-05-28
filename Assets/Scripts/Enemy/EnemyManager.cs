@@ -36,14 +36,17 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     //”š’e‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©
     public bool isHitting;
 
+    //“G‚Ìî•ñ
+    public EnemySetting.EnemyData enemyData;
+
     //ƒmƒbƒNƒoƒbƒN‚Ì“G‚Ì’â~ŠÔ(•b)
-    private float knockbackPauseTime = 1f;
+    private float knockbackPauseTime;
 
     //‘Ì—Í
     private float health;
 
-    //“G‚Ìî•ñ
-    public EnemySetting.EnemyData enemyData;
+    //“àÏ‚Ìè‡’l
+    private float innerProductThred;
 
     //ƒQƒbƒ^[
     public EnemyFlocking GetEnemyFlocking => enemyFlocking;
@@ -69,12 +72,15 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         //“G‚Ì‰Šú‰»
         isHitting = false;
         health = enemyData.maxHealth;
+        knockbackPauseTime = 1f;
+        //‹–ìŠp‚ğ“àÏ‚Ìè‡’l‚Ég‚¤
+        innerProductThred = Mathf.Cos(enemyData.fieldOfView * Mathf.Deg2Rad);
     }
 
     private void Update()
     {
         //‹ß—×‚ÌŒÂ‘Ì‚ğæ“¾‚·‚é
-       enemyFlocking.AddNeighbors(flockManager);
+        enemyFlocking.AddNeighbors(flockManager, innerProductThred);
         //stateMachine.OnUpdate();
     }
 

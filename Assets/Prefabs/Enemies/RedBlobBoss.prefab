@@ -213,6 +213,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4439338826035947417}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: baad2dad7e01d484eb47c9ee1c48b7c7,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2790366936678617737}
   m_SourcePrefab: {fileID: 100100000, guid: baad2dad7e01d484eb47c9ee1c48b7c7, type: 3}
 --- !u!1 &4180974319535275572 stripped
@@ -271,6 +275,39 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &4439338826035947417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4180974319535275572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036456cd4154bb644a4b46d2ac1e6329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyFlocking: {fileID: 2790366936678617737}
+  flockManager: {fileID: 0}
+  expPrefab: {fileID: 0}
+  rigidb: {fileID: 0}
+  animator: {fileID: 0}
+  isHitting: 0
+  enemyData:
+    name: 
+    ditectingNeiborDistance: 0
+    fieldOfView: 0
+    rotationSpeed: 0
+    separationCoefficient: 0
+    alignmentCoefficient: 0
+    combiningCoefficient: 0
+    restitutionCoefficient: 0
+    restitutionDistance: 0
+    combiningPlayerCoefficient: 0
+    minSpeed: 0
+    maxSpeed: 0
+    maxHealth: 0
+    attack: 0
 --- !u!114 &2790366936678617737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,24 +315,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4180974319535275572}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0cdead67c816204da727334e2ea42c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flockManager: {fileID: 0}
-  itemPrefab: {fileID: 1513542311294343622, guid: a419a53d5094bdc48b06082f55b5738c,
-    type: 3}
-  ditectingNeiborDistance: 10
-  fieldOfView: 200
-  rotationSpeed: 3
-  separationCoefficient: 3
-  alignmentCoefficient: 6
-  combiningCoefficient: 1
-  restitutionCoefficient: 0
-  restitutionDistance: 1
-  combiningPlayerCoefficient: 7
-  minSpeed: 0.5
-  maxSpeed: 5
+  enemyManager: {fileID: 4439338826035947417}
   playerTransform: {fileID: 0}
   neighbors: []
