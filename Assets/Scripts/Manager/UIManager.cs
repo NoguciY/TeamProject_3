@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ExpGauge experienceValueGauge;
 
+    //クールタイムゲージコンポーネント
+    [SerializeField]
+    private CoolTimeGauge coolTimeGauge;
+
     //ボタン管理コンポーネント
     [SerializeField]
     private ButtonManager buttonManager;
@@ -47,6 +52,7 @@ public class UIManager : MonoBehaviour
     public GameObject GetLevelUpBombPanel => levelUpBombPanel;
     public LifeGauge GetLifeGauge => lifeGauge;
     public ExpGauge GetExperienceValueGauge => experienceValueGauge;
+    public CoolTimeGauge GetCoolTimeGauge => coolTimeGauge;
     public ButtonManager GetButtonManager => buttonManager;
 
 
@@ -70,5 +76,9 @@ public class UIManager : MonoBehaviour
 
         //現在のレベルテキストの更新
         level.CountLevel(GameManager.Instance.playerLevel);
+
+        //クールタイムゲージの更新を増えた爆弾分行う
+        for(int i = 0; i < Enum.GetNames(typeof(Utilities.AddedBombType)).Length; i++)
+        coolTimeGauge.FillGauge(i);
     }
 }

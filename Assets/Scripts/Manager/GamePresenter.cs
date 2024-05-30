@@ -101,6 +101,12 @@ public class GamePresenter : MonoBehaviour
                 GameManager.Instance.playerLevel++;
             });
 
+        //クールダウンイベント
+        player.GetPlayerEvent.coolDownEvent.AddListener(
+            (index, coolTime) => {
+                //使用した爆弾のクールタイムゲージを満たし始める
+                uiManager.GetCoolTimeGauge.StartFillingCoolTimeGauge(index, coolTime);
+            });
 
         //UIマネージャーのイベントに関数を登録する
 

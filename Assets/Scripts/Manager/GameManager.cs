@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using System;
 
@@ -32,6 +30,7 @@ public class GameManager : MonoBehaviour
     public int playerLevel = 1;
 
     //倒した敵の数
+    [NonSerialized]
     public int deadEnemyMun = 0;
 
 
@@ -53,7 +52,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         //開始時のシーン
-        currentSceneType = SceneType.MainGame;
+        currentSceneType = SceneType.Title;
         preSceneType = currentSceneType;
     }
 

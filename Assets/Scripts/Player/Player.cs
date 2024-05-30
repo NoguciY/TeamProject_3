@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -101,19 +102,13 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //レベルの初期化
         playerLevelUp.InitLevel();
 
-        //回復力のクールタイム初期化
-        //resilienceCoolTime = 1f;
-
         //爆弾の初期化
         bombManager.Initialize();
 
-        enableBombs = new bool[Utilities.ADDEDBOMBNUM];
+        enableBombs = new bool[Enum.GetNames(typeof(Utilities.AddedBombType)).Length];
 
         //0から爆弾の種類数-1までカウントする
         newBombCounter = 0;
-
-        //初期値は最初にボムを追加したい1つ前のレベル
-        //addBombLevels = 9;
     }
 
     void Update()
@@ -233,27 +228,22 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         //1つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[0])
             if (Input.GetKeyDown(KeyCode.Alpha1))
-                //クールダウンが終わっている場合
                 //設置型爆弾を生成
-                bombManager.GeneratePlantedBomb();
+                bombManager.GeneratePlantedBomb(playerEvent.coolDownEvent);
 
         //2つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[1])
         {
             if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                //クールダウンが終わっている場合
                 //ノックバック爆弾を生成
-                bombManager.GenerateKnockbackBombs();
-            }
+                bombManager.GenerateKnockbackBombs(playerEvent.coolDownEvent);
         }
         //3つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[2])
         {
             if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                bombManager.GenerateHomingBomb();
-            }
+                //誘導爆弾を生成
+                bombManager.GenerateHomingBomb(playerEvent.coolDownEvent);
         }
     }
 
