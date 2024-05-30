@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerEvent;
 
 //爆弾を管理するクラス
 public class BombManager : MonoBehaviour
@@ -49,13 +50,15 @@ public class BombManager : MonoBehaviour
     //ノックバック爆弾とプレイヤーの間の距離
     private float toPlayerDistance;
 
+    public BombKnockback GetBombKnockback => knockbackBomb;
+
     //生成されるノックバック爆弾の数
     //private int generatedKnockbackBombNum;
 
     //誘導爆弾--------------------------------------------------
     //プレハブ
     [SerializeField]
-    private HomingBombSpawner homingBombSpawn;
+    private HomingBombSpawner homingBombSpawner;
 
     //誘導爆弾の高さの半分
     private float homingBombHelfHeight;
@@ -110,7 +113,6 @@ public class BombManager : MonoBehaviour
         coolTime[(int)BombType.Throwing] = throwingBomb.GetCoolTime;
 
         //設置型爆弾関係の値を取得
-        //var plantedBombComponent = plantedBomb.GetComponent<BombPlanted>();
         plantedBombHalfHeight = plantedBomb.GetHalfHeight();
         plantedBomb.explosionParticle = plantedBombExplosionParticle;
         plantedBombRotation = plantedBomb.transform.rotation;
@@ -123,14 +125,11 @@ public class BombManager : MonoBehaviour
         coolTime[(int)BombType.Knockback] = knockbackBomb.GetCoolTime;
 
         //誘導爆弾の関係の値を取得
-        //ミサイルスポナーオブジェクトのMissileSpawnerを取得
-        //var homingBombSpawnerComponent = homingBombSpawn.GetComponent<HomingBombSpawner>();
-        //MissileSpawnerのプレハブのBulletを取得
-        var homingBombComponent = homingBombSpawn.GetPrefab.GetComponent<BombHoming>();
-        //bulletコンポーネントのパーティクルに参照している誘導爆弾用の爆発パーティクルをセットする
+        var homingBombComponent = homingBombSpawner.GetPrefab.GetComponent<BombHoming>();
+        //homingBombのパーティクルに参照している誘導爆弾用の爆発パーティクルをセットする
         homingBombComponent.explosionParticle = homingBombExplosionParticle;
-        homingBombHelfHeight = homingBombSpawn.GetBombHalfHeight;
-        coolTime[(int)BombType.Homing] = homingBombSpawn.GetCoolTime;
+        homingBombHelfHeight = homingBombSpawner.GetBombHalfHeight;
+        coolTime[(int)BombType.Homing] = homingBombSpawner.GetCoolTime;
     }
 
     //投擲爆弾を生成する
@@ -153,7 +152,7 @@ public class BombManager : MonoBehaviour
     }
 
     //設置型爆弾を生成する
-    public void GeneratePlantedBomb()
+    public void GeneratePlantedBomb(CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Planted])
         {
@@ -163,11 +162,14 @@ public class BombManager : MonoBehaviour
 
             //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Planted] = true;
+
+            //クールタイムゲージのイベントを実行
+            coolDownEvent.Invoke((int)Utilities.AddedBombType.Planted, plantedBomb.GetCoolTime);
         }
     }
 
     //ノックバック爆弾を生成する
-    public void GenerateKnockbackBombs()
+    public void GenerateKnockbackBombs(CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Knockback])
         {
@@ -198,21 +200,27 @@ public class BombManager : MonoBehaviour
 
             //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Knockback] = true;
+
+            //クールタイムゲージのイベントを実行
+            coolDownEvent.Invoke((int)Utilities.AddedBombType.Knockback, knockbackBomb.GetCoolTime);
         }
     }
 
-    public void GenerateHomingBomb()
+    public void GenerateHomingBomb(CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Homing])
         {
             Vector3 spawnPos = playerTransform.position + Vector3.up * homingBombHelfHeight * 10;
-            GameObject bombPrefab = Instantiate(homingBombSpawn.gameObject, spawnPos, Quaternion.identity);
+            GameObject bombPrefab = Instantiate(homingBombSpawner.gameObject, spawnPos, Quaternion.identity);
 
             //プレイヤーの位置をセット
             bombPrefab.GetComponent<HomingBombSpawner>().playerTransform = playerTransform;
 
             //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Homing] = true;
+
+            //クールタイムゲージのイベントを実行
+            coolDownEvent.Invoke((int)Utilities.AddedBombType.Homing, homingBombSpawner.GetCoolTime);
         }
     }
 

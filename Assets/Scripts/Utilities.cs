@@ -11,11 +11,20 @@ public static class Utilities
     //–hŒä—Í‚ÌãŒÀ
     public static readonly int DEFENSEUPPERLIMIT = 3;
 
-    //’Ç‰Á‚³‚ê‚é”š’e‚Ì”
-    public static readonly int ADDEDBOMBNUM = 3;
-
     //”š’e‚Ìí”
     public static readonly int BOMBTYPENUM = 4;
+
+    //’Ç‰Á‚³‚ê‚é”š’e‚Ì”
+    //public static readonly int ADDEDBOMBNUM = 3;
+
+    //’Ç‰Á‚³‚ê‚é”š’e‚Ì
+    public enum AddedBombType
+    {
+        Planted,    //İ’u
+        Knockback,  //ƒmƒbƒNƒoƒbƒN
+        Homing,     //—U“±
+    }
+
 
     /// <summary>
     /// Šp“x‚ğæ“¾‚·‚é

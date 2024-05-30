@@ -36,6 +36,10 @@ public class PlayerEvent : MonoBehaviour
     //public UnityEvent addNewBombEvent;
     public UnityEvent addNewBombEvent = new UnityEvent();
 
+    //クールダウンイベント
+    public class CoolDownEvent : UnityEvent<int, float> { }
+    public CoolDownEvent coolDownEvent = new CoolDownEvent();
+
     //private void Awake()
     //{
     //    gameOverEvent = new UnityEvent();

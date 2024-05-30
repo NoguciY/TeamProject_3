@@ -1008,7 +1008,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab8b694273485234bb29438e81c29964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadEnemyMun: 0
 --- !u!1 &730520817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,7 +1865,7 @@ GameObject:
   - component: {fileID: 1256948403}
   - component: {fileID: 1256948402}
   m_Layer: 5
-  m_Name: Image
+  m_Name: HomingBombGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2502,7 +2501,7 @@ RectTransform:
   m_GameObject: {fileID: 1472314519}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.01, y: 1.01, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1333761351}
@@ -2684,7 +2683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1567118020
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2767,7 +2766,7 @@ GameObject:
   - component: {fileID: 1570491266}
   - component: {fileID: 1570491265}
   m_Layer: 5
-  m_Name: Image
+  m_Name: KnockbackBombGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3379,7 +3378,7 @@ GameObject:
   - component: {fileID: 1867593645}
   - component: {fileID: 1867593644}
   m_Layer: 5
-  m_Name: Image
+  m_Name: PlantedBombGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3459,7 +3458,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1882234570
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3960,12 +3959,12 @@ GameObject:
   - component: {fileID: 2033828930}
   - component: {fileID: 2033828929}
   m_Layer: 5
-  m_Name: KnockbackIcon
+  m_Name: KnockbackBombIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2033828928
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4076,6 +4075,7 @@ GameObject:
   - component: {fileID: 2075787560}
   - component: {fileID: 2075787561}
   - component: {fileID: 2075787564}
+  - component: {fileID: 2075787566}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -4118,6 +4118,7 @@ MonoBehaviour:
   level: {fileID: 2075787564}
   lifeGauge: {fileID: 2075787561}
   experienceValueGauge: {fileID: 2075787560}
+  coolTimeGauge: {fileID: 2075787566}
   buttonManager: {fileID: 2075787562}
 --- !u!114 &2075787559
 MonoBehaviour:
@@ -4213,6 +4214,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelText: {fileID: 1152600409}
+--- !u!114 &2075787566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075787556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b43233ac26637547aa00ba5aa080afa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolTimeGauges:
+  - {fileID: 1867593644}
+  - {fileID: 1570491265}
+  - {fileID: 1256948402}
 --- !u!1001 &3048631830326318282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5081,6 +5098,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 9.7062795e-20
       objectReference: {fileID: 0}
+    - target: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
+        type: 3}
+      propertyPath: plantedBomb
+      value: 
+      objectReference: {fileID: 2406202603539642248, guid: 594a3d490bbf43844ad09d5ce41acc49,
+        type: 3}
+    - target: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
+        type: 3}
+      propertyPath: homingBombSpawner
+      value: 
+      objectReference: {fileID: 3556812819693148378, guid: e7dd9a4bf911cfa4894de8654f5e2bab,
+        type: 3}
     - target: {fileID: 9017726956107907413, guid: 3af907046d283604d86ac8fdeb1cd519,
         type: 3}
       propertyPath: knockbackBombPrefab
