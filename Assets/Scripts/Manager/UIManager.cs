@@ -46,6 +46,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ButtonManager buttonManager;
 
+    //BombIconコンポーネント
+    [SerializeField]
+    private GameObject[] bombIcons;
+
+    private int bombIconCounter;
+
     //ゲッター
     public GameObject GetGameOverPanel => gameOverPanel;
     public GameObject GetLevelUpPanel => levelUpPanel;
@@ -62,10 +68,19 @@ public class UIManager : MonoBehaviour
         panel.SetActive(shoudShow);
     }
 
+    public void ShouwBombIcon()
+    {
+        bombIcons[bombIconCounter].SetActive(true);
+        bombIconCounter++;
+    }
+
     private void Start()
     {
         //ボタンの初期化
         buttonManager.Initialize(this);
+
+        //ボムアイコンカウンターの初期化
+        bombIconCounter = 0;
     }
 
 
