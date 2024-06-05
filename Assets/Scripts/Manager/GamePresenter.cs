@@ -94,6 +94,9 @@ public class GamePresenter : MonoBehaviour
                 //爆弾追加ボタンに爆弾追加イベントを登録する
                 uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent(player.GetNewBombCounter);
 
+                //爆弾アイコンの表示
+                uiManager.ShouwBombIcon();
+
                 //効果音を鳴らす
                 SoundManager.uniqueInstance.Play("レベルアップ");
 
