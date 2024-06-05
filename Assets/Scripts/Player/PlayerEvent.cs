@@ -12,7 +12,7 @@ public class PlayerEvent : MonoBehaviour
     public UnityEvent gameOverEvent = new UnityEvent();
 
     //経験値を得た場合に実行するイベント
-    public class ExpEvent : UnityEvent<int, int> { }
+    public class ExpEvent : UnityEvent<float, float> { }
     //public ExpEvent expEvent;
     public ExpEvent expEvent = new ExpEvent();
 

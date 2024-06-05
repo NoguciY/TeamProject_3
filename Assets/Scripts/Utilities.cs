@@ -17,7 +17,7 @@ public static class Utilities
     //’Ç‰Á‚³‚ê‚é”š’e‚Ì”
     //public static readonly int ADDEDBOMBNUM = 3;
 
-    //’Ç‰Á‚³‚ê‚é”š’e‚Ì
+    //’Ç‰Á‚³‚ê‚é”š’e‚Ìí—Ş
     public enum AddedBombType
     {
         Planted,    //İ’u

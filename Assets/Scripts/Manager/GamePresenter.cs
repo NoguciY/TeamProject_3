@@ -179,7 +179,7 @@ public class GamePresenter : MonoBehaviour
                 //新しい爆弾を使用可能にする
                 player.EnableNewBomb();
 
-
+                //効果音を鳴らす
             });
     }
 }

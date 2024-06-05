@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
 
     //現在のシーン
+    [SerializeField]
     private SceneType currentSceneType;
 
     //前回のシーン
@@ -38,11 +39,8 @@ public class GameManager : MonoBehaviour
     public float GetDeltaTimeInMain => deltaTimeInMain;
 
 
-
     private void Awake()
     {
-        Application.targetFrameRate = 60;
-
         if (instance == null)
         {
             instance = this;
@@ -51,8 +49,11 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
+        //フレームレートを設定
+        Application.targetFrameRate = 60;
+
         //開始時のシーン
-        currentSceneType = SceneType.Title;
+        //currentSceneType = SceneType.Title;
         preSceneType = currentSceneType;
     }
 
@@ -113,9 +114,8 @@ public class GameManager : MonoBehaviour
         //前回と同じシーンに変更させない
         //if (preSceneType != currentSceneType)
         //{
-            preSceneType = currentSceneType;
-            currentSceneType = nextSceneType;
-            //Debug.Log($"現在のシーン：{currentSceneType}");
+        preSceneType = currentSceneType;
+        currentSceneType = nextSceneType;
         //}
     }
 
@@ -147,7 +147,5 @@ public class GameManager : MonoBehaviour
         }
         else
             Debug.LogWarning($"{nextSceneName}を現在のシーンに変更できません");
-
-        //Debug.Log($"現在のシーン：{currentSceneType}");
     }
 }

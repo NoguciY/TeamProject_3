@@ -12,7 +12,7 @@ public class EnemyFlock : MonoBehaviour
     //近くの群を格納するリスト
     private List<GameObject> neighbors;
 
-    private void AddNeighbors(float fieldOfView, EnemyFlockManager flockManager, float ditectingNeiborDistance, Vector3 velocity)
+    private void AddNeighbors(float fieldOfView, EnemySpawner flockManager, float ditectingNeiborDistance, Vector3 velocity)
     {
         //リストをクリア
         neighbors.Clear();

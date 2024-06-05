@@ -14,12 +14,13 @@ public class ExpGauge : MonoBehaviour
     /// </summary>
     /// <param name="currentExp">現在の経験値</param>
     /// <param name="needExp">レベルアップに必要な経験値</param>
-    public void UpdateExpGauge(int currentExp, int needExp)
+    public void UpdateExpGauge(float currentExp, float needExp)
     {
         float value = 0;
         if (currentExp != 0)
             //int型同士の除算では、結果が整数になるため、flaot型にキャストする
-            value = (float)currentExp / (float)needExp;
+            //value = (float)currentExp / (float)needExp;
+            value = currentExp / needExp;
 
         //値が１以上の場合、0にする
         if (value >= 1)

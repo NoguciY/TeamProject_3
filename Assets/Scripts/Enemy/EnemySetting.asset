@@ -15,15 +15,43 @@ MonoBehaviour:
   enemyDataList:
   - name: RedBlob
     ditectingNeiborDistance: 10
-    fieldOfView: 200
+    fieldOfView: 90
     rotationSpeed: 3
     separationCoefficient: 3
-    alignmentCoefficient: 6
+    alignmentCoefficient: 1
     combiningCoefficient: 1
+    combiningPlayerCoefficient: 3
     restitutionCoefficient: 0
     restitutionDistance: 1
-    combiningPlayerCoefficient: 5
     minSpeed: 3
     maxSpeed: 5
     maxHealth: 1
     attack: 5
+  - name: Orc
+    ditectingNeiborDistance: 30
+    fieldOfView: 180
+    rotationSpeed: 3
+    separationCoefficient: 1
+    alignmentCoefficient: 6
+    combiningCoefficient: 2
+    combiningPlayerCoefficient: 3
+    restitutionCoefficient: 0
+    restitutionDistance: 1
+    minSpeed: 5
+    maxSpeed: 8
+    maxHealth: 6
+    attack: 10
+  - name: Mushroom
+    ditectingNeiborDistance: 10
+    fieldOfView: 90
+    rotationSpeed: 3
+    separationCoefficient: 0
+    alignmentCoefficient: 0
+    combiningCoefficient: 0
+    combiningPlayerCoefficient: 1
+    restitutionCoefficient: 0
+    restitutionDistance: 0
+    minSpeed: 0.1
+    maxSpeed: 0.5
+    maxHealth: 20
+    attack: 20

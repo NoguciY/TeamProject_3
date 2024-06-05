@@ -913,7 +913,7 @@ GameObject:
   - component: {fileID: 614843590}
   - component: {fileID: 614843589}
   m_Layer: 0
-  m_Name: EnemyFlockingManager
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -928,20 +928,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 614843588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7514c90fab64324b925b1d19970cf7e, type: 3}
+  m_Script: {fileID: 11500000, guid: b5ad8441757567c43bcac3c4f714e470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 479818044}
-  enemy: {fileID: 907030254304621296, guid: b3f6b5fd037d812469439e044ad8f430, type: 3}
+  playerTransform: {fileID: 479818045}
   enemySetting: {fileID: 11400000, guid: f7fdc4aa523099a4198406bf48c0a5a7, type: 2}
-  generatedMinRange: -40
-  generatedMaxRange: 40
   enemyPrefab:
   - {fileID: 907030254304621296, guid: b3f6b5fd037d812469439e044ad8f430, type: 3}
+  - {fileID: 8494156801173879527, guid: d3e4a9bb0f36a9b489155697f35112c4, type: 3}
+  - {fileID: 653426722034487598, guid: c84242a2edcfd1d40bd426725233ea78, type: 3}
   generatedNum: 3
-  generatedInterval: 60
-  centerPos: {x: 0, y: 50, z: 0}
-  radius: 26
+  generatedInterval: 15
+  radius: 25
+  radiusMushroom: 20
   boids: []
 --- !u!4 &614843590
 Transform:
@@ -1008,6 +1007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab8b694273485234bb29438e81c29964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentSceneType: 1
 --- !u!1 &730520817
 GameObject:
   m_ObjectHideFlags: 0

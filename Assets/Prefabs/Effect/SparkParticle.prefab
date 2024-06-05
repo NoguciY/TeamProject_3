@@ -4874,7 +4874,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9159632004675089658}
   - component: {fileID: 2785080164463276514}
-  - component: {fileID: 6821118657904292775}
   m_Layer: 0
   m_Name: SparkParticle
   m_TagString: Untagged
@@ -4917,26 +4916,6 @@ MonoBehaviour:
   - {fileID: 7754072104026847861}
   - {fileID: 689592073925232808}
   - {fileID: 2074796816738563710}
---- !u!114 &6821118657904292775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2305783336696801891}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b62015c442b5d4aa2e61a0db5552f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _light: {fileID: 0}
-  Delay: 0.5
-  Down: 1
-  _light2: {fileID: 0}
-  Delay2: 0
-  Delay3: 0
-  Maxintensity: 0
-  Up: 1
 --- !u!1 &2532988645121018001
 GameObject:
   m_ObjectHideFlags: 0

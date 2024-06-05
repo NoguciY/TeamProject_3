@@ -502,7 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab8b694273485234bb29438e81c29964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadEnemyMun: 0
+  currentSceneType: 3
 --- !u!4 &446785037
 Transform:
   m_ObjectHideFlags: 0
