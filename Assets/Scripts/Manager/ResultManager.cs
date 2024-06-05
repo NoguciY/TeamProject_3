@@ -5,12 +5,14 @@ using TMPro;
 
 public class ResultManager : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI timerText;          //生存時間テキスト
-    [SerializeField]
-    private TextMeshProUGUI levelText;          //レベルテキスト
-    [SerializeField]
-    private TextMeshProUGUI enemyCountText;     //倒した敵の数テキスト
+    [SerializeField, Header("生存時間テキスト")]
+    private TextMeshProUGUI timerText;          
+
+    [SerializeField, Header("レベルテキスト")]
+    private TextMeshProUGUI levelText;     
+    
+    [SerializeField, Header("倒した敵の数テキスト")]
+    private TextMeshProUGUI enemyCountText;   
 
     float survivalTime;
 

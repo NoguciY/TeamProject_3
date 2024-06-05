@@ -18,16 +18,16 @@ public class PlayerLevelUp : MonoBehaviour
     private int level;
 
     //現在の経験値
-    private int exp;
+    private float exp;
 
     //レベルアップに必要な経験値
-    private int needExp;
+    private float needExp;
 
 
     //ゲッター
     public int GetLevel => level;
-    public int GetExp => exp;
-    public int GetNeedExp => needExp;
+    public float GetExp => exp;
+    public float GetNeedExp => needExp;
 
     //初期化
     public void InitLevel()
@@ -36,10 +36,10 @@ public class PlayerLevelUp : MonoBehaviour
         exp = 0;
 
         //各レベルに必要な経験値を計算
-        experienceValue.CalNeedExperience(maxLevel);
+        experienceValue.SetNeedExperience(maxLevel);
 
         //現在のレベルアップに必要な経験値を取得
-        needExp = experienceValue.GetNeedExp(level + 1);
+        needExp = experienceValue.GetNeedExp(level);
     }
 
     //経験値を得る
@@ -54,10 +54,9 @@ public class PlayerLevelUp : MonoBehaviour
         //経験値がレベルアップに必要な経験値以上になった場合
         if (exp >= needExp)
         {
-            //レベルアップ
             level++;
-            exp = 0;
-            needExp = experienceValue.GetNeedExp(level + 1);
+            exp =　exp - needExp;
+            needExp = experienceValue.GetNeedExp(level);
             Debug.Log($"レベルアップ！\n 現在のレベル：{level}");
 
             //イベント(パネルの表示やエフェクトなど)を実行

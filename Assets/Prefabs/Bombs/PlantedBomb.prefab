@@ -101,7 +101,7 @@ MonoBehaviour:
   explosionParticle: {fileID: 0}
   damage: 3
   fuseTime: 3
-  explosionRadius: 3
+  explosionRadius: 2
   bombLifeSpan: 5
   particleLifeSpan: 3
   coolTime: 3

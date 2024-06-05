@@ -169,7 +169,6 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     //ダメージを受ける関数(インターフェースで実装)
     public void ReceiveDamage(float damage)
     {
-
         float totalDamage = -damage + difense;
         
         //ダメージが正の値にならないようにする

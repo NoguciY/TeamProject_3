@@ -4,14 +4,14 @@ using UnityEngine;
 
 
 //ステート
-public enum StateType
-{
-    Idle,           //待機
-    Move,           //移動
-    Attack,         //攻撃
-    ReceiveDamage,  //被ダメージ
-    Dead,           //死亡
-}
+//public enum StateType
+//{
+//    Idle,           //待機
+//    Move,           //移動
+//    Attack,         //攻撃
+//    ReceiveDamage,  //被ダメージ
+//    Dead,           //死亡
+//}
 
 public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDamageEnemy
 {
@@ -20,7 +20,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     private EnemyFlocking enemyFlocking;
 
     //群の生成と管理をするコンポーネント
-    public EnemyFlockManager flockManager;
+    public EnemySpawner flockManager;
 
     //経験値オブジェクト
     [SerializeField]
@@ -29,9 +29,10 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     [SerializeField]
     private Rigidbody rigidb;
 
-    //アニメーション用コンポーネント
     [SerializeField]
     private Animator animator;
+
+    public Transform playerTransform;
 
     //爆弾に当たったかどうか
     public bool isHitting;
@@ -53,45 +54,33 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     public Rigidbody GetRigidb => rigidb;
     public Animator GetAnimator => animator;
 
-    //ステートマシン
-    //private StateMachine<EnemyManager> stateMachine;
-
     private void Start()
     {
-        //ステートマシン定義
-        //stateMachine = new StateMachine<EnemyManager>(this);
-        //stateMachine.Add<StateEnemyIdle>((int)StateType.Idle);
-        //stateMachine.Add<StateEnemyMove>((int)StateType.Move);
-        //stateMachine.Add<StateEnemyAttack>((int)StateType.Attack);
-        //stateMachine.Add<StateEnemyReceiveDamage>((int)StateType.ReceiveDamage);
-        //stateMachine.Add<StateEnemyDead>((int)StateType.Dead);
-
-        ////ステート開始
-        //stateMachine.OnStart((int)StateType.Idle);
-
         //敵の初期化
         isHitting = false;
         health = enemyData.maxHealth;
         knockbackPauseTime = 1f;
+        enemyFlocking.Init(enemyData.minSpeed, enemyData.maxSpeed);
+
         //視野角を内積の閾値に使う
         innerProductThred = Mathf.Cos(enemyData.fieldOfView * Mathf.Deg2Rad);
     }
 
     private void Update()
     {
-        //近隣の個体を取得する
-        enemyFlocking.AddNeighbors(flockManager, innerProductThred);
-        //stateMachine.OnUpdate();
+        ////近隣の個体を取得する
+        //enemyFlocking.AddNeighbors(flockManager,enemyData.ditectingNeiborDistance, innerProductThred);
     }
 
     private void FixedUpdate()
     {
-        //stateMachine.OnFixedUpdate();
-
         //移動処理
         if (!isHitting)
         {
-            Vector3 moveForce = enemyFlocking.Move();
+            //近隣の個体を取得する
+            enemyFlocking.AddNeighbors(flockManager, enemyData.ditectingNeiborDistance, innerProductThred);
+            //移動する
+            Vector3 moveForce = enemyFlocking.Move(playerTransform, enemyData);
             rigidb.velocity = new Vector3(moveForce.x, rigidb.velocity.y, moveForce.z);
         }
     }

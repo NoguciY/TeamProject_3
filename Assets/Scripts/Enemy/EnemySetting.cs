@@ -34,14 +34,14 @@ public class EnemySetting : ScriptableObject
         [Header("Œ‹‡ŒW”")]
         public float combiningCoefficient;
 
+        [Header("ƒvƒŒƒCƒ„[‚ÉŒ‹‡‚·‚é—Í‚ÌŒW”")]
+        public float combiningPlayerCoefficient;
+
         [Header("•Ç‚©‚ç”½”­ŒW”")]
         public float restitutionCoefficient;
 
         [Header("•Ç‚©‚ç‚Ì—Í‚ªŠ|‚©‚èn‚ß‚é‹——£")]
         public float restitutionDistance;
-
-        [Header("ƒvƒŒƒCƒ„[‚ÉŒ‹‡‚·‚é—Í‚ÌŒW”")]
-        public float combiningPlayerCoefficient;
 
         [Header("Å¬‘¬“x")]
         public float minSpeed;
