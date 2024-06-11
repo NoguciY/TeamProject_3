@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     [NonSerialized]
     public int deadEnemyMun = 0;
 
+    public List<ItemExp> items;
+
 
     //ゲッター
     public float GetDeltaTimeInMain => deltaTimeInMain;
@@ -55,6 +57,8 @@ public class GameManager : MonoBehaviour
         //開始時のシーン
         //currentSceneType = SceneType.Title;
         preSceneType = currentSceneType;
+
+        items = new List<ItemExp>();
     }
 
     private void Update()

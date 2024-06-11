@@ -284,4 +284,12 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             newBombCounter++;
         }
     }
+
+    public void Heal(float value)
+    {
+        lifeController.AddValueToLife(value);
+
+        //‘Ì—ÍƒQ[ƒW‚ğ‰ñ•œ—Í•ª‘‰Á
+        playerEvent.addLifeEvent.Invoke(value);
+    }
 }
