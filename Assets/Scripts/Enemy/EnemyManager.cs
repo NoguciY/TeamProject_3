@@ -133,7 +133,8 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         //自身を破棄
         Destroy(this.gameObject);
         //アイテムを生成
-        Instantiate(expPrefab, this.transform.position, expPrefab.transform.rotation);
+        GameObject exp = Instantiate(expPrefab, this.transform.position, expPrefab.transform.rotation);
+        GameManager.Instance.items.Add(exp.GetComponent<ItemExp>());
     }
 
     //プレイヤーのisTriggerでないコライダーと当たり判定を行う
