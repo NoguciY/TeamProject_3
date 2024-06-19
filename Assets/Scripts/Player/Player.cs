@@ -226,21 +226,21 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
         //1つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[0])
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Q))
                 //設置型爆弾を生成
                 bombManager.GeneratePlantedBomb(playerEvent.coolDownEvent);
 
         //2つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[1])
         {
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.E))
                 //ノックバック爆弾を生成
                 bombManager.GenerateKnockbackBombs(playerEvent.coolDownEvent);
         }
         //3つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[2])
         {
-            if (Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(KeyCode.R))
                 //誘導爆弾を生成
                 bombManager.GenerateHomingBomb(playerEvent.coolDownEvent);
         }
