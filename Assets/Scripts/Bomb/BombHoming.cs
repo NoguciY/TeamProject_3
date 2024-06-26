@@ -144,7 +144,7 @@ public class BombHoming : MonoBehaviour
             GameObject particle =
                 Instantiate(explosionParticle, transform.position, Quaternion.identity);
 
-            particle.GetComponent<PlayParticles>().Play();
+            //particle.GetComponent<PlayParticles>().Play();
 
             //particleLifeSpan秒後にパーティクルを消す
             Destroy(particle, particleLifeSpan);

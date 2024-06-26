@@ -18,7 +18,7 @@ public class ItemBoxSpaner : MonoBehaviour
     private float spawnInterval = 2f;
     void Start()
     {
-        InvokeRepeating("SpawnObjects", 0f, spawnInterval);
+        InvokeRepeating("SpawnObjects", spawnInterval, spawnInterval);
     }
 
     void SpawnObjects()

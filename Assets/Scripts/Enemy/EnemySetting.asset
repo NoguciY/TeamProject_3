@@ -14,34 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyDataList:
   - name: RedBlob
+    generationOrder: 0
     ditectingNeiborDistance: 10
     fieldOfView: 90
     rotationSpeed: 3
     separationCoefficient: 3
     alignmentCoefficient: 1
-    combiningCoefficient: 1
+    combiningCoefficient: 1.5
     combiningPlayerCoefficient: 3
     restitutionCoefficient: 0
     restitutionDistance: 1
-    minSpeed: 3
-    maxSpeed: 5
+    minSpeed: 1
+    maxSpeed: 3
     maxHealth: 1
     attack: 5
   - name: Orc
+    generationOrder: 1
     ditectingNeiborDistance: 30
-    fieldOfView: 180
+    fieldOfView: 90
     rotationSpeed: 3
-    separationCoefficient: 1
-    alignmentCoefficient: 6
-    combiningCoefficient: 2
-    combiningPlayerCoefficient: 3
+    separationCoefficient: 2
+    alignmentCoefficient: 5
+    combiningCoefficient: 3.5
+    combiningPlayerCoefficient: 4
     restitutionCoefficient: 0
     restitutionDistance: 1
-    minSpeed: 5
-    maxSpeed: 8
+    minSpeed: 3
+    maxSpeed: 4.5
     maxHealth: 6
     attack: 10
   - name: Mushroom
+    generationOrder: 2
     ditectingNeiborDistance: 10
     fieldOfView: 90
     rotationSpeed: 3
