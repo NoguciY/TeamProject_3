@@ -12,10 +12,10 @@ public class ItemBoxSpaner : MonoBehaviour
     private Transform playerTransform;
 
     [SerializeField, Header("スポーン範囲の半径")]
-    private float spawnRadius = 5f; 
+    private float spawnRadius; 
 
     [SerializeField,Header("スポーン間隔")]
-    private float spawnInterval = 2f;
+    private float spawnInterval;
     void Start()
     {
         InvokeRepeating("SpawnObjects", spawnInterval, spawnInterval);
@@ -24,7 +24,7 @@ public class ItemBoxSpaner : MonoBehaviour
     void SpawnObjects()
     {
         Vector3 randomPosition = playerTransform.position + Random.insideUnitSphere * spawnRadius;
-        randomPosition.y = playerTransform.position.y + 5;  // 高さをプレイヤーと同じにする
+        randomPosition.y = playerTransform.position.y;  // 高さをプレイヤーと同じにする
         Instantiate(spawnObject, randomPosition, Quaternion.identity);
     }
 }

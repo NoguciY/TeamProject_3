@@ -8,13 +8,6 @@ public class ItemHeal : MonoBehaviour
     [SerializeField]
     private float healValue;
 
-    private void Start()
-    {
-    }
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         //アイテムを取得できるオブジェクトを取得
@@ -24,6 +17,7 @@ public class ItemHeal : MonoBehaviour
         {
             gettableItemObject.Heal(healValue);
             Destroy(this.gameObject);
+            Debug.Log($"{healValue}回復した");
         }
     }
 
