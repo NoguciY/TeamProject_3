@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static EnemySpawner;
 
 
 //ステート
@@ -20,7 +21,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     private EnemyFlocking enemyFlocking;
 
     //群の生成と管理をするコンポーネント
-    public EnemySpawner flockManager;
+    public EnemySpawner enemySpawner;
 
     //経験値オブジェクト
     [SerializeField]
@@ -78,7 +79,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         if (!isHitting)
         {
             //近隣の個体を取得する
-            enemyFlocking.AddNeighbors(flockManager, enemyData.ditectingNeiborDistance, innerProductThred);
+            enemyFlocking.AddNeighbors(enemySpawner,enemyData.generationOrder, enemyData.ditectingNeiborDistance, innerProductThred);
             //移動する
             Vector3 moveForce = enemyFlocking.Move(playerTransform, enemyData);
             rigidb.velocity = new Vector3(moveForce.x, rigidb.velocity.y, moveForce.z);
@@ -124,8 +125,8 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     private void Dead()
     {
         //群から自身を削除
-        if (flockManager != null)
-            flockManager.boids.Remove(this.gameObject);
+        if (enemySpawner != null)
+            enemySpawner.boids[enemyData.generationOrder].Remove(this.gameObject);
 
         //倒した敵の数を増やす
         GameManager.Instance.deadEnemyMun++;

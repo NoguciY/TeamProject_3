@@ -8,6 +8,14 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    //“G‚Ì¶¬‡
+    private enum EnemiesGenerationOrder
+    {
+        RedBlob,
+        Orc,
+        Mushroom,
+    }
+
     [SerializeField, Header("ƒvƒŒƒCƒ„[‚ÌTransform")]
     private Transform playerTransform;
 
@@ -24,17 +32,14 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField, Header("¶¬ŠÔŠu(•b)")]
     private float generatedInterval;
 
-    //[SerializeField, Header("¶¬‚·‚é•b”‚Æ“G–¼")]
-    //private Dictionary<float, string> generatedEnemyDictionary;
-
     [SerializeField, Header("‰~ó‚É¶¬‚·‚éÛ‚Ì”¼Œa")]
     private float radius;
 
     [SerializeField, Header("ƒLƒmƒR‚ğ‰~ó‚É¶¬‚·‚éÛ‚Ì”¼Œa")]
-    private float radiusMushroom;
+    private float radiusOfMushroomGeneration;
 
     //ƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚½ŒQ‚ÌŒÂ‘Ì‚ğŠi”[‚·‚é
-    public List<GameObject> boids;
+    public List<List<GameObject>> boids;
 
     private Transform myTransform;
 
@@ -50,6 +55,9 @@ public class EnemySpawner : MonoBehaviour
     //‰~ó‚É¶¬‚³‚ê‚½‚©
     private bool isGeneratedInCircle;
 
+    //Œo‰ßŠÔ
+    private float deltaTimeOfMushroomGeneration;
+
     //1üŠú
     private const float ONECYCLE = 2.0f * Mathf.PI;
 
@@ -64,10 +72,15 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        boids = new List<List<GameObject>>();
+        for (int i = 0; i < enemyPrefab.Length; i++)
+            boids.Add(new List<GameObject>());
+
         myTransform = transform;
 
         //“G‚Ì¶¬‚·‚é‚‚³‚ğ‰Šú‚ÌƒvƒŒƒCƒ„[‚Ì‚‚³‚É‚·‚é
         spawnHeight = playerTransform.position.y;
+
         beforeInterval = 0;
         isGeneratedInCircle = false;
     }
@@ -83,25 +96,19 @@ public class EnemySpawner : MonoBehaviour
         //İ’è‚µ‚½•b”–ˆ‚ÉÀs‚·‚é
         if (interval < beforeInterval)
             //¶¬ŠÔŠu‚²‚Æ‚É¶¬”‚ğ‘‚â‚·
-            generatedNum += 3;
+            generatedNum++;
 
         beforeInterval = interval;
 
-        if (elapsedTime < 60)
-        {
-            //İ’è‚µ‚½”‚Ì“G‚ğƒvƒŒƒCƒ„[‚ğ’†S‚É‰~ó‚É¶¬‚·‚é
-            GenerateEnemy("RedBlob");
-        }
-        else if (elapsedTime >= 120)
-        {
-            GenerateEnemy("Orc");
-        }
+        //İ’è‚µ‚½”‚Ì“G‚ğƒvƒŒƒCƒ„[‚ğ’†S‚É‰~ó‚É¶¬‚·‚é
+        GenerateEnemy("RedBlob", (int)EnemiesGenerationOrder.RedBlob);
 
-        if (elapsedTime >= 180)
-        {
-            //‚¢‚«‚È‚èƒvƒŒƒCƒ„[‚ğ’†S‚ÉˆÍ‚Ş
-            GenerateEnemyInCircle("Mushroom");
-        }
+        if (elapsedTime >= 30)
+            GenerateEnemy("Orc", (int)EnemiesGenerationOrder.Orc);
+
+        if (elapsedTime >= 60)
+            //ƒvƒŒƒCƒ„[‚ğˆÍ‚Ş‚æ‚¤‚É¶¬
+            GenerateEnemyInCircle("Mushroom", (int)EnemiesGenerationOrder.Mushroom);
     }
 
     //w’è‚µ‚½“G‚Ìî•ñ‚ğ•Ô‚·
@@ -121,13 +128,14 @@ public class EnemySpawner : MonoBehaviour
     /// í‚Éİ’è‚µ‚½”‚ªƒtƒB[ƒ‹ƒh‚É‚¢‚é‚æ‚¤‚É‚·‚é
     /// </summary>
     /// <param name="name">“G‚Ì–¼‘O</param>
-    private void GenerateEnemy(string name)
+    /// <param index="index">“G‚Ì“oê‡</param>
+    private void GenerateEnemy(string name, int index)
     {
         //¶¬‚·‚é“G‚ğæ“¾‚·‚é
         GameObject generatedEnemy = GetEnemyObjectFromName(name);
 
         //Œ»İ‚Ì¶¬”‚ªİ’è‚µ‚½¶¬”‚æ‚è¬‚³‚¢ê‡
-        if (boids.Count < generatedNum)
+        if (boids[index].Count < generatedNum)
         {
             Vector3 playerPos = playerTransform.position;
 
@@ -148,16 +156,16 @@ public class EnemySpawner : MonoBehaviour
 
             //¶¬‚µ‚½“G‚ÌenemyManager‚Ì•Ï”‚É’l‚ğ“n‚·
             var enemyManager = boid.GetComponent<EnemyManager>();
-            enemyManager.flockManager = this;
+            enemyManager.enemySpawner = this;
             enemyManager.enemyData = GetEnemyData(name);
             enemyManager.playerTransform = playerTransform;
 
             //ƒŠƒXƒg‚É’Ç‰Á
-            boids.Add(boid);
+            boids[index].Add(boid);
         }
     }
 
-    private void GenerateEnemyInCircle(string name)
+    private void GenerateEnemyInCircle(string name, int index)
     {
         //¶¬‚·‚é“G‚ğæ“¾‚·‚é
         GameObject generatedEnemy = GetEnemyObjectFromName(name);
@@ -166,13 +174,17 @@ public class EnemySpawner : MonoBehaviour
 
         if (!isGeneratedInCircle)
         {
+            //“G‚Ì¶¬”‚ÌãŒÀ
+            if (generatedNum >= 50)
+                generatedNum = 50;
+
             for (int i = 0; i < generatedNum; i++)
             {
                 //üŠú‚ÌˆÊ’u (1.0 = 100% ‚Ì 2ƒÎ ‚Æ‚È‚é)
                 float point = ((float)i / generatedNum) * ONECYCLE;
 
-                float spawnPosX = Mathf.Cos(point) * radiusMushroom + playerPos.x;
-                float spawnPosZ = Mathf.Sin(point) * radiusMushroom + playerPos.z;
+                float spawnPosX = Mathf.Cos(point) * radiusOfMushroomGeneration + playerPos.x;
+                float spawnPosZ = Mathf.Sin(point) * radiusOfMushroomGeneration + playerPos.z;
 
                 //¶¬ˆÊ’u
                 var spawnPos = new Vector3(spawnPosX, spawnHeight, spawnPosZ);
@@ -182,15 +194,24 @@ public class EnemySpawner : MonoBehaviour
 
                 //¶¬‚µ‚½“G‚ÌenemyManager‚Ì•Ï”‚É’l‚ğ“n‚·
                 var enemyManager = boid.GetComponent<EnemyManager>();
-                enemyManager.flockManager = this;
+                enemyManager.enemySpawner = this;
                 enemyManager.enemyData = GetEnemyData(name);
                 enemyManager.playerTransform = playerTransform;
 
                 //ƒŠƒXƒg‚É’Ç‰Á
-                boids.Add(boid);
+                boids[index].Add(boid);
             }
 
             isGeneratedInCircle = true;
+        }
+        else
+        {
+            deltaTimeOfMushroomGeneration += Time.deltaTime;
+            if(deltaTimeOfMushroomGeneration >= 60)
+            {
+                deltaTimeOfMushroomGeneration = 0;
+                isGeneratedInCircle = false;
+            }
         }
     }
 

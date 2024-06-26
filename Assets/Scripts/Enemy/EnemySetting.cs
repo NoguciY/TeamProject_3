@@ -16,6 +16,9 @@ public class EnemySetting : ScriptableObject
         [Header("–¼‘O")]
         public string name;
 
+        [Header("“oê‡")]
+        public int generationOrder;
+
         [Header("‹ß—×‚ÌŒÂ‘Ì‚ğŒŸ’m‚·‚é‹——£")]
         public float ditectingNeiborDistance;
 

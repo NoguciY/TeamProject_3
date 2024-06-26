@@ -107,6 +107,7 @@ public class BombManager : MonoBehaviour
         deltaTime = new float[Utilities.BOMBTYPENUM];
         coolTime = new float[Utilities.BOMBTYPENUM];
         isUsingBomb = new bool[Utilities.BOMBTYPENUM];
+        isUsingBomb[(int)BombType.Throwing] = true;
 
         //“Š±”š’eŠÖŒW‚Ì’l‚Ìİ’è
         throwingBomb.explosionParticle = throwingBombExplosionParticle;

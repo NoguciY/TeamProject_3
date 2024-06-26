@@ -137,7 +137,7 @@ public class BombKnockback : MonoBehaviour
             GameObject particle =
                 Instantiate(explosionParticle, myTransform.position, Quaternion.identity);
 
-            particle.GetComponent<PlayParticles>().Play();
+            //particle.GetComponent<PlayParticles>().Play();
 
             //particleLifeSpan秒後にパーティクルを消す
             Destroy(particle, particleLifeSpan);
