@@ -46,14 +46,15 @@ public class EnemyFlocking : MonoBehaviour
     /// 近隣の仲間を探してリストに追加
     /// </summary>
     /// <param name="flockManager">敵を生成するコンポーネント</param>
+    /// <param name="index">敵の登場順</param>
     /// <param name="ditectingNeiborDistance">近隣の個体を検知する距離</param>
     /// <param name="innerProductThred">視野角をもとにした内積</param>
-    public void AddNeighbors(EnemySpawner flockManager, float ditectingNeiborDistance, float innerProductThred)
+    public void AddNeighbors(EnemySpawner flockManager, int index, float ditectingNeiborDistance, float innerProductThred)
     {
         //リストをクリア
         neighbors.Clear();
 
-        foreach(var boid in flockManager.boids)
+        foreach(var boid in flockManager.boids[index])
         {
             //自身以外のfloackMangerを持ったオブジェクト
             if(boid != this.gameObject)

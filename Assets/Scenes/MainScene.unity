@@ -348,6 +348,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+
 --- !u!1 &318493586
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,6 +688,7 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+
 --- !u!114 &479818044 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2033395883313568266, guid: 3af907046d283604d86ac8fdeb1cd519,
@@ -1063,10 +1065,9 @@ MonoBehaviour:
   - {fileID: 8494156801173879527, guid: d3e4a9bb0f36a9b489155697f35112c4, type: 3}
   - {fileID: 653426722034487598, guid: c84242a2edcfd1d40bd426725233ea78, type: 3}
   generatedNum: 3
-  generatedInterval: 15
+  generatedInterval: 10
   radius: 25
-  radiusMushroom: 20
-  boids: []
+  radiusOfMushroomGeneration: 20
 --- !u!4 &614843590
 Transform:
   m_ObjectHideFlags: 0
@@ -1767,8 +1768,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1Lv
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fbcb1652b8105d043bef9f7f833bba43, type: 2}
-  m_sharedMaterial: {fileID: 2684837874977603520, guid: fbcb1652b8105d043bef9f7f833bba43,
+  m_fontAsset: {fileID: 11400000, guid: ca5b7d2b83eed654a97d870a2de5bf33, type: 2}
+  m_sharedMaterial: {fileID: -3183037581414074674, guid: ca5b7d2b83eed654a97d870a2de5bf33,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2188,8 +2189,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 00:00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fbcb1652b8105d043bef9f7f833bba43, type: 2}
-  m_sharedMaterial: {fileID: 2684837874977603520, guid: fbcb1652b8105d043bef9f7f833bba43,
+  m_fontAsset: {fileID: 11400000, guid: ca5b7d2b83eed654a97d870a2de5bf33, type: 2}
+  m_sharedMaterial: {fileID: -3183037581414074674, guid: ca5b7d2b83eed654a97d870a2de5bf33,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4481,9 +4482,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 23b32129bb1c83a4f92c83ada6516ad5, type: 3}
   addNewBombButton: {fileID: 1890383783}
   addNewBombButtonSprites:
-  - {fileID: 21300000, guid: 8a360d6e0195a3f43a549e653bff05b6, type: 3}
-  - {fileID: 21300000, guid: 8b2c4b192113ec3478ec4bd2af998197, type: 3}
-  - {fileID: 21300000, guid: 91f55a55fee7bc64bb73020cdb7526d7, type: 3}
+  - {fileID: 21300000, guid: c8436ee3675c98242838b2b21e3a9554, type: 3}
+  - {fileID: 21300000, guid: 16f9c59485019764a9f2995a6e20d0d7, type: 3}
+  - {fileID: 21300000, guid: 6264180f43102c24cbc61805456c44e3, type: 3}
 --- !u!114 &2075787564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4652,6 +4653,11 @@ PrefabInstance:
     - target: {fileID: 8509311238442845120, guid: 25b5eae4cd27faf4fa49f5f456c18733,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 741827130215258396, guid: 473afd894096bf84b9829ae626d29ebe,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5003,8 +5009,6 @@ PrefabInstance:
         type: 3}
       propertyPath: knockbackBombExplosionParticle
       value: 
-      objectReference: {fileID: 2305783336696801891, guid: e126f66cf5a7ecb448e04743f1b072d6,
-        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
