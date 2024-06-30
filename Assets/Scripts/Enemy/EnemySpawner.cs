@@ -87,7 +87,7 @@ public class EnemySpawner : MonoBehaviour
 
         beforeInterval = interval;
 
-        if (elapsedTime < 60)
+        if (elapsedTime < 120)
         {
             //Ý’è‚µ‚½”‚Ì“G‚ðƒvƒŒƒCƒ„[‚ð’†S‚É‰~ó‚É¶¬‚·‚é
             GenerateEnemy("RedBlob");

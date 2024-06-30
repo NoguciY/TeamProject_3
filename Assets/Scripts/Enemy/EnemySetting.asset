@@ -37,7 +37,7 @@ MonoBehaviour:
     combiningPlayerCoefficient: 3
     restitutionCoefficient: 0
     restitutionDistance: 1
-    minSpeed: 5
+    minSpeed: 3
     maxSpeed: 8
     maxHealth: 6
     attack: 10
@@ -53,5 +53,5 @@ MonoBehaviour:
     restitutionDistance: 0
     minSpeed: 0.1
     maxSpeed: 0.5
-    maxHealth: 20
+    maxHealth: 9
     attack: 20
