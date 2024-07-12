@@ -16,16 +16,17 @@ public class ItemMagnet : MonoBehaviour
         if (gettableItemObject != null)
         {
             _playerTransform = other.gameObject.transform;
-            if(GameManager.Instance.items.Count != 0)
-            { 
+            if (GameManager.Instance.items.Count != 0)
+            {
                 foreach (var item in GameManager.Instance.items)
                 {
                     item.Collect(_playerTransform);
                     Debug.Log($"経験値を{GameManager.Instance.items.Count}個回収した");
                 }
+            }
                 // アイテム取得処理
                 Destroy(gameObject);
-            }
+            
         }
     }
 }
