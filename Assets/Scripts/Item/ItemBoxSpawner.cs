@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class ItemBoxSpaner : MonoBehaviour
+public class ItemBoxSpawner : MonoBehaviour
 {
+    //経験値リスト
+
+
     [SerializeField, Header("スポーンさせるオブジェクト")]
     private GameObject spawnObject;
 
@@ -24,7 +26,7 @@ public class ItemBoxSpaner : MonoBehaviour
     void SpawnObjects()
     {
         Vector3 randomPosition = playerTransform.position + Random.insideUnitSphere * spawnRadius;
-        randomPosition.y = playerTransform.position.y + 5;  // 高さをプレイヤーと同じにする
+        randomPosition.y = playerTransform.position.y;  // 高さをプレイヤーと同じにする
         Instantiate(spawnObject, randomPosition, Quaternion.identity);
     }
 }

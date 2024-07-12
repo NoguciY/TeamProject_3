@@ -22,7 +22,8 @@ public class LifeGauge : MonoBehaviour
     //ゲージを更新する
     public void UpdateGauge(float value)
     {
-        lifeGauge.value += value;
+        lifeGauge.value += value; 
+        Debug.Log("<color=red>" + lifeGauge.value + "</color>");
     }
 
     //ゲームオーバー時にゲージが0になっていない場合ゲージを0にする

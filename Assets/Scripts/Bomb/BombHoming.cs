@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class BombHoming : MonoBehaviour
 {
@@ -143,8 +140,6 @@ public class BombHoming : MonoBehaviour
             //爆発を生成
             GameObject particle =
                 Instantiate(explosionParticle, transform.position, Quaternion.identity);
-
-            //particle.GetComponent<PlayParticles>().Play();
 
             //particleLifeSpan秒後にパーティクルを消す
             Destroy(particle, particleLifeSpan);

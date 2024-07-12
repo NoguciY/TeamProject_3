@@ -8,13 +8,6 @@ public class ItemHeal : MonoBehaviour
     [SerializeField]
     private float healValue;
 
-    private void Start()
-    {
-    }
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         //アイテムを取得できるオブジェクトを取得

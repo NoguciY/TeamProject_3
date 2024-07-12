@@ -17,7 +17,6 @@ public class ExperienceValue : MonoBehaviour
         needExpDictionary = new Dictionary<int, float>();
 
         //レベル1の必要経験値
-        //needExpDictionary[1] = 0;
         needExpDictionary.Add(1, 0);
 
         //レベル2から最大レベルまでの必要経験値

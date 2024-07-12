@@ -91,8 +91,6 @@ public class ItemExp : MonoBehaviour
 
         if(gettableItemObject != null)
         {
-            
-
             //ŒoŒ±’l‚ðŽæ“¾‚³‚¹‚é
             gettableItemObject.GetExp(exp);
 
