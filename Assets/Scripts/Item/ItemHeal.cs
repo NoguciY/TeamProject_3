@@ -17,6 +17,7 @@ public class ItemHeal : MonoBehaviour
         {
             gettableItemObject.Heal(healValue);
             Destroy(this.gameObject);
+            Debug.Log($"{healValue}‰ñ•œ‚µ‚½");
         }
     }
 

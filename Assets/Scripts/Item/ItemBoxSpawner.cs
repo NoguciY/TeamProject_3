@@ -14,10 +14,10 @@ public class ItemBoxSpawner : MonoBehaviour
     private Transform playerTransform;
 
     [SerializeField, Header("スポーン範囲の半径")]
-    private float spawnRadius = 5f; 
+    private float spawnRadius; 
 
     [SerializeField,Header("スポーン間隔")]
-    private float spawnInterval = 2f;
+    private float spawnInterval;
     void Start()
     {
         InvokeRepeating("SpawnObjects", spawnInterval, spawnInterval);
