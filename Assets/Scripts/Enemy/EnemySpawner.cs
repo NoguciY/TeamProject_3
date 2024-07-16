@@ -98,6 +98,7 @@ public class EnemySpawner : MonoBehaviour
 
         beforeInterval = interval;
 
+        GenerateEnemy("RedBlob", (int)EnemiesGenerationOrder.RedBlob);
 
         if (elapsedTime >= 30)
             GenerateEnemy("Orc", (int)EnemiesGenerationOrder.Orc);
