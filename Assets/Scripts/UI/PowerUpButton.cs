@@ -154,12 +154,6 @@ public class PowerUpButton : MonoBehaviour
 
         powerUpEventList.Add(powerUpResilienceEvent);
         powerUpEventList.Add(powerUpBombRangeEvent);
-
-        //追加される強化項目や最終強化して削除される強化項目があるため
-        //ここでリストに追加や削除をする処理も記述する
-
-        
-
     }
 
     //強化イベントリストからランダムに強化項目ボタンの数だけ、配列に格納

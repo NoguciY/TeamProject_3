@@ -1,18 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemySpawner;
 
-
-//ステート
-//public enum StateType
-//{
-//    Idle,           //待機
-//    Move,           //移動
-//    Attack,         //攻撃
-//    ReceiveDamage,  //被ダメージ
-//    Dead,           //死亡
-//}
 
 public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDamageEnemy
 {
@@ -67,22 +56,19 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
         innerProductThred = Mathf.Cos(enemyData.fieldOfView * Mathf.Deg2Rad);
     }
 
-    private void Update()
-    {
-        ////近隣の個体を取得する
-        //enemyFlocking.AddNeighbors(flockManager,enemyData.ditectingNeiborDistance, innerProductThred);
-    }
-
     private void FixedUpdate()
     {
-        //移動処理
-        if (!isHitting)
+        if (GameManager.Instance.CurrentSceneType == SceneType.MainGame)
         {
-            //近隣の個体を取得する
-            enemyFlocking.AddNeighbors(enemySpawner,enemyData.generationOrder, enemyData.ditectingNeiborDistance, innerProductThred);
-            //移動する
-            Vector3 moveForce = enemyFlocking.Move(playerTransform, enemyData);
-            rigidb.velocity = new Vector3(moveForce.x, rigidb.velocity.y, moveForce.z);
+            //移動処理
+            if (!isHitting)
+            {
+                //近隣の個体を取得する
+                enemyFlocking.AddNeighbors(enemySpawner, enemyData.generationOrder, enemyData.ditectingNeiborDistance, innerProductThred);
+                //移動する
+                Vector3 moveForce = enemyFlocking.Move(playerTransform, enemyData);
+                rigidb.velocity = new Vector3(moveForce.x, rigidb.velocity.y, moveForce.z);
+            }
         }
     }
 
@@ -133,6 +119,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
 
         //自身を破棄
         Destroy(this.gameObject);
+
         //アイテムを生成
         GameObject exp = Instantiate(expPrefab, this.transform.position, expPrefab.transform.rotation);
         GameManager.Instance.items.Add(exp.GetComponent<ItemExp>());

@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MagnetItem : MonoBehaviour
+public class ItemMagnet : MonoBehaviour
 {
     private Transform _playerTransform;
+
+    //アイテムスポーンの参照
+    private ItemBoxSpawner itemBoxSpawner;
 
     private void OnTriggerEnter(Collider other)
     {

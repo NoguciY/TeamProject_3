@@ -25,7 +25,7 @@ MonoBehaviour:
     restitutionCoefficient: 0
     restitutionDistance: 1
     minSpeed: 1
-    maxSpeed: 3
+    maxSpeed: 1.5
     maxHealth: 1
     attack: 5
   - name: Orc
@@ -39,7 +39,8 @@ MonoBehaviour:
     combiningPlayerCoefficient: 4
     restitutionCoefficient: 0
     restitutionDistance: 1
-    minSpeed: 3
+    minSpeed: 1.5
+    maxSpeed: 3
     maxHealth: 6
     attack: 10
   - name: Mushroom

@@ -44,6 +44,9 @@ public class BreakableBox : MonoBehaviour, IApplicableDamageEnemy
             if (randomPoint < item.dropChance)
             {
                 Instantiate(item.itemPrefab, transform.position, transform.rotation);
+
+                //アイテムがマグネットの場合、スポーンマネージャーの参照が欲しい
+
                 return;
             }
             else

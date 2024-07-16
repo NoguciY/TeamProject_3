@@ -54,10 +54,5 @@ public class LifeController : MonoBehaviour
             return dead = true;
 
         return false;
-
-        //if(!dead && life <= 0)
-        //    dead = true;
-
-        //return dead;
     }
 }

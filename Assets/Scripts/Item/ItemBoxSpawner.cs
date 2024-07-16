@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class ItemBoxSpaner : MonoBehaviour
+public class ItemBoxSpawner : MonoBehaviour
 {
+    //経験値リスト
+
+
     [SerializeField, Header("スポーンさせるオブジェクト")]
     private GameObject spawnObject;
 

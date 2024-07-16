@@ -1,7 +1,5 @@
-//using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
-//using Unity.VisualScripting;
 using UnityEngine;
 
 //範囲、数を決めて敵を生成する
