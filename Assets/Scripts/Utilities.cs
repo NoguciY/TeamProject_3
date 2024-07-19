@@ -14,30 +14,11 @@ public static class Utilities
     //爆弾の種数
     public static readonly int BOMBTYPENUM = 4;
 
-    //追加される爆弾の数
-    //public static readonly int ADDEDBOMBNUM = 3;
-
     //追加される爆弾の種類
     public enum AddedBombType
     {
         Planted,    //設置
         Knockback,  //ノックバック
         Homing,     //誘導
-    }
-
-
-    /// <summary>
-    /// 角度を取得する
-    /// スクリーン座標系での２つのベクトルのなす角を求める場合に使っている
-    /// </summary>
-    /// <param name="from">ベクトル</param>
-    /// <param name="to">ベクトル</param>
-    /// <returns>2つのベクトルのなす角度</returns>
-    public static float GetAngle(Vector3 from, Vector3 to)
-    {
-        var dx = to.x - from.x;
-        var dy = to.y - from.y;
-        var rad = Mathf.Atan2(dx, dy);
-        return rad * Mathf.Rad2Deg;
     }
 }

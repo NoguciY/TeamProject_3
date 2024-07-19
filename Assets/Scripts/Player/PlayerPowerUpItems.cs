@@ -31,9 +31,7 @@ public class PlayerPowerUpItems : MonoBehaviour
         player.maxLife += player.maxLife * maxLifeIncreaseRate;
 
         //LifeControllerコンポーネントの最大体力を更新する
-        //二度手間だと思う
         player.GetLifeController.SetMaxLife = player.maxLife;
-
 
         Debug.Log($"現在の最大体力：{player.maxLife}");
     }
@@ -74,15 +72,9 @@ public class PlayerPowerUpItems : MonoBehaviour
     //爆弾の攻撃範囲を強化する
     public void PowerUpBombRange(Player player)
     {
-        //爆弾の範囲を増加率分増やす
-        //float radius = player.bombPrefab.GetComponent<BombPlanted>().explosionRadius;
-        //radius += radius * bombRangeIncreaseRate;
-
         float explosionRadius = player.GetBombManager.GetBombPlanted.ExplosionRadius;
         explosionRadius += explosionRadius * bombRangeIncreaseRate;
 
-        //2回GetComponentしているから最小限に抑えられないか？
-        //player.bombPrefab.GetComponent<BombPlanted>().explosionRadius = radius;
         player.GetBombManager.GetBombPlanted.ExplosionRadius = explosionRadius;
         Debug.Log($"現在の攻撃範囲{explosionRadius}");
     }

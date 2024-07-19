@@ -18,8 +18,6 @@ public class ExpGauge : MonoBehaviour
     {
         float value = 0;
         if (currentExp != 0)
-            //int型同士の除算では、結果が整数になるため、flaot型にキャストする
-            //value = (float)currentExp / (float)needExp;
             value = currentExp / needExp;
 
         //値が１以上の場合、0にする

@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b66dc0703c780408793188326e7421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerTransform: {fileID: 0}
+  _delayTimer: 0.5
+  _maxTimer: 10
+  _speed: 0.4
+  _collectDistance: 0.3
 --- !u!136 &8699609852638090399
 CapsuleCollider:
   m_ObjectHideFlags: 0

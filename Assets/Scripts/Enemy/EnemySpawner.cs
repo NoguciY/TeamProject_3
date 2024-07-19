@@ -1,110 +1,114 @@
-//using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
-//using Unity.VisualScripting;
 using UnityEngine;
 
-//”ÍˆÍA”‚ğŒˆ‚ß‚Ä“G‚ğ¶¬‚·‚é
+//ç¯„å›²ã€æ•°ã‚’æ±ºã‚ã¦æ•µã‚’ç”Ÿæˆã™ã‚‹
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField, Header("ƒvƒŒƒCƒ„[‚ÌTransform")]
+    //æ•µã®ç”Ÿæˆé †
+    private enum EnemiesGenerationOrder
+    {
+        RedBlob,
+        Orc,
+        Mushroom,
+    }
+
+    [SerializeField, Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Transform")]
     private Transform playerTransform;
 
-    //“G‚Ìî•ñ
+    //æ•µã®æƒ…å ±
     [SerializeField]
     private EnemySetting enemySetting;
 
-    [SerializeField, Header("¶¬‚·‚é“G")]
+    [SerializeField, Header("ç”Ÿæˆã™ã‚‹æ•µ")]
     private GameObject[] enemyPrefab;
 
-    [SerializeField,Header("¶¬‚·‚é”")]
+    [SerializeField,Header("ç”Ÿæˆã™ã‚‹æ•°")]
     private int generatedNum;
 
-    [SerializeField, Header("¶¬ŠÔŠu(•b)")]
+    [SerializeField, Header("ç”Ÿæˆé–“éš”(ç§’)")]
     private float generatedInterval;
 
-    //[SerializeField, Header("¶¬‚·‚é•b”‚Æ“G–¼")]
-    //private Dictionary<float, string> generatedEnemyDictionary;
-
-    [SerializeField, Header("‰~ó‚É¶¬‚·‚éÛ‚Ì”¼Œa")]
+    [SerializeField, Header("å††çŠ¶ã«ç”Ÿæˆã™ã‚‹éš›ã®åŠå¾„")]
     private float radius;
 
-    [SerializeField, Header("ƒLƒmƒR‚ğ‰~ó‚É¶¬‚·‚éÛ‚Ì”¼Œa")]
-    private float radiusMushroom;
+    [SerializeField, Header("ã‚­ãƒã‚³ã‚’å††çŠ¶ã«ç”Ÿæˆã™ã‚‹éš›ã®åŠå¾„")]
+    private float radiusOfMushroomGeneration;
 
-    //ƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚½ŒQ‚ÌŒÂ‘Ì‚ğŠi”[‚·‚é
-    public List<GameObject> boids;
+    //ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ãŸç¾¤ã®å€‹ä½“ã‚’æ ¼ç´ã™ã‚‹
+    public List<List<GameObject>> boids;
 
     private Transform myTransform;
 
-    //‰~ó‚É¶¬‚·‚éÛ‚Ì¶¬‚·‚é‚‚³
+    //å††çŠ¶ã«ç”Ÿæˆã™ã‚‹éš›ã®ç”Ÿæˆã™ã‚‹é«˜ã•
     private float spawnHeight;
 
-    //‘O‰ñ‚ÌŠÔŠu
+    //å‰å›ã®é–“éš”
     private float beforeInterval;
 
-    //“G‚Ì–¼‘O‚ÆƒvƒŒƒnƒu‚ªƒZƒbƒg‚ÌƒfƒBƒNƒVƒ‡ƒiƒŠ[
+    //æ•µã®åå‰ã¨ãƒ—ãƒ¬ãƒãƒ–ãŒã‚»ãƒƒãƒˆã®ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼
     private Dictionary<string, GameObject> enemyDictionary;
 
-    //‰~ó‚É¶¬‚³‚ê‚½‚©
+    //å††çŠ¶ã«ç”Ÿæˆã•ã‚ŒãŸã‹
     private bool isGeneratedInCircle;
 
-    //1üŠú
+    //çµŒéæ™‚é–“
+    private float deltaTimeOfMushroomGeneration;
+
+    //1å‘¨æœŸ
     private const float ONECYCLE = 2.0f * Mathf.PI;
 
     private void Awake()
     {
         enemyDictionary = new Dictionary<string, GameObject>();
 
-        //“G‚Ì–¼‘O‚ÆƒvƒŒƒnƒu‚ğƒZƒbƒg‚·‚é
+        //æ•µã®åå‰ã¨ãƒ—ãƒ¬ãƒãƒ–ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
         foreach (GameObject enemy in enemyPrefab)
             enemyDictionary.Add(enemy.name, enemy);
     }
 
     private void Start()
     {
+        boids = new List<List<GameObject>>();
+        for (int i = 0; i < enemyPrefab.Length; i++)
+            boids.Add(new List<GameObject>());
+
         myTransform = transform;
 
-        //“G‚Ì¶¬‚·‚é‚‚³‚ğ‰Šú‚ÌƒvƒŒƒCƒ„[‚Ì‚‚³‚É‚·‚é
+        //æ•µã®ç”Ÿæˆã™ã‚‹é«˜ã•ã‚’åˆæœŸã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é«˜ã•ã«ã™ã‚‹
         spawnHeight = playerTransform.position.y;
+
         beforeInterval = 0;
         isGeneratedInCircle = false;
     }
 
     private void Update()
     {
-        //Œo‰ßŠÔ
+        //çµŒéæ™‚é–“
         float elapsedTime = GameManager.Instance.GetDeltaTimeInMain;
 
-        //ŠÔŠu = Œo‰ßŠÔ / ¶¬ŠÔŠu ‚Ì—]‚è
+        //é–“éš” = çµŒéæ™‚é–“ / ç”Ÿæˆé–“éš” ã®ä½™ã‚Š
         float interval = elapsedTime % generatedInterval;
 
-        //İ’è‚µ‚½•b”–ˆ‚ÉÀs‚·‚é
+        //è¨­å®šã—ãŸç§’æ•°æ¯ã«å®Ÿè¡Œã™ã‚‹
         if (interval < beforeInterval)
-            //¶¬ŠÔŠu‚²‚Æ‚É¶¬”‚ğ‘‚â‚·
-            generatedNum += 3;
+            //ç”Ÿæˆé–“éš”ã”ã¨ã«ç”Ÿæˆæ•°ã‚’å¢—ã‚„ã™
+            generatedNum++;
 
         beforeInterval = interval;
 
-        if (elapsedTime < 60)
-        {
-            //İ’è‚µ‚½”‚Ì“G‚ğƒvƒŒƒCƒ„[‚ğ’†S‚É‰~ó‚É¶¬‚·‚é
-            GenerateEnemy("RedBlob");
-        }
-        else if (elapsedTime >= 120)
-        {
-            GenerateEnemy("Orc");
-        }
+        GenerateEnemy("RedBlob", (int)EnemiesGenerationOrder.RedBlob);
 
-        if (elapsedTime >= 180)
-        {
-            //‚¢‚«‚È‚èƒvƒŒƒCƒ„[‚ğ’†S‚ÉˆÍ‚Ş
-            GenerateEnemyInCircle("Mushroom");
-        }
+        if (elapsedTime >= 30)
+            GenerateEnemy("Orc", (int)EnemiesGenerationOrder.Orc);
+
+        if (elapsedTime >= 60)
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å›²ã‚€ã‚ˆã†ã«ç”Ÿæˆ
+            GenerateEnemyInCircle("Mushroom", (int)EnemiesGenerationOrder.Mushroom);
     }
 
-    //w’è‚µ‚½“G‚Ìî•ñ‚ğ•Ô‚·
+    //æŒ‡å®šã—ãŸæ•µã®æƒ…å ±ã‚’è¿”ã™
     private EnemySetting.EnemyData GetEnemyData(string name)
     {
         foreach (EnemySetting.EnemyData enemyData in enemySetting.enemyDataList)
@@ -117,97 +121,111 @@ public class EnemySpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ‰~ó‚É“G‚ğ¶¬‚·‚é
-    /// í‚Éİ’è‚µ‚½”‚ªƒtƒB[ƒ‹ƒh‚É‚¢‚é‚æ‚¤‚É‚·‚é
+    /// å††çŠ¶ã«æ•µã‚’ç”Ÿæˆã™ã‚‹
+    /// å¸¸ã«è¨­å®šã—ãŸæ•°ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã„ã‚‹ã‚ˆã†ã«ã™ã‚‹
     /// </summary>
-    /// <param name="name">“G‚Ì–¼‘O</param>
-    private void GenerateEnemy(string name)
+    /// <param name="name">æ•µã®åå‰</param>
+    /// <param index="index">æ•µã®ç™»å ´é †</param>
+    private void GenerateEnemy(string name, int index)
     {
-        //¶¬‚·‚é“G‚ğæ“¾‚·‚é
+        //ç”Ÿæˆã™ã‚‹æ•µã‚’å–å¾—ã™ã‚‹
         GameObject generatedEnemy = GetEnemyObjectFromName(name);
 
-        //Œ»İ‚Ì¶¬”‚ªİ’è‚µ‚½¶¬”‚æ‚è¬‚³‚¢ê‡
-        if (boids.Count < generatedNum)
+        //ç¾åœ¨ã®ç”Ÿæˆæ•°ãŒè¨­å®šã—ãŸç”Ÿæˆæ•°ã‚ˆã‚Šå°ã•ã„å ´åˆ
+        if (boids[index].Count < generatedNum)
         {
             Vector3 playerPos = playerTransform.position;
 
-            //ƒ‰ƒ“ƒ_ƒ€‚È’l
+            //ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤
             int randomPoint = Random.Range(0, generatedNum);
 
-            //üŠú‚ÌˆÊ’u (1.0 = 100% ‚Ì 2ƒÎ ‚Æ‚È‚é)
+            //å‘¨æœŸã®ä½ç½® (1.0 = 100% ã®æ™‚ 2Ï€ ã¨ãªã‚‹)
             float point = ((float)randomPoint / generatedNum) * ONECYCLE;
 
             float spawnPosX = Mathf.Cos(point) * radius + playerPos.x;
             float spawnPosZ = Mathf.Sin(point) * radius + playerPos.z;
 
-            //¶¬ˆÊ’u
+            //ç”Ÿæˆä½ç½®
             var spawnPos = new Vector3(spawnPosX, spawnHeight, spawnPosZ);
 
-            //“G‚ğ¶¬‚·‚é
+            //æ•µã‚’ç”Ÿæˆã™ã‚‹
             GameObject boid = Instantiate(generatedEnemy, spawnPos, Quaternion.identity, myTransform);
 
-            //¶¬‚µ‚½“G‚ÌenemyManager‚Ì•Ï”‚É’l‚ğ“n‚·
+            //ç”Ÿæˆã—ãŸæ•µã®enemyManagerã®å¤‰æ•°ã«å€¤ã‚’æ¸¡ã™
             var enemyManager = boid.GetComponent<EnemyManager>();
-            enemyManager.flockManager = this;
+            enemyManager.enemySpawner = this;
             enemyManager.enemyData = GetEnemyData(name);
             enemyManager.playerTransform = playerTransform;
 
-            //ƒŠƒXƒg‚É’Ç‰Á
-            boids.Add(boid);
+            //ãƒªã‚¹ãƒˆã«è¿½åŠ 
+            boids[index].Add(boid);
         }
     }
 
-    private void GenerateEnemyInCircle(string name)
+    private void GenerateEnemyInCircle(string name, int index)
     {
-        //¶¬‚·‚é“G‚ğæ“¾‚·‚é
+        //ç”Ÿæˆã™ã‚‹æ•µã‚’å–å¾—ã™ã‚‹
         GameObject generatedEnemy = GetEnemyObjectFromName(name);
 
         Vector3 playerPos = playerTransform.position;
 
         if (!isGeneratedInCircle)
         {
+            //æ•µã®ç”Ÿæˆæ•°ã®ä¸Šé™
+            if (generatedNum >= 50)
+                generatedNum = 50;
+
             for (int i = 0; i < generatedNum; i++)
             {
-                //üŠú‚ÌˆÊ’u (1.0 = 100% ‚Ì 2ƒÎ ‚Æ‚È‚é)
+                //å‘¨æœŸã®ä½ç½® (1.0 = 100% ã®æ™‚ 2Ï€ ã¨ãªã‚‹)
                 float point = ((float)i / generatedNum) * ONECYCLE;
 
-                float spawnPosX = Mathf.Cos(point) * radiusMushroom + playerPos.x;
-                float spawnPosZ = Mathf.Sin(point) * radiusMushroom + playerPos.z;
+                float spawnPosX = Mathf.Cos(point) * radiusOfMushroomGeneration + playerPos.x;
+                float spawnPosZ = Mathf.Sin(point) * radiusOfMushroomGeneration + playerPos.z;
 
-                //¶¬ˆÊ’u
+                //ç”Ÿæˆä½ç½®
                 var spawnPos = new Vector3(spawnPosX, spawnHeight, spawnPosZ);
 
-                //“G‚ğ¶¬‚·‚é
+                //æ•µã‚’ç”Ÿæˆã™ã‚‹
                 GameObject boid = Instantiate(generatedEnemy, spawnPos, Quaternion.identity, myTransform);
 
-                //¶¬‚µ‚½“G‚ÌenemyManager‚Ì•Ï”‚É’l‚ğ“n‚·
+                //ç”Ÿæˆã—ãŸæ•µã®enemyManagerã®å¤‰æ•°ã«å€¤ã‚’æ¸¡ã™
                 var enemyManager = boid.GetComponent<EnemyManager>();
-                enemyManager.flockManager = this;
+                enemyManager.enemySpawner = this;
                 enemyManager.enemyData = GetEnemyData(name);
                 enemyManager.playerTransform = playerTransform;
 
-                //ƒŠƒXƒg‚É’Ç‰Á
-                boids.Add(boid);
+                //ãƒªã‚¹ãƒˆã«è¿½åŠ 
+                boids[index].Add(boid);
             }
 
             isGeneratedInCircle = true;
         }
+        else
+        {
+            deltaTimeOfMushroomGeneration += Time.deltaTime;
+            if(deltaTimeOfMushroomGeneration >= 60)
+            {
+                deltaTimeOfMushroomGeneration = 0;
+                isGeneratedInCircle = false;
+            }
+        }
     }
 
     /// <summary>
-    /// –¼‘O‚©‚çƒfƒBƒNƒVƒ‡ƒiƒŠ[‚ÉŠi”[‚³‚ê‚½“G‚ğæ“¾‚·‚é
+    /// åå‰ã‹ã‚‰ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«æ ¼ç´ã•ã‚ŒãŸæ•µã‚’å–å¾—ã™ã‚‹
     /// </summary>
-    /// <param name="name">“G‚Ì–¼‘O</param>
-    /// <returns>“G‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg</returns>
+    /// <param name="name">æ•µã®åå‰</param>
+    /// <returns>æ•µã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</returns>
     private GameObject GetEnemyObjectFromName(string name)
     {
         GameObject generatedEnemy = null;
 
-        //ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚ÉŠi”[‚³‚ê‚½“G‚Ì–¼‘O‚©‚çƒvƒŒƒnƒu‚ğæ“¾‚·‚é
+        //ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«æ ¼ç´ã•ã‚ŒãŸæ•µã®åå‰ã‹ã‚‰ãƒ—ãƒ¬ãƒãƒ–ã‚’å–å¾—ã™ã‚‹
         if (enemyDictionary.TryGetValue(name, out var enemyPrefab))
             generatedEnemy = enemyPrefab;
         else
-            Debug.LogError($"ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É{name}‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError($"ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«{name}ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“");
 
         return generatedEnemy;
     }

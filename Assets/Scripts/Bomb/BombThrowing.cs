@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-//using System.Runtime.ConstrainedExecution;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BombThrowing : MonoBehaviour
 {
@@ -19,9 +17,6 @@ public class BombThrowing : MonoBehaviour
 
     [SerializeField, Header("ダメージ量")]
     private float damage;
-
-    //[SerializeField,Header("発射数")]
-    //private int count;
 
     [SerializeField, Header("弾速(m/s)")]
     private float speed;
@@ -56,13 +51,16 @@ public class BombThrowing : MonoBehaviour
     // 毎フレーム呼び出される関数
     private void Update()
     {
-        // 移動する
-        myTransform.localPosition += velocity * Time.deltaTime;
+        if (GameManager.Instance.CurrentSceneType == SceneType.MainGame)
+        {
+            // 移動する
+            myTransform.localPosition += velocity * Time.deltaTime;
 
-        //回転する
-        Rotate();
+            //回転する
+            Rotate();
 
-        Destroy(gameObject, bombLifeSpan);
+            Destroy(gameObject, bombLifeSpan);
+        }
     }
 
     // 弾を発射する時に初期化するための関数

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerEvent;
 
 //爆弾を管理するクラス
 public class BombManager : MonoBehaviour
@@ -22,9 +21,6 @@ public class BombManager : MonoBehaviour
     private BombThrowing throwingBomb;
 
     public BombThrowing GetBombThrowing => throwingBomb; 
-
-    //投擲爆弾のタイマー
-    //private float throwingBombTimer;
 
     //設置型爆弾------------------------------------------------
     //プレハブ
@@ -107,6 +103,7 @@ public class BombManager : MonoBehaviour
         deltaTime = new float[Utilities.BOMBTYPENUM];
         coolTime = new float[Utilities.BOMBTYPENUM];
         isUsingBomb = new bool[Utilities.BOMBTYPENUM];
+        isUsingBomb[(int)BombType.Throwing] = true;
 
         //投擲爆弾関係の値の設定
         throwingBomb.explosionParticle = throwingBombExplosionParticle;
@@ -117,6 +114,7 @@ public class BombManager : MonoBehaviour
         plantedBomb.explosionParticle = plantedBombExplosionParticle;
         plantedBombRotation = plantedBomb.transform.rotation;
         coolTime[(int)BombType.Planted] = plantedBomb.GetCoolTime;
+        plantedBomb.ExplosionRadius = plantedBomb.GetInitExplosionRadius();
 
         //ノックバック爆弾関係の値を取得、設定
         knockbackHalfHeight = knockbackBomb.GetHalfHeight();
@@ -152,7 +150,7 @@ public class BombManager : MonoBehaviour
     }
 
     //設置型爆弾を生成する
-    public void GeneratePlantedBomb(CoolDownEvent coolDownEvent)
+    public void GeneratePlantedBomb(PlayerEvent.CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Planted])
         {
@@ -169,7 +167,7 @@ public class BombManager : MonoBehaviour
     }
 
     //ノックバック爆弾を生成する
-    public void GenerateKnockbackBombs(CoolDownEvent coolDownEvent)
+    public void GenerateKnockbackBombs(PlayerEvent.CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Knockback])
         {
@@ -206,7 +204,7 @@ public class BombManager : MonoBehaviour
         }
     }
 
-    public void GenerateHomingBomb(CoolDownEvent coolDownEvent)
+    public void GenerateHomingBomb(PlayerEvent.CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Homing])
         {

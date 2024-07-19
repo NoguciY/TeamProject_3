@@ -78,6 +78,10 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: f617de921182f3646b55e1416152f67c, type: 3}
   - soundName: "\u7206\u767A4"
     audioClip: {fileID: 8300000, guid: 4a2b7afcc97e6d84db20850cf1860d8f, type: 3}
+  - soundName: "\u30DC\u30BF\u30F3"
+    audioClip: {fileID: 8300000, guid: 4a936bb1cff0c2e4d8df31fe0477b66f, type: 3}
+  - soundName: "\u30EA\u30C8\u30E9\u30A4\u30DC\u30BF\u30F3"
+    audioClip: {fileID: 8300000, guid: 5e88c526478f208409b6850a65d828bc, type: 3}
   bgmAudioSource: {fileID: 3487457843359531227}
 --- !u!82 &3487457843359531227
 AudioSource:

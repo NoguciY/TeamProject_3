@@ -16,6 +16,9 @@ public class EnemySetting : ScriptableObject
         [Header("名前")]
         public string name;
 
+        [Header("登場順")]
+        public int generationOrder;
+
         [Header("近隣の個体を検知する距離")]
         public float ditectingNeiborDistance;
 
@@ -36,12 +39,6 @@ public class EnemySetting : ScriptableObject
 
         [Header("プレイヤーに結合する力の係数")]
         public float combiningPlayerCoefficient;
-
-        [Header("壁から反発係数")]
-        public float restitutionCoefficient;
-
-        [Header("壁からの力が掛かり始める距離")]
-        public float restitutionDistance;
 
         [Header("最小速度")]
         public float minSpeed;

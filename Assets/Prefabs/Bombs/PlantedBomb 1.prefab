@@ -106,7 +106,7 @@ MonoBehaviour:
     type: 3}
   damage: 3
   fuseTime: 3
-  explosionRadius: 3
+  explosionRadius: 4.5
   bombLifeSpan: 5
   particleLifeSpan: 3
   coolTime: 3

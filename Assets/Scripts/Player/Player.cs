@@ -2,13 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Diagnostics;
-using static BombManager;
 
 public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 {
     //値はレベルアップによって増加されるため、public
-    //privateにするいい方法は何かないか
     [Header("最大HP")]
     public float maxLife;
 
@@ -58,6 +55,10 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     [SerializeField]
     private PlayerAnimation playerAnimation;
 
+    //新しいボムを追加する直前のレベル(10,20,30で追加)
+    [SerializeField]
+    private int[] addBombLevels;
+
     //回復力の経過時間
     private float deltaTimeResilience;
 
@@ -68,12 +69,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
     private Camera mainCamera;
 
     //新しいボムを追加するカウンター
-    //[SerializeField]
     private int newBombCounter;
-
-    //新しいボムを追加する直前のレベル(10,20,30で追加)
-    [SerializeField]
-    private int[] addBombLevels;
 
     //トランスフォーム
     private Transform myTransform;
@@ -113,56 +109,41 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
     void Update()
     {
-        //ゲームオーバーかどうか
-        if (!lifeController.IsDead())
+        if (GameManager.Instance.CurrentSceneType == SceneType.MainGame)
         {
-            if (playerMove.InputMove(speed) != Vector3.zero)
+            //ゲームオーバーかどうか
+            if (!lifeController.IsDead())
             {
-                //移動する
-                myTransform.position += playerMove.InputMove(speed);
+                if (playerMove.InputMove(speed) != Vector3.zero)
+                {
+                    //移動する
+                    myTransform.position += playerMove.InputMove(speed);
 
-                //走りアニメーション再生
-                playerAnimation.SetRunAnimation();
+                    //走りアニメーション再生
+                    playerAnimation.SetRunAnimation();
+                }
+                else
+                    //待機アニメーション再生
+                    playerAnimation.SetIdleAnimation();
+
+                //マウスカーソルの方向を向かせる
+                UpdateRotationForMouse();
+
+                //爆弾を生成する
+                GenerateBomb();
+
+                //レベルアップ
+                if (playerLevelUp.GetLevel == addBombLevels[newBombCounter])
+                    playerLevelUp.LevelUp(playerEvent.addNewBombEvent);
+                else
+                    playerLevelUp.LevelUp(playerEvent.levelUpEvent);
+
+                //自動回復する
+                HealAutomatically();
             }
             else
-                //待機アニメーション再生
-                playerAnimation.SetIdleAnimation();
-
-            //マウスカーソルの方向を向かせる
-            UpdateRotationForMouse();
-
-            //爆弾を生成する
-            GenerateBomb();
-
-            //爆弾テスト
-            //if (Input.GetKeyDown(KeyCode.Alpha1))
-            //{
-            //    bombManager.GeneratePlantedBomb();
-            //}
-            //if (Input.GetKeyDown(KeyCode.Alpha2))
-            //{
-            //    bombManager.GenerateKnockbackBombs();
-            //}
-            //if (Input.GetKeyDown(KeyCode.Alpha3))
-            //{
-            //    bombManager.GenerateHomingBomb();
-            //}
-
-
-
-            //レベルアップ
-            if (playerLevelUp.GetLevel == addBombLevels[newBombCounter])
-                playerLevelUp.LevelUp(playerEvent.addNewBombEvent);
-            else
-                playerLevelUp.LevelUp(playerEvent.levelUpEvent);
-
-            //自動回復する
-            HealAutomatically();
-        }
-        else
-        {
-            //ゲームオーバーイベント発火
-            playerEvent.gameOverEvent.Invoke();   
+                //ゲームオーバーイベント発火
+                playerEvent.gameOverEvent.Invoke();
         }
     }
 
@@ -206,7 +187,11 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
         Vector3 direction = Input.mousePosition - screenPos;
 
         //2つのベクトルのなす角を取得
-        float angle = Utilities.GetAngle(Vector3.zero, direction);
+        //float angle = Utilities.GetAngle(Vector3.zero, direction);
+        var dx = direction.x;
+        var dy = direction.y;
+        var rad = Mathf.Atan2(dx, dy);
+        float angle = rad * Mathf.Rad2Deg;
 
         //プレイヤーの回転座標の更新
         Vector3 angles = myTransform.localEulerAngles;
@@ -226,21 +211,21 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
 
         //1つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[0])
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Q))
                 //設置型爆弾を生成
                 bombManager.GeneratePlantedBomb(playerEvent.coolDownEvent);
 
         //2つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[1])
         {
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.E))
                 //ノックバック爆弾を生成
                 bombManager.GenerateKnockbackBombs(playerEvent.coolDownEvent);
         }
         //3つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[2])
         {
-            if (Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(KeyCode.R))
                 //誘導爆弾を生成
                 bombManager.GenerateHomingBomb(playerEvent.coolDownEvent);
         }
@@ -283,5 +268,13 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             if(newBombCounter <= 1)
             newBombCounter++;
         }
+    }
+
+    public void Heal(float value)
+    {
+        lifeController.AddValueToLife(value);
+
+        //体力ゲージを回復力分増加
+        playerEvent.addLifeEvent.Invoke(value);
     }
 }

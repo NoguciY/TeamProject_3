@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 //爆弾
 //敵に当たった場合、
@@ -47,7 +44,13 @@ public class BombPlanted : MonoBehaviour
     //レイを飛ばす最大距離
     private float maxDistance;
 
-    //ゲッター
+    //爆発範囲の初期値
+    [SerializeField]
+    private float initExplosionRadius;
+
+    public float GetInitExplosionRadius () { return initExplosionRadius; }
+
+    //プロパティ
     public float ExplosionRadius
     {
         get { return explosionRadius; }

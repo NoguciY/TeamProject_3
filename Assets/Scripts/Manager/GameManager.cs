@@ -7,6 +7,7 @@ public enum SceneType
 {
     Title,      //タイトル
     MainGame,   //メインゲーム
+    Option,     //オプション
     GameOver,   //ゲームオーバー
     Result,     //リザルト
 }
@@ -34,10 +35,23 @@ public class GameManager : MonoBehaviour
     [NonSerialized]
     public int deadEnemyMun = 0;
 
+    public List<ItemExp> items;
+
 
     //ゲッター
     public float GetDeltaTimeInMain => deltaTimeInMain;
 
+    //プロパティ
+    public SceneType CurrentSceneType { 
+        get { return currentSceneType; }
+        set { currentSceneType = value;
+            Debug.Log($"シーン変更{currentSceneType}"); } 
+    }
+
+    public SceneType PreSceneType {
+        get { return preSceneType; }
+        set { preSceneType = value; }
+    }
 
     private void Awake()
     {
@@ -55,6 +69,8 @@ public class GameManager : MonoBehaviour
         //開始時のシーン
         //currentSceneType = SceneType.Title;
         preSceneType = currentSceneType;
+
+        items = new List<ItemExp>();
     }
 
     private void Update()
@@ -111,12 +127,8 @@ public class GameManager : MonoBehaviour
     /// <param name="nextSceneType">次のシーン</param>
     public void ChangeSceneType(SceneType nextSceneType)
     {
-        //前回と同じシーンに変更させない
-        //if (preSceneType != currentSceneType)
-        //{
         preSceneType = currentSceneType;
         currentSceneType = nextSceneType;
-        //}
     }
 
     /// <summary>
