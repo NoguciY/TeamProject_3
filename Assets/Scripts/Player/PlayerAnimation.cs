@@ -25,4 +25,10 @@ public class PlayerAnimation : MonoBehaviour
         else
             playerAnimator.SetFloat("speed", 1);
     }
+
+    //攻撃アニメーションをする
+    public void SetAttackAnimation()
+    {
+        playerAnimator.SetTrigger("attackTrigger");
+    }
 }

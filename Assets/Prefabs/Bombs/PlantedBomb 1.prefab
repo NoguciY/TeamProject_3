@@ -102,11 +102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f3361ceceadbb40af55486e674811a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionParticle: {fileID: 637259989962001759, guid: 049de12343c8bc049b11056eeb6e0ea4,
+  explosionParticle: {fileID: 637259989962001759, guid: 10e18057335f26449813606ab6c915c0,
     type: 3}
-  damage: 3
+  damage: 6
   fuseTime: 3
-  explosionRadius: 4.5
+  explosionRadius: 4.96125
   bombLifeSpan: 5
   particleLifeSpan: 3
   coolTime: 3

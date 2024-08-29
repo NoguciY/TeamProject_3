@@ -13,7 +13,7 @@ public class GamePresenter : MonoBehaviour
 {
     //プレイヤー
     [SerializeField]
-    private Player player;
+    private PlayerManager player;
 
     //UIマネージャー
     [SerializeField]

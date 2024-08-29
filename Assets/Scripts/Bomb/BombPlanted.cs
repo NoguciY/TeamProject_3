@@ -24,7 +24,7 @@ public class BombPlanted : MonoBehaviour
     public float fuseTime;
 
     [SerializeField, Header("爆発範囲")]
-    public float explosionRadius;
+    private float explosionRadius;
 
     [SerializeField, Header("爆発後から爆弾を破棄するまでの時間(秒)")]
     private float bombLifeSpan;
@@ -45,10 +45,10 @@ public class BombPlanted : MonoBehaviour
     private float maxDistance;
 
     //爆発範囲の初期値
-    [SerializeField]
-    private float initExplosionRadius;
+    //[SerializeField]
+    //private float initExplosionRadius;
 
-    public float GetInitExplosionRadius () { return initExplosionRadius; }
+    //public float GetInitExplosionRadius () { return initExplosionRadius; }
 
     //プロパティ
     public float ExplosionRadius

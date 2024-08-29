@@ -118,7 +118,7 @@ public class BombHoming : MonoBehaviour
         {
             var applicableDamageObject = hit.collider.gameObject.GetComponent<IApplicableDamageEnemy>();
 
-            Player playe = hit.collider.gameObject.GetComponent<Player>();
+            PlayerManager playe = hit.collider.gameObject.GetComponent<PlayerManager>();
             if (applicableDamageObject != null)
                 applicableDamageObject.ReceiveDamage(damage);
         }

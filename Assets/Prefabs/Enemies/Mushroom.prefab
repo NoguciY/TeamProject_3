@@ -88,6 +88,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2867774124598241938}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bae4437535df6524a846339bab906cfb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5627423966574660423}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bae4437535df6524a846339bab906cfb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6919206399517504535}
   m_SourcePrefab: {fileID: 100100000, guid: bae4437535df6524a846339bab906cfb, type: 3}
 --- !u!1 &653426722034487598 stripped
 GameObject:
@@ -158,15 +166,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyFlocking: {fileID: 2867774124598241938}
-  flockManager: {fileID: 0}
+  enemySpawner: {fileID: 0}
   expPrefab: {fileID: 8991318842181600726, guid: 99cea730d544d31429171d7879d3b241,
     type: 3}
   rigidb: {fileID: 7095586363752866036}
-  animator: {fileID: 0}
+  enemyAnimation: {fileID: -5627423966574660423}
   playerTransform: {fileID: 0}
   isHitting: 0
   enemyData:
     name: 
+    generationOrder: 0
     ditectingNeiborDistance: 0
     fieldOfView: 0
     rotationSpeed: 0
@@ -174,8 +183,6 @@ MonoBehaviour:
     alignmentCoefficient: 0
     combiningCoefficient: 0
     combiningPlayerCoefficient: 0
-    restitutionCoefficient: 0
-    restitutionDistance: 0
     minSpeed: 0
     maxSpeed: 0
     maxHealth: 0
@@ -194,3 +201,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   neighbors: []
   velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &-5627423966574660423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653426722034487598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ed6c2ef046bb3a45bc5c3bf85c968fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAnimator: {fileID: -6919206399517504535}
+--- !u!95 &-6919206399517504535
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653426722034487598}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cae88e28fcfb0084dabf08a32fa7d0db, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

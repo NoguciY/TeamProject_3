@@ -110,7 +110,7 @@ public class PowerUpButton : MonoBehaviour
 
     //レベルアップイベントで呼ばれる
     //強化ボタンに強化関数を登録する
-    public void RegisterPowerUpItemEvents(Player player)
+    public void RegisterPowerUpItemEvents(PlayerManager player)
     {
         //リストに強化可能な強化イベントを追加する
         SetPowerUpItemsList(player);
@@ -138,7 +138,7 @@ public class PowerUpButton : MonoBehaviour
     }
 
     //リストに強化可能な強化イベントを追加する
-    private void SetPowerUpItemsList(Player player)
+    private void SetPowerUpItemsList(PlayerManager player)
     {
         powerUpEventList.Clear();
 
