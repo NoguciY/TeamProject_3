@@ -69,12 +69,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropItems:
-  - itemPrefab: {fileID: 7928002301540848846, guid: 43826ac505813f74f940a0e3ce58678d,
-      type: 3}
-    dropChance: 20
-  - itemPrefab: {fileID: 7016484214158092027, guid: 7de54cc8eb9895146b6397f151dfb9e5,
+  - itemPrefab: {fileID: 7868402308668742561, guid: ecc02398a32bc0a498a4edce6b12649d,
       type: 3}
     dropChance: 80
+  - itemPrefab: {fileID: 7016484214158092027, guid: 7de54cc8eb9895146b6397f151dfb9e5,
+      type: 3}
+    dropChance: 20
   health: 1
 --- !u!54 &3378624605569594959
 Rigidbody:

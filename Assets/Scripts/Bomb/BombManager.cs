@@ -114,7 +114,7 @@ public class BombManager : MonoBehaviour
         plantedBomb.explosionParticle = plantedBombExplosionParticle;
         plantedBombRotation = plantedBomb.transform.rotation;
         coolTime[(int)BombType.Planted] = plantedBomb.GetCoolTime;
-        plantedBomb.ExplosionRadius = plantedBomb.GetInitExplosionRadius();
+        //plantedBomb.ExplosionRadius = plantedBomb.GetInitExplosionRadius();
 
         //ノックバック爆弾関係の値を取得、設定
         knockbackHalfHeight = knockbackBomb.GetHalfHeight();
@@ -131,10 +131,13 @@ public class BombManager : MonoBehaviour
     }
 
     //投擲爆弾を生成する
-    public void GenerateThrowingBomb()
+    public void GenerateThrowingBomb(PlayerAnimation playerAnimation)
     {
         if (!isUsingBomb[(int)BombType.Throwing])
         {
+            //攻撃アニメーション再生
+            playerAnimation.SetAttackAnimation();
+
             //生成位置を計算して生成
             Vector3 spawnPos = playerTransform.position + Vector3.up * playerHalfHeight;
             GameObject bombPrefab = Instantiate(throwingBomb.gameObject, spawnPos, playerTransform.rotation);

@@ -20,7 +20,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     private Rigidbody rigidb;
 
     [SerializeField]
-    private Animator animator;
+    private EnemyAnimation enemyAnimation;
 
     public Transform playerTransform;
 
@@ -42,7 +42,6 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
     //ゲッター
     public EnemyFlocking GetEnemyFlocking => enemyFlocking;
     public Rigidbody GetRigidb => rigidb;
-    public Animator GetAnimator => animator;
 
     private void Start()
     {
@@ -68,6 +67,7 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
                 //移動する
                 Vector3 moveForce = enemyFlocking.Move(playerTransform, enemyData);
                 rigidb.velocity = new Vector3(moveForce.x, rigidb.velocity.y, moveForce.z);
+                enemyAnimation.SetRunAnimation();
             }
         }
     }
@@ -104,10 +104,12 @@ public class EnemyManager : MonoBehaviour, IApplicableKnockback, IApplicableDama
 
         //体力が0になった場合、死亡
         if (health <= 0)
-            Dead();
+            enemyAnimation.SetDeadAnimation();
+            //Dead();
     }
 
-    //死亡した時の処理
+    //Animation Eventで参照している
+    //やられアニメーション終了後に行う死亡した時の処理
     private void Dead()
     {
         //群から自身を削除

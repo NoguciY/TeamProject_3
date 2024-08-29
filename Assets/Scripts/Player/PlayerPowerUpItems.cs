@@ -25,7 +25,7 @@ public class PlayerPowerUpItems : MonoBehaviour
     private float bombRangeIncreaseRate;
 
     //最大体力を強化する
-    public void PowerUpMaxLife(Player player)
+    public void PowerUpMaxLife(PlayerManager player)
     {
         //最大HPの増加率分増やす
         player.maxLife += player.maxLife * maxLifeIncreaseRate;
@@ -37,7 +37,7 @@ public class PlayerPowerUpItems : MonoBehaviour
     }
 
     //移動速度を強化する
-    public void PowerUpSpeed(Player player)
+    public void PowerUpSpeed(PlayerManager player)
     {
         //移動速度の増加率分増やす
         player.speed += player.speed * speedIncreaseRate;
@@ -45,7 +45,7 @@ public class PlayerPowerUpItems : MonoBehaviour
     }
 
     //回収範囲を強化する
-    public void PowerUpCollectionRangeRate(Player player)
+    public void PowerUpCollectionRangeRate(PlayerManager player)
     {
         //回収範囲(アイテム用のコライダーの半径)を増加率分拡大する
         player.capsuleColliderForItem.radius += 
@@ -54,7 +54,7 @@ public class PlayerPowerUpItems : MonoBehaviour
     }
 
     //防御力を強化する
-    public void PowerUpDifence(Player player)
+    public void PowerUpDifence(PlayerManager player)
     {
         //防御力を増加率分増やす
         player.difense += difenceIncreaseValue;
@@ -62,7 +62,7 @@ public class PlayerPowerUpItems : MonoBehaviour
     }
 
     //回復力を強化する
-    public void PowerUpResilience(Player player)
+    public void PowerUpResilience(PlayerManager player)
     {
         //回復力を増加率分増やす
         player.resilience += resilienceIncreaseValue;
@@ -70,7 +70,7 @@ public class PlayerPowerUpItems : MonoBehaviour
     }
 
     //爆弾の攻撃範囲を強化する
-    public void PowerUpBombRange(Player player)
+    public void PowerUpBombRange(PlayerManager player)
     {
         float explosionRadius = player.GetBombManager.GetBombPlanted.ExplosionRadius;
         explosionRadius += explosionRadius * bombRangeIncreaseRate;

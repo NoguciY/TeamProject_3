@@ -792,19 +792,19 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
-      insertIndex: -1
+      insertIndex: 1
       addedObject: {fileID: 2033395883313568266}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
-      insertIndex: -1
+      insertIndex: 2
       addedObject: {fileID: 91907527049660430}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
-      insertIndex: -1
+      insertIndex: 3
       addedObject: {fileID: 8180825191912411354}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
-      insertIndex: -1
+      insertIndex: 4
       addedObject: {fileID: 4096368864057113706}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
@@ -854,24 +854,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 374337298138495439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b792162f7a06c944c8ef2503d20fd610, type: 3}
+  m_Script: {fileID: 11500000, guid: 81d89753cba578749b09aed1c7b01da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxLife: 100
   speed: 3
-  collectionRangeRate: 1
+  collectionRangeRate: 0
   difense: 0
   resilience: 0
   resilienceCoolTime: 1
   capsuleColliderForItem: {fileID: 4712395242851268497}
   playerEvent: {fileID: 4096368864057113706}
-  lifeController: {fileID: 91907527049660430}
-  playerLevelUp: {fileID: 8180825191912411354}
-  powerUpItems: {fileID: 236893246262876744}
-  playerMove: {fileID: 6946072252918920581}
-  bombManager: {fileID: 9017726956107907413}
-  playerAnimation: {fileID: 8205812797517041320}
-  addBombLevels: 09000000130000001d000000
+  lifeController: {fileID: 0}
+  playerLevelUp: {fileID: 0}
+  powerUpItems: {fileID: 0}
+  playerMove: {fileID: 0}
+  bombManager: {fileID: 0}
+  playerAnimation: {fileID: 0}
+  addBombLevels: 
 --- !u!114 &91907527049660430
 MonoBehaviour:
   m_ObjectHideFlags: 0

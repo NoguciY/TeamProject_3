@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
+public class PlayerManager : MonoBehaviour, IApplicableDamage, IGettableItem
 {
     //値はレベルアップによって増加されるため、public
     [Header("最大HP")]
@@ -207,7 +207,7 @@ public class Player : MonoBehaviour, IApplicableDamage, IGettableItem
             bombManager.CountBombCoolTime(i);
 
         //投擲爆弾を生成
-        bombManager.GenerateThrowingBomb();
+        bombManager.GenerateThrowingBomb(playerAnimation);
 
         //1つ目の爆弾使用可能フラグがtrueの場合
         if (enableBombs[0])
