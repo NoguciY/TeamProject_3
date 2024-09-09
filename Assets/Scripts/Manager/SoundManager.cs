@@ -14,6 +14,9 @@ public class SoundManager : MonoBehaviour
 
         //上記の別名に対応した音
         public AudioClip audioClip;
+
+        //音量
+        public float volume;
     }
 
     //シングルトンインスタンス
@@ -30,7 +33,7 @@ public class SoundManager : MonoBehaviour
     private Dictionary<string, SoundData> soundDictionary;
 
     //AudioSourceの数
-    private const int AUDIOSOURCENUM = 20;
+    private const int AUDIOSOURCENUM = 10;
 
     //BGM用のAudioSource
     [SerializeField]
@@ -38,13 +41,15 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if(uniqueInstance == null)
+        if (uniqueInstance == null)
         {
             uniqueInstance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
+        {
             Destroy(gameObject);
+        }
 
         audioSources = new AudioSource[AUDIOSOURCENUM];
 
@@ -52,26 +57,41 @@ public class SoundManager : MonoBehaviour
 
         //auidioSourceList配列の数だけAudioSourceを自分自身に生成して配列に格納
         for (int i = 0; i < audioSources.Length; ++i)
+        {
             audioSources[i] = gameObject.AddComponent<AudioSource>();
+        }
 
         //soundDictionaryにセット
         foreach (SoundData soundData in soundDatas)
+        {
             soundDictionary.Add(soundData.soundName, soundData);
+        }
     }
 
-    //未使用のAudioSourceの取得 全て使用中の場合はnullを返却
+    /// <summary>
+    /// 未使用のAudioSourceの取得 全て使用中の場合はnullを返却
+    /// </summary>
+    /// <returns>未使用のAudioSource</returns>
     private AudioSource GetUnusedAudioSource()
     {
         for (int i = 0; i < audioSources.Length; ++i)
-            if (audioSources[i].isPlaying == false) 
+        {
+            if (audioSources[i].isPlaying == false)
+            {
                 return audioSources[i];
+            }
+        }
 
         //未使用のAudioSourceがない場合
         return null; 
     }
 
-    //指定されたAudioClipを未使用のAudioSourceで再生
-    private void Play(AudioClip clip)
+    /// <summary>
+    /// 指定されたAudioClipを未使用のAudioSourceで再生
+    /// </summary>
+    /// <param name="clip">再生するAudioClip</param>
+    /// <param name="volume">音量</param>
+    private void Play(AudioClip clip, float volume)
     {
         AudioSource audioSource = GetUnusedAudioSource();
 
@@ -79,22 +99,34 @@ public class SoundManager : MonoBehaviour
         if (audioSource == null) return;
       
         audioSource.clip = clip;
+        audioSource.volume = volume;
+
         audioSource.Play();
     }
 
-    //指定された別名で登録されたAudioClipを再生
-    //Play()のオーバーロード
+    /// <summary>
+    /// 指定された別名で登録されたAudioClipを再生
+    /// Play()のオーバーロード
+    /// </summary>
+    /// <param name="name">再生する音の名前</param>
     public void Play(string name)
     {
         //管理用Dictionary から、別名で探索
-        if (soundDictionary.TryGetValue(name, out var soundData)) 
+        if (soundDictionary.TryGetValue(name, out var soundData))
+        {
             //見つかった場合、再生
-            Play(soundData.audioClip);
+            Play(soundData.audioClip, soundData.volume);
+        }
         else
+        {
             Debug.LogWarning($"その別名は登録されていません:{name}");
+        }
     }
 
-    //BGMを再生する
+    /// <summary>
+    /// BGMを再生する
+    /// </summary>
+    /// <param name="name">再生するBGMの名前</param>
     public void PlayBgm(string name)
     {
         //管理用Dictionary から、別名で探索
@@ -102,10 +134,12 @@ public class SoundManager : MonoBehaviour
         {
             //見つかった場合、再生
             bgmAudioSource.clip = soundData.audioClip;
-            bgmAudioSource.Play();
+            bgmAudioSource.volume = soundData.volume;
             bgmAudioSource.Play();
         }
         else
+        {
             Debug.LogWarning($"その別名は登録されていません:{name}");
+        }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,28 +19,37 @@ public class CoolTimeGauge : MonoBehaviour
         isFilling = new bool[coolTimeGauges.Length];
     }
 
-    //クールタイムゲージを満たす
-    public void FillGauge(int index)
+    /// <summary>
+    /// クールタイムゲージを満たす
+    /// </summary>
+    /// <param name="bombID">爆弾の固有番号</param>
+    public void FillGauge(int bombID)
     {
         //ゲージを満たす
-        if (isFilling[index] && coolTimes[index] > 0)
+        if (isFilling[bombID] && coolTimes[bombID] > 0)
         {
-            coolTimeGauges[index].fillAmount += 1f / coolTimes[index] * Time.deltaTime;
+            coolTimeGauges[bombID].fillAmount += 1f / coolTimes[bombID] * Time.deltaTime;
 
             //満たしきった場合、満たすのを止める
-            if (coolTimeGauges[index].fillAmount >= 1f)
-                isFilling[index] = false;
+            if (coolTimeGauges[bombID].fillAmount >= 1f)
+                isFilling[bombID] = false;
         }
     }
     
-    //クールタイムゲージを満たし始める
-    public void StartFillingCoolTimeGauge(int index, float coolTime)
+    /// <summary>
+    /// クールタイムゲージを満たし始める
+    /// </summary>
+    /// <param name="bombID">爆弾の固有番号</param>
+    /// <param name="coolTime">クールダウンの時間(秒)</param>
+    public void StartFillingCoolTimeGauge(int bombID, float coolTime)
     {
         //クールタイムを取得していない場合、クールタイムを取得する
-        if(coolTimes[index] <= 0)
-            coolTimes[index] = coolTime;
+        if (coolTimes[bombID] <= 0)
+        {
+            coolTimes[bombID] = coolTime;
+        }
 
-        coolTimeGauges[index].fillAmount = 0;
-        isFilling[index] = true;
+        coolTimeGauges[bombID].fillAmount = 0;
+        isFilling[bombID] = true;
     }
 }

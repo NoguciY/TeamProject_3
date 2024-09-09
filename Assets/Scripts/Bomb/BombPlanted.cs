@@ -1,13 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-//爆弾
-//敵に当たった場合、
-//・敵を破壊する
-//・アイテムを生成する
-//・自身を破壊する
 
 public class BombPlanted : MonoBehaviour
 {
@@ -26,6 +18,16 @@ public class BombPlanted : MonoBehaviour
     [SerializeField, Header("爆発範囲")]
     private float explosionRadius;
 
+    public float ExplosionRadius
+    {
+        get { return explosionRadius; }
+        set
+        {
+            explosionRadius = value;
+            Debug.Log($"設置型爆弾の爆発範囲:{explosionRadius}");
+        }
+    }
+
     [SerializeField, Header("爆発後から爆弾を破棄するまでの時間(秒)")]
     private float bombLifeSpan;
 
@@ -34,6 +36,8 @@ public class BombPlanted : MonoBehaviour
 
     [SerializeField, Header("クールタイム(秒)")]
     private float coolTime;
+
+    public float GetCoolTime => coolTime;
 
     //コライダーコンポーネント
     [SerializeField]
@@ -44,24 +48,6 @@ public class BombPlanted : MonoBehaviour
     //レイを飛ばす最大距離
     private float maxDistance;
 
-    //爆発範囲の初期値
-    //[SerializeField]
-    //private float initExplosionRadius;
-
-    //public float GetInitExplosionRadius () { return initExplosionRadius; }
-
-    //プロパティ
-    public float ExplosionRadius
-    {
-        get { return explosionRadius; }
-        set { 
-            explosionRadius = value;
-            Debug.Log($"設置型爆弾の爆発範囲:{explosionRadius}");
-        }
-    }
-
-    public float GetCoolTime => coolTime;
-
     private void Start()
     {
         myTransform = transform;
@@ -71,7 +57,9 @@ public class BombPlanted : MonoBehaviour
         Invoke("Detonate", fuseTime);
     }
 
-    //爆発させる
+    /// <summary>
+    /// 爆発パーティクルを生成する
+    /// </summary>
     private void Explode()
     {
         if (explosionParticle != null)
@@ -92,8 +80,10 @@ public class BombPlanted : MonoBehaviour
         }
     }
 
-    //範囲内にいるオブジェクトにダメージ
-    void Detonate()
+    /// <summary>
+    /// 範囲内にいるオブジェクトにダメージを与える
+    /// </summary>
+    private void Detonate()
     {
         //自身を非表示
         gameObject.SetActive(false);
@@ -101,15 +91,21 @@ public class BombPlanted : MonoBehaviour
         //爆発する
         Explode();
 
-        //球状のレイにヒットした全てのコライダーを取得する：引数(球の中心、球の半径、レイを飛ばす方向、飛ばす最大距離)
-        RaycastHit[] hits = Physics.SphereCastAll(myTransform.position, explosionRadius, Vector3.forward, maxDistance);
+        //球状のレイにヒットした全てのコライダーを取得する
+        //引数：球の中心、球の半径、レイを飛ばす方向、飛ばす最大距離
+        RaycastHit[] hits = Physics.SphereCastAll(
+            myTransform.position,explosionRadius, Vector3.forward, maxDistance);
         
         foreach (var hit in hits)
         {
             //ダメージを受けることができるオブジェクトを取得
-            var applicableDamageObject = hit.collider.gameObject.GetComponent<IApplicableDamageEnemy>();
+            var applicableDamageObject = 
+                hit.collider.gameObject.GetComponent<IApplicableDamageEnemy>();
+
             if (applicableDamageObject != null)
+            {
                 applicableDamageObject.ReceiveDamage(damage);
+            }
         }
 
         //爆弾を爆発パーティクル破棄後に破棄する
@@ -117,7 +113,10 @@ public class BombPlanted : MonoBehaviour
     }
 
 
-    //爆弾の高さの半分を取得する
+    /// <summary>
+    /// 爆弾の高さの半分を取得する
+    /// </summary>
+    /// <returns>爆弾の半分分の高さ</returns>
     public float GetHalfHeight()
     {
         float halfHeight;

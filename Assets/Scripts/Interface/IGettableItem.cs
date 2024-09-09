@@ -1,8 +1,14 @@
 public interface IGettableItem
 {
-    //経験値を取得する
-    void GetExp(int exp);
+    /// <summary>
+    /// 経験値を取得する
+    /// </summary>
+    /// <param name="experienceValue">経験値</param>
+    void GetExperienceValue(float experienceValue);
 
-    //回復する
+    /// <summary>
+    /// 回復する
+    /// </summary>
+    /// <param name="healValue">回復量</param>
     void Heal(float healValue);
 }

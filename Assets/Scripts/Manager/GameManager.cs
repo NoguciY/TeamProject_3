@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public enum SceneType
 {
@@ -21,11 +20,29 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private SceneType currentSceneType;
 
+    public SceneType CurrentSceneType
+    {
+        get { return currentSceneType; }
+        set
+        {
+            currentSceneType = value;
+            Debug.Log($"シーン変更{currentSceneType}");
+        }
+    }
+
     //前回のシーン
     private SceneType preSceneType;
 
+    public SceneType PreSceneType
+    {
+        get { return preSceneType; }
+        set { preSceneType = value; }
+    }
+
     //メイン画面の経過時間(秒)
     private float deltaTimeInMain = 0;
+
+    public float GetDeltaTimeInMain => deltaTimeInMain;
 
     //レベル
     [NonSerialized]
@@ -35,23 +52,8 @@ public class GameManager : MonoBehaviour
     [NonSerialized]
     public int deadEnemyMun = 0;
 
-    public List<ItemExp> items;
-
-
-    //ゲッター
-    public float GetDeltaTimeInMain => deltaTimeInMain;
-
-    //プロパティ
-    public SceneType CurrentSceneType { 
-        get { return currentSceneType; }
-        set { currentSceneType = value;
-            Debug.Log($"シーン変更{currentSceneType}"); } 
-    }
-
-    public SceneType PreSceneType {
-        get { return preSceneType; }
-        set { preSceneType = value; }
-    }
+    //フィールドの経験値のリスト
+    public List<ItemExperienceValue> items;
 
     private void Awake()
     {
@@ -61,43 +63,53 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
         else
+        {
             Destroy(gameObject);
+        }
 
         //フレームレートを設定
         Application.targetFrameRate = 60;
 
         //開始時のシーン
-        //currentSceneType = SceneType.Title;
         preSceneType = currentSceneType;
 
-        items = new List<ItemExp>();
+        items = new List<ItemExperienceValue>();
     }
 
     private void Update()
     {
         //メインゲーム画面の場合
         if (currentSceneType == SceneType.MainGame)
+        {
             //時間を計測
             deltaTimeInMain += Time.deltaTime;
+        }
 
         Debug.Log($"現在のシーン:{currentSceneType}");
         Debug.Log($"前のシーン:{preSceneType}");
 
     }
 
-    //GameManagerインスタンスにアクセスする
+    /// <summary>
+    /// GameManagerインスタンスにアクセスする
+    /// </summary>
     public static GameManager Instance
     {
         get
         {
             if (instance == null)
+            {
                 //インスタンスをセット
                 SetupInstance();
+            }
+
             return instance;
         }
     }
 
-    //インスタンスをセットする
+    /// <summary>
+    /// インスタンスをセットする
+    /// </summary>
     private static void SetupInstance()
     {
         //シーン内に存在するGameManagerを検索
@@ -158,6 +170,8 @@ public class GameManager : MonoBehaviour
             SoundManager.uniqueInstance.PlayBgm("リザルト");
         }
         else
+        {
             Debug.LogWarning($"{nextSceneName}を現在のシーンに変更できません");
+        }
     }
 }

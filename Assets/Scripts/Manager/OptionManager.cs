@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +5,10 @@ public class OptionManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject optionPanel;
+
     [SerializeField,Header("オプションボタン")]
     private Button optionButton;
+    
     [SerializeField,Header("オプション戻るボタン")]
     private Button finishOptionButton;
 
@@ -23,6 +23,7 @@ public class OptionManager : MonoBehaviour
 
                 //シーンタイプをオプションに変更
                 GameManager.Instance.PreSceneType = GameManager.Instance.CurrentSceneType;
+
                 GameManager.Instance.CurrentSceneType = SceneType.Option;
 
                 //オプション画面表示
@@ -37,6 +38,7 @@ public class OptionManager : MonoBehaviour
 
                 //シーンタイプを前回のシーンに変更
                 GameManager.Instance.CurrentSceneType = GameManager.Instance.PreSceneType;
+                
                 //前回のシーンをオプションに変更
                 GameManager.Instance.PreSceneType = SceneType.Option;
 
@@ -44,19 +46,23 @@ public class OptionManager : MonoBehaviour
                 optionPanel.SetActive(false); 
             });
     }
-    void Update()
+    private void Update()
     {
         //オプション画面以外の場合
         if (GameManager.Instance.CurrentSceneType != SceneType.Option)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
+            {
                 optionButton.onClick.Invoke();
+            }
         }
         //オプション画面の場合
         else
         {
             if (Input.GetKeyDown(KeyCode.Escape))
+            {
                 finishOptionButton.onClick.Invoke();
+            }
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BreakableBox : MonoBehaviour, IApplicableDamageEnemy
@@ -14,6 +12,10 @@ public class BreakableBox : MonoBehaviour, IApplicableDamageEnemy
     public DropItem[] dropItems;
     public float health = 100f;
 
+    /// <summary>
+    /// ダメージを受ける
+    /// </summary>
+    /// <param name="damage">ダメージ量</param>
     public void ReceiveDamage(float damage)
     {
         health -= damage;
@@ -23,13 +25,19 @@ public class BreakableBox : MonoBehaviour, IApplicableDamageEnemy
         }
     }
 
-    void Break()
+    /// <summary>
+    /// /箱を破壊する処理
+    /// </summary>
+    private void Break()
     {
         DropRandomItem();
-        Destroy(gameObject);  // 箱を破壊
+        Destroy(gameObject);  
     }
 
-    void DropRandomItem()
+    /// <summary>
+    /// ランダムでアイテムを生成する
+    /// </summary>
+    private void DropRandomItem()
     {
         float total = 0f;
         foreach (DropItem item in dropItems)
@@ -44,9 +52,6 @@ public class BreakableBox : MonoBehaviour, IApplicableDamageEnemy
             if (randomPoint < item.dropChance)
             {
                 Instantiate(item.itemPrefab, transform.position, transform.rotation);
-
-                //アイテムがマグネットの場合、スポーンマネージャーの参照が欲しい
-
                 return;
             }
             else

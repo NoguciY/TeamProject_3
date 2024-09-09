@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemBoxSpawner : MonoBehaviour
 {
-    //経験値リスト
-
-
     [SerializeField, Header("スポーンさせるオブジェクト")]
     private GameObject spawnObject;
 
@@ -18,12 +13,17 @@ public class ItemBoxSpawner : MonoBehaviour
 
     [SerializeField,Header("スポーン間隔")]
     private float spawnInterval;
-    void Start()
+
+    private void Start()
     {
+        //箱の生成を指定した間隔で行う
         InvokeRepeating("SpawnObjects", spawnInterval, spawnInterval);
     }
 
-    void SpawnObjects()
+    /// <summary>
+    /// ランダムな位置に箱を生成する
+    /// </summary>
+    private void SpawnObjects()
     {
         Vector3 randomPosition = playerTransform.position + Random.insideUnitSphere * spawnRadius;
         randomPosition.y = playerTransform.position.y;  // 高さをプレイヤーと同じにする

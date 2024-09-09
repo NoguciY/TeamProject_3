@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAnimation : MonoBehaviour
@@ -30,5 +28,12 @@ public class EnemyAnimation : MonoBehaviour
     public void SetDeadAnimation()
     {
         enemyAnimator.SetTrigger("deathTrigger");
+    }
+
+    //ダメージを受けるアニメーション
+    public void SetReceiveDamageAnimation()
+    {
+        enemyAnimator.SetBool("isMoving", false);
+        enemyAnimator.SetTrigger("receiveDamageTrigger");
     }
 }

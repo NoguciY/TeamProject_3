@@ -1,63 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //プレイヤーが当たった場合
 //・プレイヤーが持つ値が上昇
 //・アイテムが破棄される
 
-public class ItemExp : MonoBehaviour
+public class ItemExperienceValue : MonoBehaviour
 {
-    //経験値
-    private int exp = 1;
-
-    [SerializeField]
-    private Transform _playerTransform;
+    [SerializeField, Header("経験値")]
+    private float experienceValue;
 
     //回収開始を呼んでからすぐに動き出すのを避ける
-    [SerializeField]
-    private float _delayTimer = 0.5f;
+    [SerializeField, Header("マグネットを取ってから反応するまでの時間")]
+    private float delayTimer;
 
     //何かしらの不具合で消えない場合に備えて回収にかかる最大の時間を設定しておく
-    [SerializeField]
-    private float _maxTimer = 10.0f;
+    [SerializeField, Header("マグネットでの最大回収時間")]
+    private float maxTimer;
 
-    //回収の速度
-    [SerializeField]
-    private float _speed = 0.4f;
+    [SerializeField, Header("回収の速度")]
+    private float speed;
 
     //プレイヤーにどの程度近づいたら回収したことにするか
-    [SerializeField]
-    private float _collectDistance = 0.3f;
+    [SerializeField, Header("マグネットでの回収可能距離")]
+    private float collectDistance;
 
-    private float _timer = 0.0f;
-    private bool _isCollect = false;
+    private Transform playerTransform;
+
+    private float timer;
+
+    private bool isCollect;
+
+    private void Start()
+    {
+        timer = 0.0f;
+
+        isCollect = false;
+    }
 
     private void FixedUpdate()
     {
-        if (!_isCollect)
+        if (!isCollect)
         {
             return;
         }
 
-        _timer += Time.deltaTime;
-        if (_timer < _delayTimer)
+        timer += Time.deltaTime;
+        if (timer < delayTimer)
         {
             return;
         }
         //回収の最大時間を超えていないかチェック
-        else if (_timer > _maxTimer)
+        else if (timer > maxTimer)
         {
             FinishCollect();
             return;
         }
 
         //プレイヤーに向かって進ませる
-        transform.position = Vector3.MoveTowards(transform.position, _playerTransform.position, _speed);
+        transform.position = Vector3.MoveTowards(transform.position, playerTransform.position, speed);
 
         //特定の距離まで近づいたら回収完了
-        var diff = _playerTransform.position - transform.position;
-        if (diff.magnitude < _collectDistance)
+        var diff = playerTransform.position - transform.position;
+        if (diff.magnitude < collectDistance)
         {
             FinishCollect();
         }
@@ -68,9 +72,9 @@ public class ItemExp : MonoBehaviour
     /// </summary>
     public void Collect(Transform playerTransform)
     {
-        _timer = 0.0f;
-        _isCollect = true;
-        _playerTransform = playerTransform;
+        timer = 0.0f;
+        isCollect = true;
+        this.playerTransform = playerTransform;
     }
 
     /// <summary>
@@ -78,12 +82,16 @@ public class ItemExp : MonoBehaviour
     /// </summary>
     public void FinishCollect()
     {
-        _isCollect = false;
+        isCollect = false;
         this.gameObject.SetActive(false);
 
         //もし回収完了のタイミングで処理をしたい場合はここに処理を追加する
     }
 
+    /// <summary>
+    /// 当たり判定
+    /// </summary>
+    /// <param name="other">プレイヤー</param>
     private void OnTriggerEnter(Collider other)
     {
         //アイテムを取得できるオブジェクトを取得
@@ -92,7 +100,7 @@ public class ItemExp : MonoBehaviour
         if(gettableItemObject != null)
         {
             //経験値を取得させる
-            gettableItemObject.GetExp(exp);
+            gettableItemObject.GetExperienceValue(experienceValue);
 
             //リストから削除する
             GameManager.Instance.items.Remove(this);

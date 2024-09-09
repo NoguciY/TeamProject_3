@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +9,16 @@ public class ButtonManager : MonoBehaviour
     [SerializeField]
     private Button gameOverContinueButton;
 
+    public Button GetGameOverContinueButton => gameOverContinueButton;
+
     //強化ボタンコンポーネント
     public PowerUpButton powerUpButton;
 
 
-    //ゲッター
-    public Button GetGameOverContinueButton => gameOverContinueButton;
-
-    //ボタンの初期化(イベントの登録)
+    /// <summary>
+    /// ボタンの初期化(イベントの登録)
+    /// </summary>
+    /// <param name="uIManager">UIManager</param>
     public void Initialize(UIManager uIManager)
     {
         //事前にパワーアップボタンにポーズをやめる関数と

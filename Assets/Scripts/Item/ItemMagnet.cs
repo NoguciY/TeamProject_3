@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemMagnet : MonoBehaviour
 {
     private Transform _playerTransform;
 
-    //アイテムスポーンの参照
-    private ItemBoxSpawner itemBoxSpawner;
-
+    /// <summary>
+    /// 当たり判定
+    /// </summary>
+    /// <param name="other">プレイヤー</param>
     private void OnTriggerEnter(Collider other)
     {
         //アイテムを取得できるオブジェクトを取得

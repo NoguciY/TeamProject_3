@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //爆弾を管理するクラス
@@ -20,7 +18,7 @@ public class BombManager : MonoBehaviour
     [SerializeField]
     private BombThrowing throwingBomb;
 
-    public BombThrowing GetBombThrowing => throwingBomb; 
+    //public BombThrowing GetBombThrowing => throwingBomb; 
 
     //設置型爆弾------------------------------------------------
     //プレハブ
@@ -40,13 +38,13 @@ public class BombManager : MonoBehaviour
     [SerializeField]
     private BombKnockback knockbackBomb;
 
+    //public BombKnockback GetBombKnockback => knockbackBomb;
+
     //ノックバック爆弾の高さの半分
     private float knockbackHalfHeight;
 
     //ノックバック爆弾とプレイヤーの間の距離
     private float toPlayerDistance;
-
-    public BombKnockback GetBombKnockback => knockbackBomb;
 
     //生成されるノックバック爆弾の数
     //private int generatedKnockbackBombNum;
@@ -54,7 +52,7 @@ public class BombManager : MonoBehaviour
     //誘導爆弾--------------------------------------------------
     //プレハブ
     [SerializeField]
-    private HomingBombSpawner homingBombSpawner;
+    private BombHomingSpawner homingBombSpawner;
 
     //誘導爆弾の高さの半分
     private float homingBombHelfHeight;
@@ -74,7 +72,6 @@ public class BombManager : MonoBehaviour
     private GameObject homingBombExplosionParticle;
 
     //プレイヤーのTransformコンポーネント
-    //[SerializeField]
     private Transform playerTransform;
 
     //プレイヤーのコライダー
@@ -92,10 +89,12 @@ public class BombManager : MonoBehaviour
     //爆弾を使ったかどうか
     private bool[] isUsingBomb;
 
-    //爆弾関係のものを初期化する
+    /// <summary>
+    /// 爆弾関係のものを初期化する
+    /// </summary>
     public void Initialize()
     {
-        //プレイヤーのコンポーネントや値を取得
+        //プレイヤーのコンポーネントやパラメータを取得
         playerTransform = transform;
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
         playerHalfHeight = playerTransform.localScale.y * playerCapsuleCollider.height * 0.5f;
@@ -114,7 +113,6 @@ public class BombManager : MonoBehaviour
         plantedBomb.explosionParticle = plantedBombExplosionParticle;
         plantedBombRotation = plantedBomb.transform.rotation;
         coolTime[(int)BombType.Planted] = plantedBomb.GetCoolTime;
-        //plantedBomb.ExplosionRadius = plantedBomb.GetInitExplosionRadius();
 
         //ノックバック爆弾関係の値を取得、設定
         knockbackHalfHeight = knockbackBomb.GetHalfHeight();
@@ -126,11 +124,14 @@ public class BombManager : MonoBehaviour
         var homingBombComponent = homingBombSpawner.GetPrefab.GetComponent<BombHoming>();
         //homingBombのパーティクルに参照している誘導爆弾用の爆発パーティクルをセットする
         homingBombComponent.explosionParticle = homingBombExplosionParticle;
-        homingBombHelfHeight = homingBombSpawner.GetBombHalfHeight;
+        homingBombHelfHeight = homingBombSpawner.GetBombHalfHeight();
         coolTime[(int)BombType.Homing] = homingBombSpawner.GetCoolTime;
     }
 
-    //投擲爆弾を生成する
+    /// <summary>
+    /// 投擲爆弾を生成する
+    /// </summary>
+    /// <param name="playerAnimation">アニメーション用クラス</param>
     public void GenerateThrowingBomb(PlayerAnimation playerAnimation)
     {
         if (!isUsingBomb[(int)BombType.Throwing])
@@ -145,14 +146,17 @@ public class BombManager : MonoBehaviour
             //プレイヤーの位置をセット
             var throwingBombComponent = bombPrefab.GetComponent<BombThrowing>();
             throwingBombComponent.playerTransform = playerTransform;
-            throwingBombComponent.Init();
+            throwingBombComponent.Initialize();
 
             //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Throwing] = true;
         }
     }
 
-    //設置型爆弾を生成する
+    /// <summary>
+    /// 設置型爆弾を生成する
+    /// </summary>
+    /// <param name="coolDownEvent">クールダウンイベント</param>
     public void GeneratePlantedBomb(PlayerEvent.CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Planted])
@@ -169,7 +173,10 @@ public class BombManager : MonoBehaviour
         }
     }
 
-    //ノックバック爆弾を生成する
+    /// <summary>
+    /// ノックバック爆弾を生成する
+    /// </summary>
+    /// <param name="coolDownEvent">クールダウンイベント</param>
     public void GenerateKnockbackBombs(PlayerEvent.CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Knockback])
@@ -195,8 +202,12 @@ public class BombManager : MonoBehaviour
 
                 GameObject bombPrefab = Instantiate(knockbackBomb.gameObject, spawnPos, Quaternion.identity);
 
+                BombKnockback bombKnockbackComponet = bombPrefab.GetComponent<BombKnockback>();
+
                 //プレイヤーの位置をセット
-                bombPrefab.GetComponent<BombKnockback>().playerTransform = playerTransform;
+                bombKnockbackComponet.playerTransform = playerTransform;
+
+                bombKnockbackComponet.myID = i;
             }
 
             //クールタイムのカウントを開始するフラグ
@@ -207,6 +218,10 @@ public class BombManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ホーミング爆弾を生成する
+    /// </summary>
+    /// <param name="coolDownEvent">クールダウンイベント</param>
     public void GenerateHomingBomb(PlayerEvent.CoolDownEvent coolDownEvent)
     {
         if (!isUsingBomb[(int)BombType.Homing])
@@ -215,7 +230,7 @@ public class BombManager : MonoBehaviour
             GameObject bombPrefab = Instantiate(homingBombSpawner.gameObject, spawnPos, Quaternion.identity);
 
             //プレイヤーの位置をセット
-            bombPrefab.GetComponent<HomingBombSpawner>().playerTransform = playerTransform;
+            bombPrefab.GetComponent<BombHomingSpawner>().playerTransform = playerTransform;
 
             //クールタイムのカウントを開始するフラグ
             isUsingBomb[(int)BombType.Homing] = true;
@@ -225,19 +240,22 @@ public class BombManager : MonoBehaviour
         }
     }
 
-    //爆弾のクールタイムを計測し、再使用できるようにする
-    public void CountBombCoolTime(int num)
+    /// <summary>
+    /// 爆弾のクールタイムを計測し、再使用できるようにする
+    /// </summary>
+    /// <param name="bombID">爆弾の固有番号</param>
+    public void CountBombCoolTime(int bombID)
     {
-        if (isUsingBomb[num])
+        if (isUsingBomb[bombID])
         {
             //経過時間をカウント
-            deltaTime[num] += Time.deltaTime;
+            deltaTime[bombID] += Time.deltaTime;
             
             //経過時間がクールタイム以上の場合、使用可能にする
-            if (deltaTime[num] >= coolTime[num])
+            if (deltaTime[bombID] >= coolTime[bombID])
             {
-                isUsingBomb[num] = false;
-                deltaTime[num] = 0;
+                isUsingBomb[bombID] = false;
+                deltaTime[bombID] = 0;
             }
         }
     }

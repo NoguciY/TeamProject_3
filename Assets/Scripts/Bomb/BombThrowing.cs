@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BombThrowing : MonoBehaviour
@@ -24,6 +22,8 @@ public class BombThrowing : MonoBehaviour
     [SerializeField, Header("発射間隔")]
     private float coolTime;
 
+    public float GetCoolTime => coolTime;
+
     [SerializeField, Header("1秒間に回転する角度(degree/s)")]
     private float angleOfRotationPerSecond;
 
@@ -39,16 +39,12 @@ public class BombThrowing : MonoBehaviour
     //速度
     private Vector3 velocity;
 
-
-    //ゲッター
-    public float GetCoolTime => coolTime;
     
     private void Start()
     {
         myTransform = transform;
     }
 
-    // 毎フレーム呼び出される関数
     private void Update()
     {
         if (GameManager.Instance.CurrentSceneType == SceneType.MainGame)
@@ -63,8 +59,10 @@ public class BombThrowing : MonoBehaviour
         }
     }
 
-    // 弾を発射する時に初期化するための関数
-    public void Init()
+    /// <summary>
+    /// 弾を発射する時に初期化するための関数
+    /// </summary>
+    public void Initialize()
     {
         if (playerTransform != null)
         {
@@ -77,7 +75,9 @@ public class BombThrowing : MonoBehaviour
     }
 
 
-    //x軸を軸に回転する
+    /// <summary>
+    /// x軸を軸に回転する
+    /// </summary>
     private void Rotate()
     {
         //1フレームに回転する角度
@@ -87,7 +87,9 @@ public class BombThrowing : MonoBehaviour
         myTransform.Rotate(angle, 0, 0);
     }
 
-    //爆発させる
+    /// <summary>
+    /// 爆発パーティクルを生成する
+    /// </summary>
     private void Explode()
     {
         if (explosionParticle != null)
@@ -108,7 +110,10 @@ public class BombThrowing : MonoBehaviour
         }
     }
 
-    //敵に当たった場合の処理
+    /// <summary>
+    /// 敵に当たった場合の処理
+    /// </summary>
+    /// <param name="other">敵</param>
     private void OnTriggerEnter(Collider other)
     {
         //ダメージを受けることができるオブジェクトを取得

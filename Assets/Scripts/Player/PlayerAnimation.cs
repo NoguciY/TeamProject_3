@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
@@ -7,6 +5,9 @@ public class PlayerAnimation : MonoBehaviour
     //アニメーターコンポーネント
     [SerializeField]
     private Animator playerAnimator;
+
+    //やれらアニメーションが終了したか
+    public bool isFinishedDeadAnimation;
 
     //待機アニメーションをする
     public void SetIdleAnimation()
@@ -30,5 +31,18 @@ public class PlayerAnimation : MonoBehaviour
     public void SetAttackAnimation()
     {
         playerAnimator.SetTrigger("attackTrigger");
+    }
+
+    //やられアニメーションをする
+    public void SetDeadAnimation()
+    {
+        isFinishedDeadAnimation = false;
+        playerAnimator.SetTrigger("deadTrigger");
+    }
+
+    //やられアニメーションの終了を知らせる
+    public void FinishDeadAnimation()
+    {
+        isFinishedDeadAnimation = true;
     }
 }

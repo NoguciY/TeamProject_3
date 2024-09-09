@@ -44,9 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 122c4472e511b2f478239e565529559f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4642862650850846665, guid: 870ce97fd38215b459752c3adf74c847, type: 3}
+  homingBomb: {fileID: 4642862650850846665, guid: 870ce97fd38215b459752c3adf74c847,
+    type: 3}
   iterationCount: 1
   interval: 0.5
   lifeTime: 2
   coolTime: 15
+  offsetHeight: 10
+  bombCapsuleCollider: {fileID: 1631253602513066645, guid: 870ce97fd38215b459752c3adf74c847,
+    type: 3}
   playerTransform: {fileID: 0}

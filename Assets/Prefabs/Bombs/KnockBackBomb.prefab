@@ -102,7 +102,7 @@ MonoBehaviour:
   damage: 1
   knockbackForce: 10
   angleSpeed: 180
-  toPlayerDistance: 5
+  toPlayerDistance: 4
   bombLifeSpan: 5
   particleLifeSpan: 3
   generatedBombNum: 2

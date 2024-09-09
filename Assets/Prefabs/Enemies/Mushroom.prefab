@@ -167,7 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyFlocking: {fileID: 2867774124598241938}
   enemySpawner: {fileID: 0}
-  expPrefab: {fileID: 8991318842181600726, guid: 99cea730d544d31429171d7879d3b241,
+  experienceValuePrefab: {fileID: 8991318842181600726, guid: 99cea730d544d31429171d7879d3b241,
     type: 3}
   rigidb: {fileID: 7095586363752866036}
   enemyAnimation: {fileID: -5627423966574660423}

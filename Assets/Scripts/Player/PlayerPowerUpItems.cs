@@ -24,7 +24,10 @@ public class PlayerPowerUpItems : MonoBehaviour
     [SerializeField, Header("爆弾の爆発範囲の増加率"), Range(0, 1)]
     private float bombRangeIncreaseRate;
 
-    //最大体力を強化する
+    /// <summary>
+    /// 最大体力を強化する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void PowerUpMaxLife(PlayerManager player)
     {
         //最大HPの増加率分増やす
@@ -36,7 +39,10 @@ public class PlayerPowerUpItems : MonoBehaviour
         Debug.Log($"現在の最大体力：{player.maxLife}");
     }
 
-    //移動速度を強化する
+    /// <summary>
+    /// 移動速度を強化する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void PowerUpSpeed(PlayerManager player)
     {
         //移動速度の増加率分増やす
@@ -44,7 +50,10 @@ public class PlayerPowerUpItems : MonoBehaviour
         Debug.Log($"現在の移動速度：{player.speed}");
     }
 
-    //回収範囲を強化する
+    /// <summary>
+    /// 回収範囲を強化する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void PowerUpCollectionRangeRate(PlayerManager player)
     {
         //回収範囲(アイテム用のコライダーの半径)を増加率分拡大する
@@ -53,7 +62,10 @@ public class PlayerPowerUpItems : MonoBehaviour
         Debug.Log($"アイテム用の当たり判定の半径：{player.capsuleColliderForItem.radius}");
     }
 
-    //防御力を強化する
+    /// <summary>
+    /// 防御力を強化する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void PowerUpDifence(PlayerManager player)
     {
         //防御力を増加率分増やす
@@ -61,7 +73,10 @@ public class PlayerPowerUpItems : MonoBehaviour
         Debug.Log($"現在の防御力：{player.difense}");
     }
 
-    //回復力を強化する
+    /// <summary>
+    /// 回復力を強化する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void PowerUpResilience(PlayerManager player)
     {
         //回復力を増加率分増やす
@@ -69,7 +84,10 @@ public class PlayerPowerUpItems : MonoBehaviour
         Debug.Log($"現在の回復力：{player.resilience}");
     }
 
-    //爆弾の攻撃範囲を強化する
+    /// <summary>
+    /// 爆弾の攻撃範囲を強化する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void PowerUpBombRange(PlayerManager player)
     {
         float explosionRadius = player.GetBombManager.GetBombPlanted.ExplosionRadius;
@@ -79,7 +97,11 @@ public class PlayerPowerUpItems : MonoBehaviour
         Debug.Log($"現在の攻撃範囲{explosionRadius}");
     }
 
-    //爆弾の使用速度を強化する
+    /// <summary>
+    /// 爆弾の使用速度を強化する
+    /// </summary>
+    /// <param name="bomb">爆弾</param>
+    /// <param name="coolTime">クールタイム</param>
     public void PowerUpCoolDown(GameObject bomb, float coolTime)
     {
 

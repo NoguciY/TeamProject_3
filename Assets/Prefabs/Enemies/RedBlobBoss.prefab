@@ -288,21 +288,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyFlocking: {fileID: 2790366936678617737}
-  flockManager: {fileID: 0}
-  expPrefab: {fileID: 0}
+  enemySpawner: {fileID: 0}
+  experienceValuePrefab: {fileID: 8991318842181600726, guid: 99cea730d544d31429171d7879d3b241,
+    type: 3}
   rigidb: {fileID: 0}
-  animator: {fileID: 0}
+  enemyAnimation: {fileID: 0}
+  playerTransform: {fileID: 0}
   isHitting: 0
   enemyData:
     name: 
+    generationOrder: 0
     ditectingNeiborDistance: 0
     fieldOfView: 0
     rotationSpeed: 0
     separationCoefficient: 0
     alignmentCoefficient: 0
     combiningCoefficient: 0
-    restitutionCoefficient: 0
-    restitutionDistance: 0
     combiningPlayerCoefficient: 0
     minSpeed: 0
     maxSpeed: 0
@@ -320,6 +321,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0cdead67c816204da727334e2ea42c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyManager: {fileID: 4439338826035947417}
-  playerTransform: {fileID: 0}
   neighbors: []
+  velocity: {x: 0, y: 0, z: 0}
