@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8735239948762941687}
   - component: {fileID: 8699609852638090399}
   m_Layer: 0
-  m_Name: ExpPink
+  m_Name: ExperienceValuePink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,14 +43,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8991318842181600726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1b66dc0703c780408793188326e7421, type: 3}
+  m_Script: {fileID: 11500000, guid: bfdab61acf5be6f4aaad35e9d4ded86e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 0}
-  _delayTimer: 0.5
-  _maxTimer: 10
-  _speed: 0.4
-  _collectDistance: 0.3
+  experienceValue: 1
+  delayTimer: 0.5
+  maxTimer: 10
+  speed: 0.4
+  collectDistance: 0.3
 --- !u!136 &8699609852638090399
 CapsuleCollider:
   m_ObjectHideFlags: 0

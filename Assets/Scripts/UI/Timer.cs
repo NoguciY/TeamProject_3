@@ -9,12 +9,17 @@ public class Timer : MonoBehaviour
     
     //分数
     private int minute;
+
     //秒数
     private int seconds;
+    
     //前回の秒数
     private int oldSeconds;
 
-    //テキストに経過時間を反映する
+    /// <summary>
+    /// テキストに経過時間を反映する
+    /// </summary>
+    /// <param name="time">時間(秒)</param>
     public void CountTimer(float time)
     {
         //時間計測

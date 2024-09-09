@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,32 +6,45 @@ using UnityEngine.UI;
 
 public class LifeGauge : MonoBehaviour
 {
-    //体力ゲージ
-    [SerializeField]
+    [SerializeField, Header("体力ゲージ")]
     private Slider lifeGauge;
 
-    //ゲージの初期化(体力を最大値にする)
+
+    /// <summary>
+    /// ゲージの初期化(体力を最大値にする)
+    /// </summary>
+    /// <param name="maxLife">最大体力</param>
     public void InitializeGauge(float maxLife)
     {
         lifeGauge.maxValue = maxLife;
         lifeGauge.value = maxLife;
     }
 
-    //ゲージを更新する
-    public void UpdateGauge(float value)
+    /// <summary>
+    /// ゲージを更新する
+    /// </summary>
+    /// <param name="life">体力</param>
+    public void UpdateGauge(float life)
     {
-        lifeGauge.value += value; 
-        Debug.Log("<color=red>" + lifeGauge.value + "</color>");
-    }
+        lifeGauge.value = life;
 
-    //ゲームオーバー時にゲージが0になっていない場合ゲージを0にする
-    public void GameOverLifeGauge()
-    {
-        if(lifeGauge.value >= 0)
+        //体力が最大値を超えないようにする
+        if (lifeGauge.value > lifeGauge.maxValue)
+        {
+            lifeGauge.value = lifeGauge.maxValue;
+        }
+        //体力は0より小さくしない
+        else if (lifeGauge.value < 0)
+        {
             lifeGauge.value = 0;
+        }
+
+        Debug.Log("体力ゲージ："+ "<color=red>" + lifeGauge.value + "</color>");
     }
 
-    //ゲージの最大値の設定
+    /// <summary>
+    /// ゲージの最大値の設定
+    /// </summary>
     public float SetMaxValue
     {
         set{ 

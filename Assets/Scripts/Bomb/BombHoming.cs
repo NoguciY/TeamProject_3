@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BombHoming : MonoBehaviour
@@ -29,7 +27,7 @@ public class BombHoming : MonoBehaviour
     private float maxUpwardHeight;
 
     //上昇中かどうかのフラグ
-    private bool isAscending = true;
+    private bool isAscending;
 
     //初期位置
     private Vector3 initialPosition;
@@ -47,15 +45,16 @@ public class BombHoming : MonoBehaviour
     //スフィアキャストの最大距離
     private float maxDistance;
 
-    void Start()
+    private void Start()
     {
         initialPosition = transform.position;
         SetRandomTarget(); // 最初のターゲットを設定
         Invoke("Detonate", fuseTime);
         maxDistance = 0;
+        isAscending = true;
     }
 
-    void Update()
+    private void Update()
     {
         if (isAscending)
         {
@@ -100,7 +99,10 @@ public class BombHoming : MonoBehaviour
         }
     }
 
-    void SetRandomTarget()
+    /// <summary>
+    /// ランダムにターゲットを設定する
+    /// </summary>
+    private void SetRandomTarget()
     {
         GameObject[] targetObjects = GameObject.FindGameObjectsWithTag("Enemy"); // "Target"タグのオブジェクトを取得
         if (targetObjects.Length > 0)
@@ -110,6 +112,10 @@ public class BombHoming : MonoBehaviour
             target = targetObjects[randomIndex].transform;
         }
     }
+
+    /// <summary>
+    /// 対象に当たった場合、ダメージを与える
+    /// </summary>
     void Detonate()
     {
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, explosionRadius, Vector3.forward, maxDistance);
@@ -120,19 +126,29 @@ public class BombHoming : MonoBehaviour
 
             PlayerManager playe = hit.collider.gameObject.GetComponent<PlayerManager>();
             if (applicableDamageObject != null)
+            {
                 applicableDamageObject.ReceiveDamage(damage);
+            }
         }
 
         Destroy(gameObject);
     }
-    public float GetHalfHeight()
-    {
-        float halfHeight;
-        return halfHeight =
-            transform.localScale.y * capsuleCollider.radius; 
-    }
 
-    //爆発させる
+    /// <summary>
+    /// 半分の大きさを返す
+    /// </summary>
+    /// <returns></returns>
+    //public float GetHalfHeight()
+    //{
+    //    float halfHeight;
+    //    return halfHeight =
+    //        transform.localScale.y * capsuleCollider.radius; 
+    //}
+
+
+    /// <summary>
+    /// 爆発パーティクルを生成する
+    /// </summary>
     private void Explode()
     {
         if (explosionParticle != null)
@@ -150,12 +166,18 @@ public class BombHoming : MonoBehaviour
             Debug.Log("爆発!!");
         }
         else
+        {
             Debug.LogWarning("パーティクルがありません");
+        }
     }
 
-
+    /// <summary>
+    /// パーティクルを生成、ダメージを与える
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
+        //フィールドに当たった場合
         if(other.gameObject.CompareTag("Field"))
         {
             Explode();

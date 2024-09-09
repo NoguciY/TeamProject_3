@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,56 +9,78 @@ public class PlayerLevelUp : MonoBehaviour
     private ExperienceValue experienceValue;
 
     //最大レベル
-    private int maxLevel = 300;
+    private int maxLevel;
 
     //現在のレベル
     [SerializeField]
     private int level;
 
     //現在の経験値
-    private float exp;
+    private float currentExperienceValue;
 
     //レベルアップに必要な経験値
-    private float needExp;
+    private float needExperienceValue;
 
 
     //ゲッター
     public int GetLevel => level;
-    public float GetExp => exp;
-    public float GetNeedExp => needExp;
+    public float GetExperienceValue => currentExperienceValue;
+    public float GetNeedExperienceValue => needExperienceValue;
 
-    //初期化
+    /// <summary>
+    /// 初期化
+    /// </summary>
     public void InitLevel()
     {
         level = 1;
-        exp = 0;
+        currentExperienceValue = 0;
+        maxLevel = 300;
 
         //各レベルに必要な経験値を計算
         experienceValue.SetNeedExperience(maxLevel);
 
         //現在のレベルアップに必要な経験値を取得
-        needExp = experienceValue.GetNeedExp(level);
+        needExperienceValue = experienceValue.GetNeedExperienceValue(level);
     }
 
-    //経験値を得る
-    public void AddExp(int exp)
+    /// <summary>
+    /// 経験値を得る
+    /// </summary>
+    /// <param name="experienceValue">経験値</param>
+    public void AddExperienceValue(float experienceValue)
     {
-        this.exp += exp;
+        currentExperienceValue += experienceValue;
+        Debug.Log($"現在の経験値：{currentExperienceValue}");
     }
 
-    //レベルアップ
-    public void LevelUp(UnityEvent levelUpEvent)
+    /// <summary>
+    /// レベルアップ
+    /// </summary>
+    /// <param name="normalLevelUpEvent">通常のレベルアップイベント</param>
+    /// <param name="addNewBombEvent">新しい爆弾を追加するイベント</param>
+    /// <param name="addNewBombLevel">新しい爆弾を追加するレベル</param>
+    public void LevelUp(UnityEvent normalLevelUpEvent, UnityEvent addNewBombEvent, int addNewBombLevel)
     {
         //経験値がレベルアップに必要な経験値以上になった場合
-        if (exp >= needExp)
+        if (currentExperienceValue >= needExperienceValue)
         {
             level++;
-            exp =　exp - needExp;
-            needExp = experienceValue.GetNeedExp(level);
-            Debug.Log($"レベルアップ！\n 現在のレベル：{level}");
+            currentExperienceValue -= needExperienceValue;
+            needExperienceValue = experienceValue.GetNeedExperienceValue(level);
 
-            //イベント(パネルの表示やエフェクトなど)を実行
-            levelUpEvent.Invoke();
+            Debug.Log($"レベルアップ！\n 現在のレベル：{ level }");
+            Debug.Log($"必要な経験値：{ needExperienceValue }");
+
+            //新しい爆弾を追加するイベントを実行
+            if (level == addNewBombLevel)
+            {
+                addNewBombEvent.Invoke();
+            }
+            //通常のレベルアップイベントを実行
+            else
+            {
+                normalLevelUpEvent.Invoke();
+            }
         }
     }
 }

@@ -1,9 +1,13 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement; // 忘れない！！
 
 public class StartButton : MonoBehaviour
 {
+    /// <summary>
+    /// ボタンのクリックイベントに登録する
+    /// 指定したシーンに切り替える
+    /// </summary>
+    /// <param name="loadSceneName">ロードするシーンの名前</param>
     public void LoadScene(string loadSceneName)
     {
         //シーンの遷移

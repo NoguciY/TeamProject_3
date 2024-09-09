@@ -5,19 +5,28 @@ using UnityEngine;
 
 public class PlayerLevel : MonoBehaviour
 {
+    //レベルテキスト
     [SerializeField]
-    private TextMeshProUGUI levelText;          //レベルテキスト
+    private TextMeshProUGUI levelText;          
 
+    //現在のレベル
     private int currentLevel;
-    private int oldLevel;
 
+    //前のレベル
+    private int beforeLevel;
+
+    /// <summary>
+    /// レベルが変化した場合、現在のレベルにテキストを書き換える
+    /// </summary>
+    /// <param name="level">レベル</param>
     public void CountLevel(int level)
     {
         currentLevel = level;
-        if (currentLevel != oldLevel)
+
+        if (currentLevel != beforeLevel)
         {
             levelText.text = level.ToString() + "Lv";
         }
-        oldLevel = currentLevel;
+        beforeLevel = currentLevel;
     }
 }

@@ -797,7 +797,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
       insertIndex: 2
-      addedObject: {fileID: 91907527049660430}
+      addedObject: {fileID: 8908391500906502554}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9ea301e15b083c4580f9a365cabba93,
         type: 3}
       insertIndex: 3
@@ -865,14 +865,14 @@ MonoBehaviour:
   resilienceCoolTime: 1
   capsuleColliderForItem: {fileID: 4712395242851268497}
   playerEvent: {fileID: 4096368864057113706}
-  lifeController: {fileID: 0}
-  playerLevelUp: {fileID: 0}
-  powerUpItems: {fileID: 0}
-  playerMove: {fileID: 0}
-  bombManager: {fileID: 0}
-  playerAnimation: {fileID: 0}
-  addBombLevels: 
---- !u!114 &91907527049660430
+  lifeController: {fileID: 8908391500906502554}
+  playerLevelUp: {fileID: 8180825191912411354}
+  powerUpItems: {fileID: 236893246262876744}
+  playerMove: {fileID: 6946072252918920581}
+  bombManager: {fileID: 9017726956107907413}
+  playerAnimation: {fileID: 8205812797517041320}
+  addBombLevels: 04000000090000001d000000
+--- !u!114 &8908391500906502554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -881,7 +881,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 374337298138495439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c06e244ede379c74f9682393c2043a14, type: 3}
+  m_Script: {fileID: 11500000, guid: aee6af3b1c1b25845bd880ab99beaf8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   life: 0
@@ -928,7 +928,7 @@ MonoBehaviour:
   collectionRangeIncreaseRate: 0.25
   difenceIncreaseValue: 1
   resilienceIncreaseValue: 0.2
-  bombRangeIncreaseRate: 0.5
+  bombRangeIncreaseRate: 0.05
 --- !u!114 &4379404434032715048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -977,9 +977,9 @@ MonoBehaviour:
     type: 3}
   plantedBombExplosionParticle: {fileID: 637259989962001759, guid: 10e18057335f26449813606ab6c915c0,
     type: 3}
-  knockbackBombExplosionParticle: {fileID: 2305783336696801891, guid: e126f66cf5a7ecb448e04743f1b072d6,
+  knockbackBombExplosionParticle: {fileID: 100006, guid: 10b506478f435cf4ca5bbcf982c59f08,
     type: 3}
-  homingBombExplosionParticle: {fileID: 100000, guid: d2de0bd165dfd5f409a6eddf27717f22,
+  homingBombExplosionParticle: {fileID: 100000, guid: f881607407b15cc46b24d6bda799037a,
     type: 3}
 --- !u!114 &8205812797517041320
 MonoBehaviour:

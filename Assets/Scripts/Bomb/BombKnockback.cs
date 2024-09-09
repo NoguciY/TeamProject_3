@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //ノックバック爆弾
@@ -12,6 +10,10 @@ public class BombKnockback : MonoBehaviour
     //プレイヤーの位置
     [System.NonSerialized]
     public Transform playerTransform;
+
+    //爆弾の順番
+    [System.NonSerialized]
+    public int myID;
 
     //爆発パーティクル
     //[System.NonSerialized]ではなく[HideInInspector]を設定することで
@@ -31,6 +33,8 @@ public class BombKnockback : MonoBehaviour
     [SerializeField, Header("プレイヤーからの距離")]
     private float toPlayerDistance;
 
+    public float GetToPlayerDistance => toPlayerDistance;
+
     [SerializeField, Header("爆発後から爆弾を破棄するまでの時間(秒)")]
     private float bombLifeSpan;
 
@@ -40,97 +44,86 @@ public class BombKnockback : MonoBehaviour
     [SerializeField, Header("生成される爆弾数")]
     private int generatedBombNum;
 
+    public int GetGeneratedBombNum => generatedBombNum;
+
     [SerializeField, Header("クールタイム(秒)")]
     private float coolTime;
+
+    public float GetCoolTime => coolTime;
 
     //コライダーコンポーネント
     [SerializeField]
     private SphereCollider sphereCollider;
 
-    //回転軸
-    private Vector3 axis;
-
-    //transformに毎回アクセスすると重いので、キャッシュしておく
     private Transform myTransform;
-
-    //爆弾の高さの半分
-    private float bombHalfHeight;
 
     //移動方向
     private Vector3 movingDirection;
 
-    //ゲッター
-    public float GetToPlayerDistance => toPlayerDistance;
-    public int GetGeneratedBombNum => generatedBombNum;
-    public float GetCoolTime => coolTime;
+    //爆弾の高さの半分
+    private float halfHeight;
+
+    //現在の回転角度
+    private float currentAngle;
+
+    //それぞれのオブジェクトを等間隔に配置するための角度差
+    private float angleBetweenObjects;
 
     private void Start()
     {
-        axis = Vector3.up;
         myTransform = transform;
-        bombHalfHeight = GetHalfHeight();
         movingDirection = Vector3.zero;
+        halfHeight = GetHalfHeight();
+        currentAngle = 0;
+        angleBetweenObjects = 360f / generatedBombNum;
     }
 
     private void Update()
     {
         //プレイヤーの周りを回る
-        RevolveAboutPlayer();
+        RotateAroundPlayer();
     }
 
-
-    //爆弾の高さの半分を取得する
-    public float GetHalfHeight()
+    /// <summary>
+    /// プレイヤーを中心にしてy軸を軸に回転する
+    /// 他のノックバック爆弾と等間隔で回転する
+    /// </summary>
+    private void RotateAroundPlayer()
     {
-        float halfHeight;
-        return halfHeight =
-            transform.localScale.y * sphereCollider.radius;
+        if (GameManager.Instance.CurrentSceneType != SceneType.MainGame ||
+            playerTransform == null) return;
+
+        //敵に当たった場合に移動方向が欲しいため
+        Vector3 previousPosition = myTransform.position;
+
+        //プレイヤーの位置
+        Vector3 centerPos = playerTransform.position + Vector3.up * halfHeight;
+
+        //オブジェクト毎の回転角度
+        float objectAngle = currentAngle + myID * angleBetweenObjects;
+
+        //オイラー角からクォータニオン生成
+        Quaternion rotation = Quaternion.Euler(0, objectAngle, 0);
+
+        //回転後の位置を計算
+        Vector3 rotatedPos = rotation * (Vector3.forward * toPlayerDistance);
+
+        myTransform.position = rotatedPos + centerPos;
+
+        //ノックバック相手に渡す爆弾の移動方向
+        movingDirection = myTransform.position - previousPosition;
+
+        //１フレームで回転する角度
+        float angle = angleSpeed * Time.deltaTime;
+
+        currentAngle += angle;
+
+        Debug.Log($"回転する角度:{objectAngle}");
     }
 
-    //プレイヤーを中心にしてy軸を軸に回転する
-    private void RevolveAboutPlayer()
-    {
-        if (GameManager.Instance.CurrentSceneType == SceneType.MainGame)
-        {
-            if (playerTransform != null)
-            {
-                //敵に当たった場合に移動方向が欲しいため
-                Vector3 previousPosition = myTransform.position;
-
-                //プレイヤーの位置を中心に回転する
-                Vector3 centerPos = playerTransform.position;
-
-                //１フレームで回転する角度
-                var angle = angleSpeed * Time.deltaTime;
-
-                //指定した角度と軸から回転(クオータニオン)を作成
-                var angleAxis = Quaternion.AngleAxis(angle, axis);
-
-                //円運動の位置計算
-                //中心からの相対ベクトル(爆弾の現在位置 - プレイヤーの位置)
-                Vector3 fromCenterVec = myTransform.position - centerPos;
-
-                //相対ベクトルの向き
-                Vector3 direction = fromCenterVec.normalized;
-
-                //位置を中心点からの相対的な向きだけ残して、円運動の半径を設定
-                Vector3 pos = direction * toPlayerDistance;
-
-                //円運動の軌道上の位置に移動させる
-                pos = angleAxis * pos;
-
-                //中心点を加算し、爆弾の位置を更新
-                myTransform.position = pos + centerPos;
-
-                //ノックバック相手に渡す爆弾の移動方向
-                movingDirection = myTransform.position - previousPosition;
-
-                Debug.Log($"回転する角度:{angleAxis}");
-            }
-        }
-    }
-
-    //爆発させる
+    /// <summary>
+    /// 爆発パーティクルを生成する
+    /// </summary>
     private void Explode()
     {
         if (explosionParticle != null)
@@ -148,11 +141,16 @@ public class BombKnockback : MonoBehaviour
             Debug.Log("爆発!!");
         }
         else
+        {
             Debug.LogWarning("パーティクルがありません");
+        }
     }
 
 
-    //敵に当たった場合の処理
+    /// <summary>
+    /// 敵に当たった場合の処理
+    /// </summary>
+    /// <param name="other">敵</param>
     private void OnTriggerEnter(Collider other)
     {
         //ダメージを受けることができるオブジェクトを取得
@@ -179,5 +177,16 @@ public class BombKnockback : MonoBehaviour
             //自身を破壊する
             Destroy(gameObject, bombLifeSpan);
         }
+    }
+
+    /// <summary>
+    /// 爆弾の高さの半分を取得する
+    /// </summary>
+    /// <returns>爆弾の半分分の高さ</returns>
+    public float GetHalfHeight()
+    {
+        float halfHeight;
+        return halfHeight =
+            transform.localScale.y * sphereCollider.radius;
     }
 }

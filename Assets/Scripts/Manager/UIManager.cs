@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,13 +11,19 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverPanel;
 
+    public GameObject GetGameOverPanel => gameOverPanel;
+
     //レベルアップパネル
     [SerializeField]
     private GameObject levelUpPanel;
 
+    public GameObject GetLevelUpPanel => levelUpPanel;
+
     //レベルアップパネル(爆弾追加用)
     [SerializeField]
     private GameObject levelUpBombPanel;
+
+    public GameObject GetLevelUpBombPanel => levelUpBombPanel;
 
     //経過時間テキストコンポーネント
     [SerializeField]
@@ -34,17 +37,25 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private LifeGauge lifeGauge;
 
+    public LifeGauge GetLifeGauge => lifeGauge;
+
     //経験値ゲージコンポーネント
     [SerializeField]
-    private ExpGauge experienceValueGauge;
+    private ExperienceValueGauge experienceValueGauge;
+
+    public ExperienceValueGauge GetExperienceValueGauge => experienceValueGauge;
 
     //クールタイムゲージコンポーネント
     [SerializeField]
     private CoolTimeGauge coolTimeGauge;
 
+    public CoolTimeGauge GetCoolTimeGauge => coolTimeGauge;
+
     //ボタン管理コンポーネント
     [SerializeField]
     private ButtonManager buttonManager;
+
+    public ButtonManager GetButtonManager => buttonManager;
 
     //BombIconコンポーネント
     [SerializeField]
@@ -52,28 +63,7 @@ public class UIManager : MonoBehaviour
 
     private int bombIconCounter;
 
-    //ゲッター
-    public GameObject GetGameOverPanel => gameOverPanel;
-    public GameObject GetLevelUpPanel => levelUpPanel;
-    public GameObject GetLevelUpBombPanel => levelUpBombPanel;
-    public LifeGauge GetLifeGauge => lifeGauge;
-    public ExpGauge GetExperienceValueGauge => experienceValueGauge;
-    public CoolTimeGauge GetCoolTimeGauge => coolTimeGauge;
-    public ButtonManager GetButtonManager => buttonManager;
-
-
-    //パネルを表示させるか
-    public void ShoulShowPanel(GameObject panel, bool shoudShow)
-    {
-        panel.SetActive(shoudShow);
-    }
-
-    public void ShouwBombIcon()
-    {
-        bombIcons[bombIconCounter].SetActive(true);
-        bombIconCounter++;
-    }
-
+    
     private void Start()
     {
         //ボタンの初期化
@@ -93,7 +83,29 @@ public class UIManager : MonoBehaviour
         level.CountLevel(GameManager.Instance.playerLevel);
 
         //クールタイムゲージの更新を増えた爆弾分行う
-        for(int i = 0; i < Enum.GetNames(typeof(Utilities.AddedBombType)).Length; i++)
-        coolTimeGauge.FillGauge(i);
+        for (int i = 0; i < Enum.GetNames(typeof(Utilities.AddedBombType)).Length; i++)
+        {
+            coolTimeGauge.FillGauge(i);
+        }
     }
+
+    /// <summary>
+    /// パネルを表示させるか
+    /// </summary>
+    /// <param name="panel">表示させるパネル</param>
+    /// <param name="shoudShow">true:表示する / false:表示しない</param>
+    public void ShoulShowPanel(GameObject panel, bool shoudShow)
+    {
+        panel.SetActive(shoudShow);
+    }
+
+    /// <summary>
+    /// 画像(爆弾アイコン)を表示させるか
+    /// </summary>
+    public void ShouwBombIcon()
+    {
+        bombIcons[bombIconCounter].SetActive(true);
+        bombIconCounter++;
+    }
+
 }

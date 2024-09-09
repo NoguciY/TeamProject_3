@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 //定数を定義する
 public static class Utilities
 {
     //ステージの大きさ
     public static readonly float STAGESIZE = 50f;
+
+    //プレイヤー速さの上限
+    public static readonly int SPEEDUPPERLIMIT = 7;
 
     //防御力の上限
     public static readonly int DEFENSEUPPERLIMIT = 3;

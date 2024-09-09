@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemHeal : MonoBehaviour
 {
-    //回復量
-    [SerializeField]
+    [SerializeField, Header("回復量")]
     private float healValue;
 
+    /// <summary>
+    /// 当たり判定
+    /// </summary>
+    /// <param name="other">プレイヤー</param>
     private void OnTriggerEnter(Collider other)
     {
         //アイテムを取得できるオブジェクトを取得

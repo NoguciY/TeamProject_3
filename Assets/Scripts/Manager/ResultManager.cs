@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class ResultManager : MonoBehaviour
 {
@@ -16,7 +14,7 @@ public class ResultManager : MonoBehaviour
 
     float survivalTime;
 
-    void Start()
+    private void Start()
     {
         //ê∂ë∂éûä‘Çï\é¶
         survivalTime = GameManager.Instance.GetDeltaTimeInMain;

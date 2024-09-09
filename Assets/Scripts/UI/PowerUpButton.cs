@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static Utilities;
 
 public class PowerUpButton : MonoBehaviour
 {
@@ -97,7 +98,9 @@ public class PowerUpButton : MonoBehaviour
         //addNewBombListener = null;
     }
 
-    //強化イベントクラスのspriteに強化ボタン画像を設定
+    /// <summary>
+    /// 強化イベントクラスのspriteに強化ボタン画像を設定
+    /// </summary>
     public void SetPowerUpButtoSprites()
     {
         powerUpMaxLifeEvent.powerUpButtonSprite = powerUpButtonSpriteList[0];
@@ -108,12 +111,16 @@ public class PowerUpButton : MonoBehaviour
         powerUpBombRangeEvent.powerUpButtonSprite = powerUpButtonSpriteList[5];
     }
 
-    //レベルアップイベントで呼ばれる
-    //強化ボタンに強化関数を登録する
+    /// <summary>
+    /// レベルアップイベントで呼ばれる
+    /// 強化ボタンに強化関数を登録する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     public void RegisterPowerUpItemEvents(PlayerManager player)
     {
         //リストに強化可能な強化イベントを追加する
         SetPowerUpItemsList(player);
+
         //リストからランダムに強化項目ボタンの数分、配列に格納
         GetRandomPowerUpItemEvents();
 
@@ -121,9 +128,11 @@ public class PowerUpButton : MonoBehaviour
         {
             //前回ボタンに登録したリスナー(強化関数のみ)を削除する
             if (powerUpListeners[i] != null)
+            {
                 powerUpButtons[i].onClick.RemoveListener(powerUpListeners[i]);
+            }
 
-            //ラムダ式で引数ありのリスナーを登録するために必要
+            //ラムダ式で引数ありのリスナーを登録するため必要
             int index = i;
 
             //ボタンに登録するリスナーを保持する
@@ -137,7 +146,10 @@ public class PowerUpButton : MonoBehaviour
         }
     }
 
-    //リストに強化可能な強化イベントを追加する
+    /// <summary>
+    /// リストに強化可能な強化イベントを追加する
+    /// </summary>
+    /// <param name="player">PlayerManager</param>
     private void SetPowerUpItemsList(PlayerManager player)
     {
         powerUpEventList.Clear();
@@ -145,18 +157,33 @@ public class PowerUpButton : MonoBehaviour
         //強化項目イベントリストに強化可能な強化項目を格納
         //初期の強化項目を追加する
         powerUpEventList.Add(powerUpMaxLifeEvent);
-        powerUpEventList.Add(powerUpSpeedEvent);
+
+        //速さが上限値より下の場合、追加
+        if (player.speed < Utilities.SPEEDUPPERLIMIT)
+        {
+            powerUpEventList.Add(powerUpSpeedEvent);
+        }
+
         powerUpEventList.Add(powerUpCollectionRangeRateEvent);
 
         //防御力が上限値より下の場合、追加
         if (player.difense < Utilities.DEFENSEUPPERLIMIT)
+        {
             powerUpEventList.Add(powerUpDifenseEvent);
+        }
 
         powerUpEventList.Add(powerUpResilienceEvent);
-        powerUpEventList.Add(powerUpBombRangeEvent);
+
+        //爆弾が使用可能の場合、追加
+        if (player.CanUseBumb((int)AddedBombType.Planted))
+        {
+            powerUpEventList.Add(powerUpBombRangeEvent);
+        }
     }
 
-    //強化イベントリストからランダムに強化項目ボタンの数だけ、配列に格納
+    /// <summary>
+    /// 強化イベントリストからランダムに強化項目ボタンの数だけ、配列に格納
+    /// </summary>
     private void GetRandomPowerUpItemEvents()
     {
         //リストの数
@@ -177,26 +204,33 @@ public class PowerUpButton : MonoBehaviour
             //同じイベントが配列に格納されないようにする
             if (beforeRndFirst != rnd && beforeRndSecond != rnd)
             {
-                //Debug.Log($"rnd:{rnd}");
                 //配列に追加する
                 powerUpEvents[i] = powerUpEventList[rnd];
                 powerUpButtonSprites[i] = powerUpEventList[rnd].powerUpButtonSprite;
-                Debug.Log($"powerUpEvents[{i}]にevents[{rnd}]を追加");
+                //Debug.Log($"powerUpEvents[{i}]にevents[{rnd}]を追加");
 
                 //1回目のランダムな値を格納
                 if (i == 0)
+                {
                     beforeRndFirst = rnd;
+                }
                 //2回目のランダムな値を格納
-                else if(i == 1)
+                else if (i == 1)
+                {
                     beforeRndSecond = rnd;
+                }
+
                 i++;
             }
         }
     }
 
-    //爆弾追加イベントに登録する関数
-    //爆弾追加ボタンに爆弾追加関数を登録する
-    public void RegisterAddNewBombEvent(int index)
+    /// <summary>
+    /// 爆弾追加イベントに登録する関数
+    /// 爆弾追加ボタンに爆弾追加関数を登録する
+    /// </summary>
+    /// <param name="newBombID">新しく追加する爆弾の固有番号</param>
+    public void RegisterAddNewBombEvent(int newBombID)
     {
         //前回ボタンに登録したリスナー(爆弾追加関数のみ)を削除する
         if(addNewBombListener != null)
@@ -209,6 +243,6 @@ public class PowerUpButton : MonoBehaviour
         addNewBombButton.onClick.AddListener(addNewBombListener);
 
         //ボタンの画像を変更
-        addNewBombButton.image.sprite = addNewBombButtonSprites[index];
+        addNewBombButton.image.sprite = addNewBombButtonSprites[newBombID];
     }
 }

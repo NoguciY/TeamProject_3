@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private Vector3 offset;
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         //カメラの位置をターゲットをoffset分加算した値にする
         transform.position = target.position + offset;

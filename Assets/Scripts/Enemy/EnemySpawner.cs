@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,14 +64,18 @@ public class EnemySpawner : MonoBehaviour
 
         //敵の名前とプレハブをセットする
         foreach (GameObject enemy in enemyPrefab)
+        {
             enemyDictionary.Add(enemy.name, enemy);
+        }
     }
 
     private void Start()
     {
         boids = new List<List<GameObject>>();
         for (int i = 0; i < enemyPrefab.Length; i++)
+        {
             boids.Add(new List<GameObject>());
+        }
 
         myTransform = transform;
 
@@ -93,28 +96,37 @@ public class EnemySpawner : MonoBehaviour
 
         //設定した秒数毎に実行する
         if (interval < beforeInterval)
+        {
             //生成間隔ごとに生成数を増やす
             generatedNum++;
+        }
 
         beforeInterval = interval;
 
         GenerateEnemy("RedBlob", (int)EnemiesGenerationOrder.RedBlob);
 
         if (elapsedTime >= 30)
+        {
             GenerateEnemy("Orc", (int)EnemiesGenerationOrder.Orc);
+        }
 
         if (elapsedTime >= 60)
+        {
             //プレイヤーを囲むように生成
             GenerateEnemyInCircle("Mushroom", (int)EnemiesGenerationOrder.Mushroom);
+        }
     }
 
-    //指定した敵の情報を返す
+    /// <summary>
+    /// 指定した敵の情報を返す
+    /// </summary>
+    /// <param name="name">敵の名前</param>
+    /// <returns>敵の情報</returns>
     private EnemySetting.EnemyData GetEnemyData(string name)
     {
         foreach (EnemySetting.EnemyData enemyData in enemySetting.enemyDataList)
         {
-            if (enemyData.name == name)
-                return enemyData;
+            if (enemyData.name == name) return enemyData;
         }
 
         return null;
@@ -162,6 +174,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 円状に敵を生成する
+    /// </summary>
+    /// <param name="name">敵の名前</param>
+    /// <param name="index">敵の登場順</param>
     private void GenerateEnemyInCircle(string name, int index)
     {
         //生成する敵を取得する
@@ -223,9 +240,13 @@ public class EnemySpawner : MonoBehaviour
 
         //ディクショナリーに格納された敵の名前からプレハブを取得する
         if (enemyDictionary.TryGetValue(name, out var enemyPrefab))
+        {
             generatedEnemy = enemyPrefab;
+        }
         else
+        {
             Debug.LogError($"ディクショナリーに{name}が登録されていません");
+        }
 
         return generatedEnemy;
     }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,18 +7,18 @@ using UnityEngine;
 
 public class EnemyFlocking : MonoBehaviour
 {
-    private Transform myTransform;
-
     //近隣の個体を格納する
     [SerializeField]
     private List<GameObject> neighbors;
 
-    //速さ
-    private float speed;
-
     //移動処理に使う速度
     [SerializeField]
     private Vector3 velocity;
+
+    private Transform myTransform;
+
+    //速さ
+    private float speed;
 
     //加速度
     private Vector3 acceleration;
@@ -70,8 +69,10 @@ public class EnemyFlocking : MonoBehaviour
 
                     //内積を使い視野角内にいる仲間のみをリストに追加する
                     float innerProduct = Vector3.Dot(forward, direction);
-                    if(innerProduct >= innerProductThred) 
+                    if (innerProduct >= innerProductThred)
+                    {
                         neighbors.Add(boid);
+                    }
                 }
             }
         }
@@ -130,14 +131,17 @@ public class EnemyFlocking : MonoBehaviour
     {
         Vector3 avoidanceForce = Vector3.zero;
 
-        if (neighbors.Count == 0)
-            return avoidanceForce;
+        if (neighbors.Count == 0) return avoidanceForce;
 
         //近隣の群から離れるベクトルを返す
         foreach (GameObject neighbor in neighbors)
+        {
             //オブジェクトが破棄されてない場合
             if (neighbor != null)
+            {
                 avoidanceForce += myTransform.position - neighbor.transform.position;
+            }
+        }
 
         return coefficient * avoidanceForce.normalized;
     }
@@ -151,8 +155,7 @@ public class EnemyFlocking : MonoBehaviour
     {
         Vector3 averageVelocity = Vector3.zero;
 
-        if (neighbors.Count == 0)
-            return averageVelocity;
+        if (neighbors.Count == 0) return averageVelocity;
 
         //近隣の群の平均速度の計算
         foreach (GameObject neighbor in neighbors)
@@ -160,7 +163,6 @@ public class EnemyFlocking : MonoBehaviour
             //オブジェクトが破棄されていない場合
             if (neighbor != null)
             {
-                //float flockDistance = Vector3.Distance(myTransform.position, neighbor.transform.position);
                 EnemyFlocking anotherFlock = neighbor.GetComponent<EnemyFlocking>();
                 averageVelocity += anotherFlock.velocity;
             }
@@ -179,15 +181,16 @@ public class EnemyFlocking : MonoBehaviour
     {
         Vector3 centerPos = Vector3.zero;
 
-        if (neighbors.Count == 0)
-            return centerPos;
+        if (neighbors.Count == 0) return centerPos;
 
         //群の中心位置の計算
         foreach (GameObject neighbor in neighbors)
         {
             //オブジェクトが破棄されていない場合
             if (neighbor != null)
+            {
                 centerPos += neighbor.transform.position;
+            }
         }
         centerPos /= neighbors.Count;
 
@@ -205,8 +208,7 @@ public class EnemyFlocking : MonoBehaviour
     {
         Vector3 combineForce = Vector3.zero;
 
-        if(playerTransform == null)
-            return combineForce;
+        if(playerTransform == null) return combineForce;
 
         //プレイヤーの位置を取得する
         Vector3 playerPos = playerTransform.position;

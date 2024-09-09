@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,9 +10,9 @@ public class PlayerEvent : MonoBehaviour
     public UnityEvent gameOverEvent = new UnityEvent();
 
     //経験値を得た場合に実行するイベント
-    public class ExpEvent : UnityEvent<float, float> { }
+    public class ExperienceValueEvent : UnityEvent<float, float> { }
     //public ExpEvent expEvent;
-    public ExpEvent expEvent = new ExpEvent();
+    public ExperienceValueEvent experienceValueEvent = new ExperienceValueEvent();
 
     //ダメージを受けた場合に実行するイベント
     public class AddLifeEvent : UnityEvent<float> { }
@@ -25,6 +23,10 @@ public class PlayerEvent : MonoBehaviour
     public class GetMaxLifeEvent : UnityEvent<float> { }
     //public GetMaxLifeEvent getMaxLifeEvent;
     public GetMaxLifeEvent getMaxLifeEvent = new GetMaxLifeEvent();
+
+    //経験値の最大値を渡す場合に実行するイベント
+    public class GetMaxExperienceValueEvent : UnityEvent<float, float> { }
+    public GetMaxExperienceValueEvent getMaxExperienceValueEvent = new GetMaxExperienceValueEvent();
 
     //レベルアップの場合に実行するイベント
     [NonSerialized]
