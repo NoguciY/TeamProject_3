@@ -12,12 +12,4 @@ public static class Utilities
 
     //爆弾の種数
     public static readonly int BOMBTYPENUM = 4;
-
-    //追加される爆弾の種類
-    public enum AddedBombType
-    {
-        Planted,    //設置
-        Knockback,  //ノックバック
-        Homing,     //誘導
-    }
 }

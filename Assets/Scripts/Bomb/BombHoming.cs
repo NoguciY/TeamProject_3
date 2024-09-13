@@ -45,17 +45,23 @@ public class BombHoming : MonoBehaviour
     //スフィアキャストの最大距離
     private float maxDistance;
 
+    //経過時間
+    private float elapsedTime;
+
     private void Start()
     {
         initialPosition = transform.position;
-        SetRandomTarget(); // 最初のターゲットを設定
-        Invoke("Detonate", fuseTime);
         maxDistance = 0;
         isAscending = true;
+
+        // 最初のターゲットを設定
+        SetRandomTarget();
     }
 
     private void Update()
     {
+        if (GameManager.Instance.CurrentSceneType != SceneType.MainGame) return;
+
         if (isAscending)
         {
             // 上昇
@@ -97,6 +103,16 @@ public class BombHoming : MonoBehaviour
                 Detonate();
             }
         }
+
+        //経過時間が爆発時間を過ぎた場合、爆発
+        elapsedTime += Time.deltaTime;
+
+        if (elapsedTime >= fuseTime)
+        {
+            Explode();
+            Detonate();
+        }
+
     }
 
     /// <summary>
@@ -135,18 +151,6 @@ public class BombHoming : MonoBehaviour
     }
 
     /// <summary>
-    /// 半分の大きさを返す
-    /// </summary>
-    /// <returns></returns>
-    //public float GetHalfHeight()
-    //{
-    //    float halfHeight;
-    //    return halfHeight =
-    //        transform.localScale.y * capsuleCollider.radius; 
-    //}
-
-
-    /// <summary>
     /// 爆発パーティクルを生成する
     /// </summary>
     private void Explode()
@@ -161,7 +165,7 @@ public class BombHoming : MonoBehaviour
             Destroy(particle, particleLifeSpan);
 
             //効果音を再生
-            SoundManager.uniqueInstance.Play("爆発4");
+            SoundManager.uniqueInstance.PlaySE("爆発4");
 
             Debug.Log("爆発!!");
         }

@@ -13,10 +13,16 @@ public class CoolTimeGauge : MonoBehaviour
     //ゲージが満ちているか
     private bool[] isFilling;
 
+    //クールタイムゲージの数
+    private int gaugeNum;
+    
+    public int GetGeugeNum => gaugeNum;
+
     void Start()
     {
-        coolTimes = new float[coolTimeGauges.Length];
-        isFilling = new bool[coolTimeGauges.Length];
+        gaugeNum = coolTimeGauges.Length;
+        coolTimes = new float[gaugeNum];
+        isFilling = new bool[gaugeNum];
     }
 
     /// <summary>
@@ -25,6 +31,8 @@ public class CoolTimeGauge : MonoBehaviour
     /// <param name="bombID">爆弾の固有番号</param>
     public void FillGauge(int bombID)
     {
+        if (GameManager.Instance.CurrentSceneType != SceneType.MainGame) return;
+
         //ゲージを満たす
         if (isFilling[bombID] && coolTimes[bombID] > 0)
         {
@@ -32,7 +40,9 @@ public class CoolTimeGauge : MonoBehaviour
 
             //満たしきった場合、満たすのを止める
             if (coolTimeGauges[bombID].fillAmount >= 1f)
+            {
                 isFilling[bombID] = false;
+            }
         }
     }
     

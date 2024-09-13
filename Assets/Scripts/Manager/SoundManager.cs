@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public class SoundManager : MonoBehaviour
         //音量
         public float volume;
     }
+
+    //オーディオミキサー
+    [SerializeField]
+    private AudioMixer audioMixer;
 
     //シングルトンインスタンス
     public static SoundManager uniqueInstance;
@@ -59,6 +64,9 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < audioSources.Length; ++i)
         {
             audioSources[i] = gameObject.AddComponent<AudioSource>();
+
+            //音量調整のためにミキサーグループを取得
+            audioSources[i].outputAudioMixerGroup = audioMixer.FindMatchingGroups("SE")[0];
         }
 
         //soundDictionaryにセット
@@ -109,7 +117,7 @@ public class SoundManager : MonoBehaviour
     /// Play()のオーバーロード
     /// </summary>
     /// <param name="name">再生する音の名前</param>
-    public void Play(string name)
+    public void PlaySE(string name)
     {
         //管理用Dictionary から、別名で探索
         if (soundDictionary.TryGetValue(name, out var soundData))

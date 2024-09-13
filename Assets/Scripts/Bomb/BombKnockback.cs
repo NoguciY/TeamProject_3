@@ -136,7 +136,7 @@ public class BombKnockback : MonoBehaviour
             Destroy(particle, particleLifeSpan);
 
             //Œø‰Ê‰¹‚ğÄ¶
-            SoundManager.uniqueInstance.Play("”š”­3");
+            SoundManager.uniqueInstance.PlaySE("”š”­3");
 
             Debug.Log("”š”­!!");
         }

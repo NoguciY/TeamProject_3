@@ -48,13 +48,26 @@ public class BombPlanted : MonoBehaviour
     //レイを飛ばす最大距離
     private float maxDistance;
 
+    //経過時間
+    private float elapsedTime;
+
     private void Start()
     {
         myTransform = transform;
         maxDistance = 0;
+    }
 
-        //fuseTime後に爆発する
-        Invoke("Detonate", fuseTime);
+    private void Update()
+    {
+        if (GameManager.Instance.CurrentSceneType != SceneType.MainGame) return;
+
+        //経過時間が爆発時間を過ぎた場合、爆発
+        elapsedTime += Time.deltaTime;
+
+        if (elapsedTime >= fuseTime)
+        {
+            Detonate();
+        }
     }
 
     /// <summary>
@@ -74,7 +87,7 @@ public class BombPlanted : MonoBehaviour
             Destroy(particle, particleLifeSpan);
 
             //効果音を再生
-            SoundManager.uniqueInstance.Play("爆発2");
+            SoundManager.uniqueInstance.PlaySE("爆発2");
 
             Debug.Log("爆発!!");
         }

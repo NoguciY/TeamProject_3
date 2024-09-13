@@ -28,12 +28,12 @@ public class LifeGauge : MonoBehaviour
     {
         lifeGauge.value = life;
 
-        //体力が最大値を超えないようにする
+        //体力ゲージの値が最大値を超えないようにする
         if (lifeGauge.value > lifeGauge.maxValue)
         {
             lifeGauge.value = lifeGauge.maxValue;
         }
-        //体力は0より小さくしない
+        //体力ゲージの値は0より小さくしない
         else if (lifeGauge.value < 0)
         {
             lifeGauge.value = 0;

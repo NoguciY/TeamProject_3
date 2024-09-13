@@ -63,7 +63,13 @@ public class UIManager : MonoBehaviour
 
     private int bombIconCounter;
 
-    
+    //オプションコンポーネント
+    [SerializeField]
+    private OptionManager optionManager;
+
+    [SerializeField]
+    private SoundVolumeSlider soundVolumeSlider;
+
     private void Start()
     {
         //ボタンの初期化
@@ -71,6 +77,10 @@ public class UIManager : MonoBehaviour
 
         //ボムアイコンカウンターの初期化
         bombIconCounter = 0;
+
+        optionManager.Initialize();
+
+        soundVolumeSlider.Initialize();
     }
 
 
@@ -83,10 +93,13 @@ public class UIManager : MonoBehaviour
         level.CountLevel(GameManager.Instance.playerLevel);
 
         //クールタイムゲージの更新を増えた爆弾分行う
-        for (int i = 0; i < Enum.GetNames(typeof(Utilities.AddedBombType)).Length; i++)
+        for (int i = 0; i < coolTimeGauge.GetGeugeNum; i++)
         {
             coolTimeGauge.FillGauge(i);
         }
+
+        //オプションの操作
+        optionManager.ControllOption();
     }
 
     /// <summary>
