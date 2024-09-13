@@ -15,16 +15,16 @@ public class PlayerLevelUp : MonoBehaviour
     [SerializeField]
     private int level;
 
+    public int GetLevel => level;
+
     //現在の経験値
     private float currentExperienceValue;
+
+    public float GetExperienceValue => currentExperienceValue;
 
     //レベルアップに必要な経験値
     private float needExperienceValue;
 
-
-    //ゲッター
-    public int GetLevel => level;
-    public float GetExperienceValue => currentExperienceValue;
     public float GetNeedExperienceValue => needExperienceValue;
 
     /// <summary>

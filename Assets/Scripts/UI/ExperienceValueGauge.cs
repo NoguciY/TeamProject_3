@@ -5,7 +5,7 @@ public class ExperienceValueGauge : MonoBehaviour
 {
     //経験値ゲージ
     [SerializeField]
-    private Slider experienceValueGauge;
+    private Slider experienceValueSlider;
 
     /// <summary>
     /// 経験値ゲージを更新する
@@ -15,9 +15,9 @@ public class ExperienceValueGauge : MonoBehaviour
     public void UpdateGauge(float currentExperienceValue, float needExperienceValue)
     {
         //最大値を更新
-        experienceValueGauge.maxValue = needExperienceValue;
+        experienceValueSlider.maxValue = needExperienceValue;
 
         //ゲージの値を更新
-        experienceValueGauge.value = currentExperienceValue;
+        experienceValueSlider.value = currentExperienceValue;
     }
 }

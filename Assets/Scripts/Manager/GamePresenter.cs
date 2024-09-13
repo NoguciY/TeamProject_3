@@ -81,7 +81,7 @@ public class GamePresenter : MonoBehaviour
                 uiManager.GetButtonManager.powerUpButton.RegisterPowerUpItemEvents(player);
 
                 //レベルアップ時に効果音を鳴らす
-                SoundManager.uniqueInstance.Play("レベルアップ");
+                SoundManager.uniqueInstance.PlaySE("レベルアップ");
 
                 //ゲームマネージャーに保存しているプレイヤーレベルをインクリメント
                 GameManager.Instance.playerLevel++;
@@ -97,13 +97,13 @@ public class GamePresenter : MonoBehaviour
                 Time.timeScale = 0;
 
                 //爆弾追加ボタンに爆弾追加イベントを登録する
-                uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent(player.GetNewBombCounter);
+                uiManager.GetButtonManager.powerUpButton.RegisterAddNewBombEvent(player.GetBombManager.GetAddBombCounter);
 
                 //爆弾アイコンの表示
                 uiManager.ShouwBombIcon();
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("レベルアップ");
+                SoundManager.uniqueInstance.PlaySE("レベルアップ");
 
                 //ゲームマネージャーに保存しているプレイヤーレベルをインクリメント
                 GameManager.Instance.playerLevel++;
@@ -115,6 +115,7 @@ public class GamePresenter : MonoBehaviour
                 //使用した爆弾のクールタイムゲージを満たし始める
                 uiManager.GetCoolTimeGauge.StartFillingCoolTimeGauge(bombID, coolTime);
             });
+
 
         //UIマネージャーのイベントに関数を登録する
 
@@ -132,7 +133,7 @@ public class GamePresenter : MonoBehaviour
                 uiManager.GetLifeGauge.UpdateGauge(player.GetLifeController.GetLife);
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("最大体力アップ");
+                SoundManager.uniqueInstance.PlaySE("最大体力アップ");
             });
 
         //移動速度強化イベント
@@ -142,7 +143,7 @@ public class GamePresenter : MonoBehaviour
                 player.GetPowerUpItems.PowerUpSpeed(player);
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("移動速度アップ");
+                SoundManager.uniqueInstance.PlaySE("移動速度アップ");
             });
 
         //回収範囲強化イベント
@@ -152,7 +153,7 @@ public class GamePresenter : MonoBehaviour
                 player.GetPowerUpItems.PowerUpCollectionRangeRate(player);
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("回収範囲アップ");
+                SoundManager.uniqueInstance.PlaySE("回収範囲アップ");
             });
         
         //防御力強化イベント
@@ -162,7 +163,7 @@ public class GamePresenter : MonoBehaviour
                 player.GetPowerUpItems.PowerUpDifence(player);
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("防御力アップ");
+                SoundManager.uniqueInstance.PlaySE("防御力アップ");
             });
 
         //回復力強化イベント
@@ -172,7 +173,7 @@ public class GamePresenter : MonoBehaviour
                 player.GetPowerUpItems.PowerUpResilience(player);
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("回復力アップ");
+                SoundManager.uniqueInstance.PlaySE("回復力アップ");
             });
 
         //爆弾の爆発範囲強化イベント
@@ -182,17 +183,19 @@ public class GamePresenter : MonoBehaviour
                 player.GetPowerUpItems.PowerUpBombRange(player);
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("爆発範囲アップ");
+                SoundManager.uniqueInstance.PlaySE("爆発範囲アップ");
             });
 
         //爆弾追加イベント
         uiManager.GetButtonManager.powerUpButton.addNewBombEvent.AddListener(
             () =>{
                 //新しい爆弾を使用可能にする
-                player.EnableNewBomb();
+                //player.EnableNewBomb();
+
+                player.GetBombManager.EnableNewBomb();
 
                 //効果音を鳴らす
-                SoundManager.uniqueInstance.Play("爆弾追加");
+                SoundManager.uniqueInstance.PlaySE("爆弾追加");
             });
     }
 }

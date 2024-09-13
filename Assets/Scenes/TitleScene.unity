@@ -254,8 +254,9 @@ GameObject:
   - component: {fileID: 686966220}
   - component: {fileID: 686966219}
   - component: {fileID: 686966218}
+  - component: {fileID: 686966222}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -386,6 +387,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686966216}
   m_CullTransparentMesh: 1
+--- !u!114 &686966222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686966216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17ead5b9fd2174740904d0eb8d04d9ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,7 +697,7 @@ GameObject:
   - component: {fileID: 1335966551}
   - component: {fileID: 1335966550}
   m_Layer: 5
-  m_Name: Image
+  m_Name: TitleImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,11 +773,23 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 2a14adfbf64163d438c889f5d0fd0ef2, type: 3}
+    - target: {fileID: 3487457843359531227, guid: efc317168959a1b4e88463135de83d35,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -5526991890704125816, guid: b00bd4929dc8fae458061265a8dacbce,
+        type: 2}
     - target: {fileID: 5371553014076663881, guid: efc317168959a1b4e88463135de83d35,
         type: 3}
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6109059720561914371, guid: efc317168959a1b4e88463135de83d35,
+        type: 3}
+      propertyPath: audioMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: b00bd4929dc8fae458061265a8dacbce,
+        type: 2}
     - target: {fileID: 6513940847554337184, guid: efc317168959a1b4e88463135de83d35,
         type: 3}
       propertyPath: m_LocalPosition.x

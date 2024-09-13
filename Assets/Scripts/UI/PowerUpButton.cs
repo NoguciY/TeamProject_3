@@ -174,8 +174,8 @@ public class PowerUpButton : MonoBehaviour
 
         powerUpEventList.Add(powerUpResilienceEvent);
 
-        //爆弾が使用可能の場合、追加
-        if (player.CanUseBumb((int)AddedBombType.Planted))
+        //設置型爆弾が使用可能の場合、追加
+        if (player.GetBombManager.CanUseBumb((int)BombManager.BombType.Planted))
         {
             powerUpEventList.Add(powerUpBombRangeEvent);
         }
@@ -242,7 +242,7 @@ public class PowerUpButton : MonoBehaviour
         //ボタンにリスナーを登録する
         addNewBombButton.onClick.AddListener(addNewBombListener);
 
-        //ボタンの画像を変更
-        addNewBombButton.image.sprite = addNewBombButtonSprites[newBombID];
+        //ボタンの画像を変更 , newBombID - 1：newBombIDは1から始まるため -1 している
+        addNewBombButton.image.sprite = addNewBombButtonSprites[newBombID - 1];
     }
 }

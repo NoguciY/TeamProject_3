@@ -39,7 +39,10 @@ public class BombThrowing : MonoBehaviour
     //‘¬“x
     private Vector3 velocity;
 
-    
+    //Œo‰ßŠÔ
+    private float elapsedTime;
+
+
     private void Start()
     {
         myTransform = transform;
@@ -47,16 +50,22 @@ public class BombThrowing : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.CurrentSceneType == SceneType.MainGame)
+        if (GameManager.Instance.CurrentSceneType != SceneType.MainGame) return;
+
+        elapsedTime += Time.deltaTime;
+
+        // ˆÚ“®‚·‚é
+        myTransform.localPosition += velocity * Time.deltaTime;
+
+        //‰ñ“]‚·‚é
+        Rotate();
+
+        //õ–½‚ğ‰ß‚¬‚½ê‡A”j‰ó
+        if (elapsedTime >= bombLifeSpan)
         {
-            // ˆÚ“®‚·‚é
-            myTransform.localPosition += velocity * Time.deltaTime;
-
-            //‰ñ“]‚·‚é
-            Rotate();
-
-            Destroy(gameObject, bombLifeSpan);
+            Destroy(gameObject);
         }
+
     }
 
     /// <summary>
@@ -104,7 +113,7 @@ public class BombThrowing : MonoBehaviour
             Destroy(particle, particleLifeSpan);
 
             //Œø‰Ê‰¹‚ğÄ¶
-            SoundManager.uniqueInstance.Play("”š”­1");
+            SoundManager.uniqueInstance.PlaySE("”š”­1");
 
             Debug.Log("”š”­!!");
         }

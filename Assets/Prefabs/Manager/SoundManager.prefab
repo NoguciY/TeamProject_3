@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5371553014076663881}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -45,43 +45,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fbe2109f733bbf43af5486475e60951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: b00bd4929dc8fae458061265a8dacbce, type: 2}
   soundDatas:
   - soundName: "\u30BF\u30A4\u30C8\u30EB"
     audioClip: {fileID: 8300000, guid: 2a14adfbf64163d438c889f5d0fd0ef2, type: 3}
+    volume: 0.3
   - soundName: "\u30E1\u30A4\u30F3\u30B2\u30FC\u30E0"
     audioClip: {fileID: 8300000, guid: 6922614e90b50ec4f9a0bd2f48173824, type: 3}
+    volume: 0.3
   - soundName: "\u30B2\u30FC\u30E0\u30AA\u30FC\u30D0\u30FC"
     audioClip: {fileID: 8300000, guid: d1f7e3c82da029d4ba7836df0717dfd7, type: 3}
+    volume: 0.3
   - soundName: "\u30EA\u30B6\u30EB\u30C8"
     audioClip: {fileID: 8300000, guid: 4729fa1f0b9bd25458c0f9d9931be076, type: 3}
+    volume: 0.3
   - soundName: "\u30C0\u30E1\u30FC\u30B8"
     audioClip: {fileID: 8300000, guid: 01cec2622f59b184897e5f361c84aa7c, type: 3}
+    volume: 1
   - soundName: "\u30EC\u30D9\u30EB\u30A2\u30C3\u30D7"
-    audioClip: {fileID: 8300000, guid: 9fc204843885d0141b357fbae27a65c7, type: 3}
+    audioClip: {fileID: 8300000, guid: d2a1e3d66a849b246ae8d8d12bc987d7, type: 3}
+    volume: 1
   - soundName: "\u6700\u5927\u4F53\u529B\u30A2\u30C3\u30D7"
     audioClip: {fileID: 8300000, guid: bd164e2405dd8354f9e45ca9cc922b25, type: 3}
+    volume: 1
   - soundName: "\u79FB\u52D5\u901F\u5EA6\u30A2\u30C3\u30D7"
     audioClip: {fileID: 8300000, guid: 7e91cf815ec59fa41b6b604f9a7723f6, type: 3}
+    volume: 1
   - soundName: "\u56DE\u53CE\u7BC4\u56F2\u30A2\u30C3\u30D7"
     audioClip: {fileID: 8300000, guid: f7b398612ce4fb84c9b89db224737867, type: 3}
+    volume: 1
   - soundName: "\u9632\u5FA1\u529B\u30A2\u30C3\u30D7"
     audioClip: {fileID: 8300000, guid: 29fdb6b608bfbff4d94872771f6a21ca, type: 3}
+    volume: 1
   - soundName: "\u56DE\u5FA9\u529B\u30A2\u30C3\u30D7"
     audioClip: {fileID: 8300000, guid: 38c65947d33c55148bab92cd90f69ff4, type: 3}
+    volume: 1
   - soundName: "\u7206\u767A\u7BC4\u56F2\u30A2\u30C3\u30D7"
     audioClip: {fileID: 8300000, guid: 9fc650bab7bdf4e45921e48ecefb9f1e, type: 3}
+    volume: 1
   - soundName: "\u7206\u767A1"
     audioClip: {fileID: 8300000, guid: 79f7011881bfa444db016621c5998b3a, type: 3}
+    volume: 1
   - soundName: "\u7206\u767A2"
     audioClip: {fileID: 8300000, guid: 015ff635689a58c409dda9e241dc778c, type: 3}
+    volume: 1
   - soundName: "\u7206\u767A3"
     audioClip: {fileID: 8300000, guid: f617de921182f3646b55e1416152f67c, type: 3}
+    volume: 1
   - soundName: "\u7206\u767A4"
     audioClip: {fileID: 8300000, guid: 4a2b7afcc97e6d84db20850cf1860d8f, type: 3}
+    volume: 1
   - soundName: "\u30DC\u30BF\u30F3"
     audioClip: {fileID: 8300000, guid: 4a936bb1cff0c2e4d8df31fe0477b66f, type: 3}
-  - soundName: "\u30EA\u30C8\u30E9\u30A4\u30DC\u30BF\u30F3"
+    volume: 1
+  - soundName: "\u30EA\u30B6\u30EB\u30C8\u30DC\u30BF\u30F3"
     audioClip: {fileID: 8300000, guid: 5e88c526478f208409b6850a65d828bc, type: 3}
+    volume: 1
+  - soundName: "\u3084\u3089\u308C"
+    audioClip: {fileID: 8300000, guid: ebf880ad50731534dac29a2870965e9b, type: 3}
+    volume: 1
+  - soundName: "\u7206\u5F3E\u8FFD\u52A0"
+    audioClip: {fileID: 8300000, guid: 133e40bceafadec49a3d1e011e3970a0, type: 3}
+    volume: 1
   bgmAudioSource: {fileID: 3487457843359531227}
 --- !u!82 &3487457843359531227
 AudioSource:
@@ -92,8 +117,9 @@ AudioSource:
   m_GameObject: {fileID: 5371553014076663881}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4cc35bf50c20734458c1472cb0149b32, type: 3}
+  OutputAudioMixerGroup: {fileID: -5526991890704125816, guid: b00bd4929dc8fae458061265a8dacbce,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 6922614e90b50ec4f9a0bd2f48173824, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.3
   m_Pitch: 1

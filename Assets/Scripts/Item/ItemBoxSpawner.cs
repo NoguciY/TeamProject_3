@@ -14,10 +14,29 @@ public class ItemBoxSpawner : MonoBehaviour
     [SerializeField,Header("スポーン間隔")]
     private float spawnInterval;
 
+    //前回の間隔
+    private float beforeInterval;
+
     private void Start()
     {
-        //箱の生成を指定した間隔で行う
-        InvokeRepeating("SpawnObjects", spawnInterval, spawnInterval);
+        beforeInterval = 0;
+    }
+
+    private void Update()
+    {
+        //経過時間
+        float elapsedTime = GameManager.Instance.GetDeltaTimeInMain;
+
+        //間隔 = 経過時間 / 生成間隔 の余り
+        float interval = elapsedTime % spawnInterval;
+
+        //設定した秒数毎に実行する
+        if (interval < beforeInterval)
+        {
+            SpawnObjects();
+        }
+
+        beforeInterval = interval;
     }
 
     /// <summary>
